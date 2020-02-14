@@ -1,3 +1,7 @@
+// 환경 변수 로드
+import * as dotenv from 'dotenv';
+dotenv.config();
+
 // import Koa.js related package
 import * as Koa from 'koa';
 import * as Router from 'koa-router';

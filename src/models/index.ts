@@ -1,9 +1,8 @@
 import { Sequelize } from "sequelize";
-import * as config from '../modules/dbInfo'
 
-const sequelize = new Sequelize(config.database, config.id, config.pw, {
-    host: config.host,
-    dialect: config.dialect
+const sequelize = new Sequelize(process.env.DEV_DATABASE_NAME, process.env.DEV_DATABASE_ID, process.env.DEV_DATABASE_PW, {
+    host: process.env.DEV_DATABASE_HOST,
+    dialect: 'mariadb'
 });
 
 export { sequelize, Sequelize };
