@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es2020",
+    "noImplicitAny": true,
+    "outDir": "./dist",
+    "sourceMap": true,
+    "typeRoots": ["/node_modules/@types", "/@types"]
+  },
+  "include": [
+    "./src/**/*"
+  ]
+}
