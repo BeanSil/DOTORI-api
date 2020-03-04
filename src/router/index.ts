@@ -1,11 +1,8 @@
 import * as Router from 'koa-router';
-
-// import your Routers here
+import score from './score';
 
 const index = new Router();
 
-// use your routers here
-// like this
-// router.use('/api', api.routes());
+index.use('/score', score.routes());
 
 export default index;
