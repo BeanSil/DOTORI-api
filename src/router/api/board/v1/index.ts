@@ -1,6 +1,6 @@
 import * as Router from 'koa-router';
 
-import { getPosts, getPost } from './v1.controller';
+import { getPosts, getPost, postPost, putPost, deletePost } from './v1.controller';
 
 const v1 = new Router();
 
@@ -8,10 +8,15 @@ const v1 = new Router();
 v1.get('/', getPosts);
 
 // GET
-v1.get('/:postid', getPosts);
+v1.get('/:postid', getPost);
 
 // POST
+v1.post('/:postid', postPost);
+
 // PUT
+v1.post('/', putPost);
+
 // DELETE
+v1.delete('/:postid', deletePost);
 
 export default v1;
