@@ -1,5 +1,5 @@
 import * as Router from 'koa-router';
-import { sequelize } from '../../models';
+import { sequelize } from '../../../models';
 
 const score = new Router();
 
