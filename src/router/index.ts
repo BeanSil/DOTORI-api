@@ -1,8 +1,10 @@
 import * as Router from 'koa-router';
-import score from './score';
+
+import api from './api';
 
 const index = new Router();
 
-index.use('/score', score.routes());
+// 이 파일은 편집하지 마세요.
+index.use('/api', api.routes());
 
 export default index;
