@@ -3,6 +3,35 @@ import { Database } from '../models';
 
 Database.sequelize.sync();
 
+export async function getUserScore(ctx: Context, next: Next) {
+    /* TO-DO: 토큰 검증 후 state 객체에 User 데이터가 불러오도록
+    const user = ctx.state.user
+    */
+
+    // 토큰 구현 후 삭제 예정
+    const user = {
+        id: 1,
+        name: "박준영"
+    }
+    
+    let archive = await Database.ScoreArchive.findAll({
+        where: {
+            user_id: user.id
+        }
+    });
+    
+    const scores = archive.map((archive: any) => archive.score)
+
+    const data = {
+        data: {
+            name: user.name,
+            archive: scores
+        }
+    }
+
+    ctx.body = data;
+}
+
 export async function getAllArchives(ctx: Context, next: Next) {
     const data = {
         data: {

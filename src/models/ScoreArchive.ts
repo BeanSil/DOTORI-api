@@ -4,7 +4,9 @@ export interface ScoreArchiveAttributes extends Model {
     id: number,
     user_id: string,
     score: number,
-    reason?: string | null
+    reason?: string | null,
+    createdAt?: Date,
+    updatedAt?: Date
 };
 
 export type ScoreArchiveStatic = typeof Model & {

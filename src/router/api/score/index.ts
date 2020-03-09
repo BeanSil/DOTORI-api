@@ -3,7 +3,7 @@ import * as Controller from '../../../controller/score.controller'
 
 const score = new Router();
 
-score.get('/');
+score.get('/', Controller.getUserScore);
 
 score.get('/archive', Controller.getAllArchives);
 score.post('/archive', Controller.insertArchive);
