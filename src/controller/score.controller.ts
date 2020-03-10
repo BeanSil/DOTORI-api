@@ -25,7 +25,7 @@ export async function getUserScore(ctx: Context, next: Next) {
     const data = {
         data: {
             name: user.name,
-            archive: scores
+            scores: scores
         }
     }
 
