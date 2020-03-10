@@ -16,7 +16,7 @@ export async function getUserScore(ctx: Context, next: Next) {
     
     let archive = await Database.models.ScoreArchive.findAll({
         where: {
-            UserId: user.id
+            user_id: user.id
         }
     });
     

@@ -29,15 +29,22 @@ export function ScoreArchiveFactory(sequelize: Sequelize) {
         }
     }
 
-    let ScoreArchive = <ScoreArchiveStatic>sequelize.define('ScoreArchive', attributes);
+    const foreignKeyOptions = {
+        foreignKey: { 
+            allowNull: false,
+            name: 'user_id'
+        }, 
+        onDelete: 'CASCADE'
+    }
+
+    const ScoreArchive = <ScoreArchiveStatic>sequelize.define('ScoreArchive', attributes);
 
     ScoreArchive.associate = function (models: any) {
-        for (let i in models) {
-            if (models[i].tableName === 'Users') {
-                models[i].hasMany(ScoreArchive);
-                ScoreArchive.belongsTo(models[i]);
-            }
-        }
+        models.filter((model: any) => model.tableName === 'Users')
+            .map((model: any) => {
+                model.hasMany(ScoreArchive, foreignKeyOptions);
+                ScoreArchive.belongsTo(model, foreignKeyOptions);
+            })
     };
 
     return ScoreArchive;

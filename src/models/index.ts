@@ -10,11 +10,13 @@ const sequelize = new Sequelize(process.env.DEV_DATABASE_NAME, process.env.DEV_D
 const models = {
     ScoreArchive: ScoreArchiveFactory(sequelize),
     User: UserFactory(sequelize)
-}
+};
 
-Object.values<any>(models)
-  .filter(model => typeof model.associate === "function")
-  .forEach(model => model.associate(models));
+const _models = Object.values<any>(models)
+
+_models
+  .filter(_model => typeof _model.associate === "function")
+  .forEach(_model => _model.associate(_models));
 
 export const Database = {
     sequelize,
