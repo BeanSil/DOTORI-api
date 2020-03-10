@@ -46,7 +46,9 @@ export async function insertArchive(ctx: Context, next: Next) {
     const archive = ctx.request.body;
 
     const data = {
-        insertedArchive: await Database.models.ScoreArchive.create(archive)
+        data: {
+            insertedArchive: await Database.models.ScoreArchive.create(archive)
+        }
     }
 
     ctx.body = data;
@@ -61,13 +63,15 @@ export async function updateArchive(ctx: Context, next: Next) {
     });
 
     const data = {
-        result: await Database.models.ScoreArchive.update(updatedArchive, {
-            where: conditions
-        }),
-        updatedArchive: currentArchive,
-        currentArchive: await Database.models.ScoreArchive.findAll({
-            where: conditions
-        })
+        data: {
+            result: await Database.models.ScoreArchive.update(updatedArchive, {
+                where: conditions
+            }),
+            updatedArchive: currentArchive,
+            currentArchive: await Database.models.ScoreArchive.findAll({
+                where: conditions
+            })
+        }
     }
 
     ctx.body = data;
@@ -81,10 +85,12 @@ export async function removeArchive(ctx: Context, next: Next) {
     });
 
     const data = {
-        result: await Database.models.ScoreArchive.destroy({
-            where: conditions
-        }),
-        deletedArchive: deletedArchive
+        data: {
+            result: await Database.models.ScoreArchive.destroy({
+                where: conditions
+            }),
+            deletedArchive: deletedArchive
+        }
     };
 
     ctx.body = data;
