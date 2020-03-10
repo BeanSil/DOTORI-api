@@ -14,9 +14,9 @@ export async function getUserScore(ctx: Context, next: Next) {
         name: "박준영"
     }
     
-    let archive = await Database.ScoreArchive.findAll({
+    let archive = await Database.models.ScoreArchive.findAll({
         where: {
-            user_id: user.id
+            UserId: user.id
         }
     });
     
@@ -35,7 +35,7 @@ export async function getUserScore(ctx: Context, next: Next) {
 export async function getAllArchives(ctx: Context, next: Next) {
     const data = {
         data: {
-            archives: await Database.ScoreArchive.findAll()
+            archives: await Database.models.ScoreArchive.findAll()
         }
     }
 
@@ -46,7 +46,7 @@ export async function insertArchive(ctx: Context, next: Next) {
     const archive = ctx.request.body;
 
     const data = {
-        insertedArchive: await Database.ScoreArchive.create(archive)
+        insertedArchive: await Database.models.ScoreArchive.create(archive)
     }
 
     ctx.body = data;
@@ -56,16 +56,16 @@ export async function updateArchive(ctx: Context, next: Next) {
     const updatedArchive = ctx.request.body.data;
     const conditions = ctx.request.body.conditions;
 
-    const currentArchive = await Database.ScoreArchive.findAll({
+    const currentArchive = await Database.models.ScoreArchive.findAll({
         where: conditions
     });
 
     const data = {
-        result: await Database.ScoreArchive.update(updatedArchive, {
+        result: await Database.models.ScoreArchive.update(updatedArchive, {
             where: conditions
         }),
         updatedArchive: currentArchive,
-        currentArchive: await Database.ScoreArchive.findAll({
+        currentArchive: await Database.models.ScoreArchive.findAll({
             where: conditions
         })
     }
@@ -76,12 +76,12 @@ export async function updateArchive(ctx: Context, next: Next) {
 export async function removeArchive(ctx: Context, next: Next) {
     const conditions = ctx.request.body;
 
-    const deletedArchive = await Database.ScoreArchive.findAll({
+    const deletedArchive = await Database.models.ScoreArchive.findAll({
         where: conditions
     });
 
     const data = {
-        result: await Database.ScoreArchive.destroy({
+        result: await Database.models.ScoreArchive.destroy({
             where: conditions
         }),
         deletedArchive: deletedArchive

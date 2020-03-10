@@ -2,7 +2,6 @@ import { Sequelize, DataTypes, Model, BuildOptions } from 'sequelize';
 
 export interface ScoreArchiveAttributes extends Model {
     id: number,
-    user_id: string,
     score: number,
     reason?: string | null,
     createdAt?: Date,
@@ -11,6 +10,7 @@ export interface ScoreArchiveAttributes extends Model {
 
 export type ScoreArchiveStatic = typeof Model & {
     new(values?: object, options?: BuildOptions): ScoreArchiveAttributes;
+    associate(models: any): void;
 }
 
 export function ScoreArchiveFactory(sequelize: Sequelize) {
@@ -19,10 +19,6 @@ export function ScoreArchiveFactory(sequelize: Sequelize) {
             type: DataTypes.INTEGER.UNSIGNED,
             primaryKey: true,
             autoIncrement: true
-        },
-        user_id: {
-            type: DataTypes.STRING,
-            allowNulls: false
         },
         score: {
             type: DataTypes.INTEGER,
@@ -33,7 +29,16 @@ export function ScoreArchiveFactory(sequelize: Sequelize) {
         }
     }
 
-    const ScoreArchive = <ScoreArchiveStatic>sequelize.define('ScoreArchive', attributes);
+    let ScoreArchive = <ScoreArchiveStatic>sequelize.define('ScoreArchive', attributes);
+
+    ScoreArchive.associate = function (models: any) {
+        for (let i in models) {
+            if (models[i].tableName === 'Users') {
+                models[i].hasMany(ScoreArchive);
+                ScoreArchive.belongsTo(models[i]);
+            }
+        }
+    };
 
     return ScoreArchive;
 }
