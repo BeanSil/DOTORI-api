@@ -18,6 +18,8 @@ _models
   .filter(_model => typeof _model.associate === "function")
   .forEach(_model => _model.associate(_models));
 
+sequelize.sync();
+
 export {
     sequelize,
     Sequelize,

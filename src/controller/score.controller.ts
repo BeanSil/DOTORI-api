@@ -1,13 +1,8 @@
 import { Context, Next } from 'koa';
-import { sequelize, models } from '../models';
-
-sequelize.sync();
+import { models } from '../models';
 
 export async function getUserScore(ctx: Context, next: Next) {
     const user = ctx.user;
-
-    //TO-DO: User가 학생 유저인지 검증하는 로직 구현
-    ctx.assert(user, 401, 'User who is not student can\'t access to this request.');
 
     const archive = await models.ScoreArchive.findAll({
         where: {
@@ -29,11 +24,6 @@ export async function getUserScore(ctx: Context, next: Next) {
 }
 
 export async function getAllArchives(ctx: Context, next: Next) {
-    const user = ctx.user;
-
-    //TO-DO: User가 관리자 유저인지 검증하는 로직 구현
-    ctx.assert(user, 401, 'User who is not administrator can\'t access to this request.');
-
     const archives = await models.ScoreArchive.findAll();
     
     //TO-DO: 불러온 아카이브 데이터 중 user_id로 User 데이터 불러오기
@@ -48,11 +38,6 @@ export async function getAllArchives(ctx: Context, next: Next) {
 }
 
 export async function insertArchive(ctx: Context, next: Next) {
-    const user = ctx.user;
-
-    //TO-DO: User가 관리자 유저인지 검증하는 로직 구현
-    ctx.assert(user, 401, 'User who is not administrator can\'t access to this request.');
-
     const archive = ctx.request.body;
 
     const data = {
@@ -65,11 +50,6 @@ export async function insertArchive(ctx: Context, next: Next) {
 }
 
 export async function updateArchive(ctx: Context, next: Next) {
-    const user = ctx.user;
-
-    //TO-DO: User가 관리자 유저인지 검증하는 로직 구현
-    ctx.assert(user, 401, 'User who is not administrator can\'t access to this request.');
-
     const provided = ctx.request.body.data;
     const conditions = ctx.request.body.conditions;
 
@@ -99,11 +79,6 @@ export async function updateArchive(ctx: Context, next: Next) {
 }
 
 export async function removeArchive(ctx: Context, next: Next) {
-    const user = ctx.user;
-
-    //TO-DO: User가 관리자 유저인지 검증하는 로직 구현
-    ctx.assert(user, 401, 'User who is not administrator can\'t access to this request.');
-
     const conditions = ctx.request.body;
 
     const deletedArchive = await models.ScoreArchive.findAll({

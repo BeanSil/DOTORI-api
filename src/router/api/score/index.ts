@@ -1,12 +1,8 @@
 import * as Router from 'koa-router';
-import * as Controller from '../../../controller/score.controller';
+import v1 from './v1';
 
 const score = new Router();
 
-score.get('/', Controller.getUserScore);
-score.get('/archive', Controller.getAllArchives);
-score.post('/archive', Controller.insertArchive);
-score.put('/archive', Controller.updateArchive);
-score.delete('/archive', Controller.removeArchive);
+score.use('/v1', v1.routes());
 
 export default score;
