@@ -7,10 +7,10 @@ const sequelize = new Sequelize(process.env.DEV_DATABASE_NAME, process.env.DEV_D
     dialect: 'mariadb'
 });
 
-const models = {
-    ScoreArchive: ScoreArchiveFactory(sequelize),
-    User: UserFactory(sequelize)
-};
+const scoreArchive = ScoreArchiveFactory(sequelize);
+const user = UserFactory(sequelize);
+
+const models = [ scoreArchive, user ];
 
 const _models = Object.values<any>(models);
 
@@ -23,5 +23,6 @@ sequelize.sync();
 export {
     sequelize,
     Sequelize,
-    models
+    scoreArchive,
+    user
 }
