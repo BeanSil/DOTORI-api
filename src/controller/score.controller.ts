@@ -34,9 +34,13 @@ export async function getAllArchives(ctx: Context, next: Next) {
     //TO-DO: User가 관리자 유저인지 검증하는 로직 구현
     ctx.assert(user, 401, 'User who is not administrator can\'t access to this request.');
 
+    const archives = await models.ScoreArchive.findAll();
+    
+    //TO-DO: 불러온 아카이브 데이터 중 user_id로 User 데이터 불러오기
+
     const data = {
         data: {
-            archives: await models.ScoreArchive.findAll()
+            archives: archives
         }
     };
 
