@@ -1,92 +1,114 @@
 import { Context, Next } from 'koa';
-import { Database } from '../models';
+import { sequelize, models } from '../models';
 
-Database.sequelize.sync();
+sequelize.sync();
 
 export async function getUserScore(ctx: Context, next: Next) {
-    /* TO-DO: 토큰 검증 후 state 객체에 User 데이터가 불러오도록
-    const user = ctx.state.user
-    */
+    const user = ctx.user;
 
-    // 토큰 구현 후 삭제 예정
-    const user = {
-        id: 1,
-        name: "박준영"
-    }
-    
-    let archive = await Database.models.ScoreArchive.findAll({
+    //TO-DO: User가 학생 유저인지 검증하는 로직 구현
+    ctx.assert(user, 401, 'User who is not student can\'t access to this request.');
+
+    const archive = await models.ScoreArchive.findAll({
         where: {
             user_id: user.id
         }
-    });
+    })
     
-    const scores = archive.map((archive: any) => archive.score)
+    const scores = archive.map((archive: any) => archive.score);
 
     const data = {
         data: {
             name: user.name,
             scores: scores
-        }
-    }
+        },
+
+    };
 
     ctx.body = data;
 }
 
 export async function getAllArchives(ctx: Context, next: Next) {
+    const user = ctx.user;
+
+    //TO-DO: User가 관리자 유저인지 검증하는 로직 구현
+    ctx.assert(user, 401, 'User who is not administrator can\'t access to this request.');
+
     const data = {
         data: {
-            archives: await Database.models.ScoreArchive.findAll()
+            archives: await models.ScoreArchive.findAll()
         }
-    }
+    };
 
     ctx.body = data;
 }
 
 export async function insertArchive(ctx: Context, next: Next) {
+    const user = ctx.user;
+
+    //TO-DO: User가 관리자 유저인지 검증하는 로직 구현
+    ctx.assert(user, 401, 'User who is not administrator can\'t access to this request.');
+
     const archive = ctx.request.body;
 
     const data = {
         data: {
-            insertedArchive: await Database.models.ScoreArchive.create(archive)
+            insertedArchive: await models.ScoreArchive.create(archive)
         }
-    }
+    };
 
     ctx.body = data;
 }
 
 export async function updateArchive(ctx: Context, next: Next) {
-    const updatedArchive = ctx.request.body.data;
+    const user = ctx.user;
+
+    //TO-DO: User가 관리자 유저인지 검증하는 로직 구현
+    ctx.assert(user, 401, 'User who is not administrator can\'t access to this request.');
+
+    const provided = ctx.request.body.data;
     const conditions = ctx.request.body.conditions;
 
-    const currentArchive = await Database.models.ScoreArchive.findAll({
+    const currentArchive = await models.ScoreArchive.findAll({
         where: conditions
     });
 
+    const result = await models.ScoreArchive.update(provided, {
+        where: conditions
+    });
+
+    const updatedArchive = await models.ScoreArchive.findAll({
+        where: conditions
+    });
+
+    //TO-DO: 수정 전(currentArchive)과 수정 후(updatedArchive)가 같은 경우 에러 Throw
+
     const data = {
         data: {
-            result: await Database.models.ScoreArchive.update(updatedArchive, {
-                where: conditions
-            }),
+            result: result,
             updatedArchive: currentArchive,
-            currentArchive: await Database.models.ScoreArchive.findAll({
-                where: conditions
-            })
+            currentArchive: updatedArchive
         }
-    }
+    };
 
     ctx.body = data;
 }
 
 export async function removeArchive(ctx: Context, next: Next) {
+    const user = ctx.user;
+
+    //TO-DO: User가 관리자 유저인지 검증하는 로직 구현
+    ctx.assert(user, 401, 'User who is not administrator can\'t access to this request.');
+
     const conditions = ctx.request.body;
 
-    const deletedArchive = await Database.models.ScoreArchive.findAll({
+    const deletedArchive = await models.ScoreArchive.findAll({
         where: conditions
     });
 
     const data = {
         data: {
-            result: await Database.models.ScoreArchive.destroy({
+            result: await models.ScoreArchive.destroy({
                 where: conditions
             }),
             deletedArchive: deletedArchive

@@ -12,13 +12,13 @@ const models = {
     User: UserFactory(sequelize)
 };
 
-const _models = Object.values<any>(models)
+const _models = Object.values<any>(models);
 
 _models
   .filter(_model => typeof _model.associate === "function")
   .forEach(_model => _model.associate(_models));
 
-export const Database = {
+export {
     sequelize,
     Sequelize,
     models

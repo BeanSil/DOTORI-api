@@ -6,7 +6,7 @@ export interface ScoreArchiveAttributes extends Model {
     reason?: string | null,
     createdAt?: Date,
     updatedAt?: Date
-};
+}
 
 export type ScoreArchiveStatic = typeof Model & {
     new(values?: object, options?: BuildOptions): ScoreArchiveAttributes;
@@ -26,8 +26,16 @@ export function ScoreArchiveFactory(sequelize: Sequelize) {
         },
         reason: {
             type: DataTypes.STRING
+        },
+        createdAt: {
+            type: DataTypes.DATE,
+            allowNulls: false
+        },
+        updatedAt: {
+            type: DataTypes.DATE,
+            allowNulls: false
         }
-    }
+    };
 
     const foreignKeyOptions = {
         foreignKey: { 
@@ -35,7 +43,7 @@ export function ScoreArchiveFactory(sequelize: Sequelize) {
             name: 'user_id'
         }, 
         onDelete: 'CASCADE'
-    }
+    };
 
     const ScoreArchive = <ScoreArchiveStatic>sequelize.define('ScoreArchive', attributes);
 

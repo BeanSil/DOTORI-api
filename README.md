@@ -8,3 +8,7 @@ yarn start
 ```sh
 yarn dev
 ```
+
+## 상벌점 API
+
+[🔗API 문서](https://documenter.getpostman.com/view/9902269/SzRuYCDP)

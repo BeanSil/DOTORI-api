@@ -5,7 +5,7 @@ export interface UserAttributes extends Model {
     name: string,
     createdAt?: Date,
     updatedAt?: Date
-};
+}
 
 export type UserStatic = typeof Model & {
     new(values?: object, options?: BuildOptions): UserAttributes;
@@ -21,6 +21,14 @@ export function UserFactory(sequelize: Sequelize) {
         name: {
             type: DataTypes.STRING,
             allowNulls: false
+        },
+        createdAt: {
+            type: DataTypes.DATE,
+            allowNull: false
+        },
+        updatedAt: {
+            type: DataTypes.DATE,
+            allowNull: false
         }
     }
 
