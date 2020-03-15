@@ -44,13 +44,9 @@ export const insertArchive = async (ctx: Context) => {
         score: Joi.number().integer().required(),
         user_id: Joi.number().integer().required(),
         reason: Joi.string().max(255)
-    })
+    });
 
-    const archive = ctx.request.body;
-
-    const result = await archiveSchema.validateAsync(archive);
-
-    console.log(result);
+    const archive = await archiveSchema.validateAsync(ctx.request.body);
 
     const data = {
         data: {
@@ -62,8 +58,22 @@ export const insertArchive = async (ctx: Context) => {
 }
 
 export const updateArchive = async (ctx: Context) => {
-    const provided = ctx.request.body.data;
-    const conditions = ctx.request.body.conditions;
+    const requestSchema = Joi.object({
+        data: {
+            score: Joi.number().integer().required(),
+            user_id: Joi.number().integer().required(),
+            reason: Joi.string().max(255)
+        },
+        conditions: {
+            id: Joi.number().integer().required()
+        }
+    })
+        .with('data', 'conditions')
+    
+    const requested = await requestSchema.validateAsync(ctx.request.body);
+
+    const provided = requested.data;
+    const conditions = requested.conditions;
 
     const currentArchive = await scoreArchive.findAll({
         where: conditions
@@ -91,7 +101,11 @@ export const updateArchive = async (ctx: Context) => {
 }
 
 export const removeArchive = async (ctx: Context) => {
-    const conditions = ctx.request.body;
+    const requestSchema = Joi.object({
+        id: Joi.number().integer().required()
+    })
+
+    const conditions = await requestSchema.validateAsync(ctx.request.body);
 
     const deletedArchive = await scoreArchive.findAll({
         where: conditions
