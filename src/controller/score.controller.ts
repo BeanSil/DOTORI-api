@@ -1,4 +1,6 @@
 import { Context } from 'koa';
+import * as Joi from '@hapi/joi';
+
 import { scoreArchive } from '../models';
 
 export const getUserScore = async (ctx: Context) => {
@@ -38,7 +40,17 @@ export const getAllArchives = async (ctx: Context) => {
 }
 
 export const insertArchive = async (ctx: Context) => {
+    const archiveSchema = Joi.object({
+        score: Joi.number().integer().required(),
+        user_id: Joi.number().integer().required(),
+        reason: Joi.string().max(255)
+    })
+
     const archive = ctx.request.body;
+
+    const result = await archiveSchema.validateAsync(archive);
+
+    console.log(result);
 
     const data = {
         data: {
