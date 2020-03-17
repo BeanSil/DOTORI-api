@@ -30,7 +30,7 @@
   "scripts": {
     "start": "cross-env NODE_PATH=./src pm2 start dist --watch",
     "test": "standardx \"src/**/*.ts\" && tsc",
-    "pretty": "prettier --single-quote es2020 --write \"src/**/*.ts\"",
+    "pretty": "prettier es2020 --write \"src/**/*.ts\"",
     "clear": "rimraf dist",
     "build": "tsc",
     "dev": "nodemon --watch 'src/**/*' -e ts,tsx --exec ts-node ./src/index.ts",
