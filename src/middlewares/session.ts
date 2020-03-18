@@ -1,8 +1,8 @@
 import {Context} from "koa";
 
 const sessionCreator = async (ctx: Context, next: () => Promise<any>) => {
-    ctx.user = '1';  // TODO: User 모델 만들어서 그거 줄 것
+    ctx.user = '1';  // TODO: Authorization Header에 있는 Oauth Access Token 받아서 유저로 변환
     return await next()
 };
 
-export default sessionCreator
+export default sessionCreator;
