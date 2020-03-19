@@ -1,7 +1,16 @@
 import { Context } from 'koa';
 import * as Joi from '@hapi/joi';
+import {post} from "../models";
 
-export const getPost = (ctx: Context) => {};
+const PostIdInParam = Joi.object().keys({
+  id: Joi.number().integer().min(1).required()
+});
+
+export const getPost = async (ctx: Context) => {
+  ctx.assert(PostIdInParam.validate(ctx.params), 400);
+
+  ctx.body = await post.findByPk(ctx.params.postid);
+};
 
 export const getPosts = (ctx: Context) => {};
 
