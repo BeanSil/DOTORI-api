@@ -47,4 +47,10 @@ export const postPost = (ctx: Context) => {
 
 export const putPost = (ctx: Context) => {};
 
-export const deletePost = (ctx: Context) => {};
+export const deletePost = (ctx: Context) => {
+  ctx.assert(PostIdInParam.validate(ctx.params), 400);
+
+  post.destroy(ctx.params.postid);
+
+  ctx.status = 200;
+};
