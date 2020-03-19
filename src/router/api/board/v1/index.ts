@@ -1,6 +1,12 @@
 import * as Router from 'koa-router';
 
-import { getPosts, getPost, postPost, putPost, deletePost } from '../../../../controller/board.v1.controller';
+import {
+  getPosts,
+  getPost,
+  postPost,
+  putPost,
+  deletePost
+} from '../../../../controller/board.v1.controller';
 
 const v1 = new Router();
 
