@@ -13,7 +13,7 @@ export type ScoreArchiveStatic = typeof Model & {
   associate(models: any): void;
 };
 
-export function ScoreArchiveFactory(sequelize: Sequelize) {
+export const ScoreArchiveFactory = (sequelize: Sequelize) => {
   const attributes = {
     id: {
       type: DataTypes.INTEGER.UNSIGNED,
@@ -49,7 +49,7 @@ export function ScoreArchiveFactory(sequelize: Sequelize) {
     sequelize.define('ScoreArchive', attributes)
   );
 
-  ScoreArchive.associate = function(models: any) {
+  ScoreArchive.associate = (models: any) => {
     models
       .filter((model: any) => model.tableName === 'Users')
       .map((model: any) => {
@@ -59,4 +59,4 @@ export function ScoreArchiveFactory(sequelize: Sequelize) {
   };
 
   return ScoreArchive;
-}
+};

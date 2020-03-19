@@ -27,7 +27,7 @@ export const getUserScore = async (ctx: Context) => {
 export const getAllArchives = async (ctx: Context) => {
   const archives = await scoreArchive.findAll();
 
-  //TO-DO: 불러온 아카이브 데이터 중 user_id로 User 데이터 불러오기
+  // TO-DO: 불러온 아카이브 데이터 중 user_id로 User 데이터 불러오기
 
   const data = {
     data: {
@@ -95,7 +95,7 @@ export const updateArchive = async (ctx: Context) => {
     where: conditions
   });
 
-  //TO-DO: 수정 전(currentArchive)과 수정 후(updatedArchive)가 같은 경우 에러 Throw
+  // TO-DO: 수정 전(currentArchive)과 수정 후(updatedArchive)가 같은 경우 에러 Throw
 
   const data = {
     data: {

@@ -8,7 +8,7 @@ const validateStudent = async (ctx: Context, next: Next) => {
     "User who is not student can't access to this request."
   );
 
-  return await next();
+  await next();
 };
 
 const validateAdmin = async (ctx: Context, next: Next) => {
@@ -18,7 +18,7 @@ const validateAdmin = async (ctx: Context, next: Next) => {
     "User who is not administrator can't access to this request."
   );
 
-  return await next();
+  await next();
 };
 
 export { validateStudent, validateAdmin };

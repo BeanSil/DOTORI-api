@@ -11,7 +11,7 @@ export type UserStatic = typeof Model & {
   new (values?: object, options?: BuildOptions): UserAttributes;
 };
 
-export function UserFactory(sequelize: Sequelize) {
+export const UserFactory = (sequelize: Sequelize) => {
   const attributes = {
     id: {
       type: DataTypes.INTEGER.UNSIGNED,
@@ -35,4 +35,4 @@ export function UserFactory(sequelize: Sequelize) {
   const User = <UserStatic>sequelize.define('User', attributes);
 
   return User;
-}
+};
