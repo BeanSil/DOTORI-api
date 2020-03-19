@@ -27,7 +27,7 @@ export const PostFactory = (sequelize: Sequelize) => {
       type: DataTypes.NUMBER,
       allowNull: false
     },
-    boardType: {
+    board_type: {
       type: DataTypes.STRING(5),
       values: ['자유게시판', '공지사항'],
       allowNull: false
