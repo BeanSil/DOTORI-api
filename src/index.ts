@@ -20,7 +20,6 @@ app.use(bodyParser());
 app.use(sessionCreator);
 app.use(router.routes()).use(router.allowedMethods());
 
-
 app.listen(port, () => {
   console.log(`Server started at port ${port}`);
 });
