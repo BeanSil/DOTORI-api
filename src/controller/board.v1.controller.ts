@@ -1,9 +1,12 @@
 import { Context } from 'koa';
 import * as Joi from '@hapi/joi';
-import {post} from "../models";
+import { post } from '../models';
 
 const PostIdInParam = Joi.object().keys({
-  id: Joi.number().integer().min(1).required()
+  id: Joi.number()
+    .integer()
+    .min(1)
+    .required()
 });
 
 export const getPost = async (ctx: Context) => {
@@ -12,7 +15,12 @@ export const getPost = async (ctx: Context) => {
   ctx.body = await post.findByPk(ctx.params.postid);
 };
 
-export const getPosts = (ctx: Context) => {};
+export const getPosts = async (ctx: Context) => {
+  ctx.body = await post.findAll({
+    offset: 0,
+    limit: 20,
+  }); // TODO: add pagination
+};
 
 export const postPost = (ctx: Context) => {
   const NewPost = Joi.object().keys({
