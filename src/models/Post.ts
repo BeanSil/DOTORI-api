@@ -1,8 +1,9 @@
 import { Sequelize, DataTypes, Model, BuildOptions } from 'sequelize';
 
 interface PostAttribute extends Model {
-  readonly postid: bigint;
-  readonly boardType: string;
+  readonly post_id: bigint;
+  readonly user_id: number;
+  readonly board_type: string;
   readonly title: string;
   readonly content: string;
   readonly is_anonymous: boolean;
