@@ -4,15 +4,15 @@ import { sequelize } from '../../../models';
 const music = new Router();
 
 
-music.get('/music', (ctx, next) => {
+music.get('/v1', (ctx, next) => {
     ctx.body = 'GET /music/v1';
 });
 
-music.post('/music', (ctx, next) => {
+music.post('/v1', (ctx, next) => {
     ctx.body = 'POST /music/v1';
 });
 
-music.delete('/music/:id', (ctx, next) => {
+music.delete('/v1/:id', (ctx, next) => {
     ctx.body = 'DELETE /music/v1/:id';
 });
 
