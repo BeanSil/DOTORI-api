@@ -1,19 +1,9 @@
 import * as Router from 'koa-router';
-import { sequelize } from '../../../models';
+
+import v1 from './v1'
 
 const music = new Router();
 
+music.use('/v1', v1.routes());
 
-music.get('/v1', (ctx, next) => {
-    ctx.body = 'GET /music/v1';
-});
-
-music.post('/v1', (ctx, next) => {
-    ctx.body = 'POST /music/v1';
-});
-
-music.delete('/v1/:id', (ctx, next) => {
-    ctx.body = 'DELETE /music/v1/:id';
-});
-
-export default music; 
+export default music;
