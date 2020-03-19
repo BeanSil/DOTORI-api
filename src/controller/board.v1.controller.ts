@@ -18,7 +18,7 @@ export const getPost = async (ctx: Context) => {
 export const getPosts = async (ctx: Context) => {
   ctx.body = await post.findAll({
     offset: 0,
-    limit: 20,
+    limit: 20
   }); // TODO: add pagination
 };
 
@@ -37,7 +37,7 @@ export const postPost = (ctx: Context) => {
 
   ctx.assert(NewPost.validate(ctx.request.body), 400);
 
-  let body = ctx.request.body;
+  const body = ctx.request.body;
   body.user_id = ctx.user.id;
 
   post.create(body);
