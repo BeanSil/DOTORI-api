@@ -45,10 +45,32 @@ export const postPost = (ctx: Context) => {
   ctx.status = 201;
 };
 
-export const putPost = (ctx: Context) => {};
+export const putPost = (ctx: Context) => {
+  const OldPost = Joi.object().keys({
+    board_type: Joi.string().allow(['자유게시판', '공지사항']),
+    title: Joi.string()
+      .min(1)
+      .max(255),
+    content: Joi.string(),
+    is_anonymous: Joi.bool()
+  });
+
+  // TODO: 회원 권한 검사 (본인)
+
+  ctx.assert(PostIdInParam.validate(ctx.params), 400);
+  ctx.assert(OldPost.validate(ctx.request.body), 400);
+
+  post.update(ctx.request.body, {
+    where: {
+      post_id: ctx.params.postid
+    }
+  });
+};
 
 export const deletePost = (ctx: Context) => {
   ctx.assert(PostIdInParam.validate(ctx.params), 400);
+
+  // TODO: 회원 권한 검사 (본인 or 관리자)
 
   post.destroy(ctx.params.postid);
 
