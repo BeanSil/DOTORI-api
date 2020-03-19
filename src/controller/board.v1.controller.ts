@@ -36,6 +36,13 @@ export const postPost = (ctx: Context) => {
   });
 
   ctx.assert(NewPost.validate(ctx.request.body), 400);
+
+  let body = ctx.request.body;
+  body.user_id = ctx.user.id;
+
+  post.create(body);
+
+  ctx.status = 201;
 };
 
 export const putPost = (ctx: Context) => {};
