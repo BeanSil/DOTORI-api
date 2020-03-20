@@ -90,7 +90,7 @@
       "text",
       "text-summary"
     ],
-    "testRegex": "src/(/__tests__/.*|(\\.|/)(test|spec))\\.(js|ts)x?$",
+    "testRegex": "src\\/tests\\/\\/?(?:[^\\/]+\\/?)*\\/*.(spec|test).ts$",
     "testPathIgnorePatterns": [
       "/node_modules/",
       "/build/",
