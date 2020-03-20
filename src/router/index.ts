@@ -9,7 +9,7 @@ const index = new Router();
 index.use('/api', api.routes());
 
 index.all('/', (ctx: Context) => {
-  ctx.status = 400;
+  ctx.status = 403;
 });
 
 export default index;
