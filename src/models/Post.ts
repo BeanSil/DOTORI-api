@@ -25,7 +25,7 @@ export const PostFactory = (sequelize: Sequelize) => {
       primaryKey: true
     },
     user_id: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.INTEGER,
       allowNull: false
     },
     board_type: {
@@ -38,7 +38,7 @@ export const PostFactory = (sequelize: Sequelize) => {
       allowNull: false
     },
     content: {
-      type: DataTypes.STRING('long'),
+      type: DataTypes.TEXT({ length: 'long' }),
       allowNull: false
     },
     is_anonymous: {
