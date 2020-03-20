@@ -63,4 +63,35 @@
       "plugin:@typescript-eslint/recommended"
     ]
   },
+  "jest": {
+    "moduleFileExtensions": [
+      "json",
+      "js",
+      "ts"
+    ],
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "src/controller/**/*.ts"
+    ],
+    "transform": {
+      "\\.ts$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "coverageThreshold": {
+      "global": {
+        "branches": 100,
+        "functions": 100,
+        "lines": 89
+      }
+    },
+    "coverageReporters": [
+      "text",
+      "text-summary"
+    ],
+    "testRegex": "src/(/__tests__/.*|(\\.|/)(test|spec))\\.(js|ts)x?$",
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/build/",
+      "/coverage/"
+    ]
+  }
 }
