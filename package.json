@@ -34,7 +34,8 @@
   },
   "scripts": {
     "start": "cross-env NODE_PATH=./src pm2 start dist --watch",
-    "test": "standardx \"src/**/*.ts\" && tsc",
+    "style-test": "standardx \"src/**/*.ts\" && tsc",
+    "test": "jest && yarn style-test",
     "pretty": "prettier es2020 --write \"src/**/*.ts\"",
     "clear": "rimraf dist",
     "build": "tsc",
