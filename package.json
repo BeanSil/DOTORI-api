@@ -63,7 +63,7 @@
       "plugin:@typescript-eslint/recommended"
     ],
     "ignore": [
-      "src/test/**/*"
+      "src/tests/**/*"
     ]
   },
   "jest": {

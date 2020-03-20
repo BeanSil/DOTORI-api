@@ -25,11 +25,10 @@ app.use(bodyParser());
 app.use(sessionCreator);
 app.use(router.routes()).use(router.allowedMethods());
 
-if (process.env.JEST_WORKER_ID === undefined)
+if (process.env.JEST_WORKER_ID === undefined) {
   app.listen(port, () => {
     console.log(`Server started at port ${port}`);
   });
-else
-  console.log('Test server running...');
+} else console.log('Test server running...');
 
 export default app;
