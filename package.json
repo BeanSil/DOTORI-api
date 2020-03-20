@@ -4,10 +4,12 @@
   "version": "1.0.0",
   "main": "dist/index.js",
   "dependencies": {
+    "@types/koa-logger": "^3.1.1",
     "cross-env": "^6.0.3",
     "dotenv": "^8.2.0",
     "koa": "^2.11.0",
     "koa-bodyparser": "^4.2.1",
+    "koa-logger": "^3.2.1",
     "koa-router": "^7.4.0",
     "nodemon": "^1.19.4",
     "pm2": "^4.2.1",
