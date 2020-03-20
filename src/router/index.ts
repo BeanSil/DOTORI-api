@@ -1,7 +1,7 @@
 import * as Router from 'koa-router';
 
 import api from './api';
-import {Context} from "koa";
+import { Context } from 'koa';
 
 const index = new Router();
 
