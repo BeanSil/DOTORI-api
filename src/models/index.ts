@@ -1,5 +1,5 @@
 import { Sequelize } from 'sequelize';
-import { UserFactory } from "./User";
+import { UserFactory } from './User';
 
 const sequelize = new Sequelize(
   process.env.DEV_DATABASE_NAME,
