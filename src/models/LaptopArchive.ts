@@ -34,11 +34,7 @@ export const LaptopArchiveFactory = (sequelize: Sequelize) => {
             allowNull: false
         },
         createdAt: {
-            type: DataTypes.DATE,
-            allowNull: false
-        },
-        updatedAt: {
-            type: DataTypes.DATE,
+            type: DataTypes.DATEONLY,
             allowNull: false
         }
     });
