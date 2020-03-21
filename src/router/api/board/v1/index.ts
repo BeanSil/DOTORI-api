@@ -13,6 +13,9 @@ const v1 = new Router();
 // BULK-GET
 v1.get('/', getPosts);
 
+// BULK-GET - pagination
+v1.get('/page/:page([0-9])', getPosts);
+
 // GET
 v1.get('/:postid', getPost);
 

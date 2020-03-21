@@ -17,9 +17,9 @@ export const getPost = async (ctx: Context) => {
 
 export const getPosts = async (ctx: Context) => {
   ctx.body = await post.findAll({
-    offset: 0,
+    offset: 20 * ctx.params.page || 0,
     limit: 20
-  }); // TODO: add pagination
+  });
 };
 
 export const postPost = (ctx: Context) => {
