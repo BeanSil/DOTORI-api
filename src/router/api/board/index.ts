@@ -4,6 +4,6 @@ import v1 from './v1';
 
 const board = new Router();
 
-board.use('/api', v1.routes());
+board.use('/v1', v1.routes());
 
 export default board;
