@@ -31,12 +31,12 @@ export const UserFactory = (sequelize: Sequelize) => {
       allowNull: false
     },
     pw: {
-      type: DataTypes.STRING(5),
+      type: DataTypes.STRING(64),
       values: ['자유게시판', '공지사항'],
       allowNull: false
     },
     name: {
-      type: DataTypes.STRING(255),
+      type: DataTypes.STRING(5),
       allowNull: false
     },
     grade: {
