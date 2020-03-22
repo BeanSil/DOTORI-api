@@ -16,4 +16,4 @@ const laptop = LaptopArchiveFactory(sequelize);
 
 sequelize.sync();
 
-export { sequelize, Sequelize, laptop};
+export { sequelize, Sequelize, laptop };
