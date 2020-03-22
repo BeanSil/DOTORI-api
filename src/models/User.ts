@@ -32,7 +32,6 @@ export const UserFactory = (sequelize: Sequelize) => {
     },
     pw: {
       type: DataTypes.STRING(64),
-      values: ['자유게시판', '공지사항'],
       allowNull: false
     },
     name: {
