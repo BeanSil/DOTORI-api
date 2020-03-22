@@ -1,4 +1,5 @@
 import { Sequelize } from 'sequelize';
+import { MusicArchiveFactory } from './MusicArchive';
 
 const sequelize = new Sequelize(
   process.env.DEV_DATABASE_NAME,
@@ -10,4 +11,8 @@ const sequelize = new Sequelize(
   }
 );
 
-export { sequelize, Sequelize };
+const music = MusicArchiveFactory(sequelize);
+
+sequelize.sync();
+
+export { sequelize, Sequelize,music };

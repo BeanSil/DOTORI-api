@@ -1,5 +1,5 @@
 import * as Router from 'koa-router';
-import {Context, Next} from "koa";
+import { Context, Next } from 'koa';
 
 const v1 = new Router();
 
