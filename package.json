@@ -4,24 +4,42 @@
   "version": "1.0.0",
   "main": "dist/index.js",
   "dependencies": {
-    "@types/koa": "^2.0.51",
-    "@types/koa-bodyparser": "^4.3.0",
-    "@types/koa-router": "^7.0.42",
+    "@types/koa-logger": "^3.1.1",
     "cross-env": "^6.0.3",
     "dotenv": "^8.2.0",
     "koa": "^2.11.0",
     "koa-bodyparser": "^4.2.1",
+    "koa-logger": "^3.2.1",
     "koa-router": "^7.4.0",
+    "mariadb": "^2.3.1",
     "nodemon": "^1.19.4",
     "pm2": "^4.2.1",
-    "rimraf": "^3.0.0",
     "sequelize": "^5.21.3",
+    "standardx": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/bluebird": "^3.5.30",
+    "@types/jest": "^25.1.4",
+    "@types/koa": "^2.0.51",
+    "@types/koa-bodyparser": "^4.3.0",
+    "@types/koa-router": "^7.0.42",
+    "@types/supertest": "^2.0.8",
+    "@types/validator": "^12.0.1",
+    "@typescript-eslint/eslint-plugin": "^2.24.0",
+    "@typescript-eslint/parser": "^2.24.0",
+    "jest": "^25.1.0",
+    "prettier": "1.19.1",
+    "rimraf": "^3.0.0",
+    "supertest": "^4.0.2",
+    "ts-jest": "^25.2.1",
     "ts-node": "^8.4.1",
     "typescript": "^3.7.2"
   },
-  "devDependencies": {},
   "scripts": {
     "start": "cross-env NODE_PATH=./src pm2 start dist --watch",
+    "style-test": "standardx \"src/**/*.ts\" && tsc",
+    "test": "jest && yarn style-test",
+    "pretty": "prettier es2020 --write \"src/**/*.ts\"",
     "clear": "rimraf dist",
     "build": "tsc",
     "dev": "nodemon --watch 'src/**/*' -e ts,tsx --exec ts-node ./src/index.ts",
@@ -34,7 +52,54 @@
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/startergate/Koa-TypeScript-Boilerplate/issues"
+    "url": "https://github.com/startergate/DOTORI-api/issues"
   },
-  "homepage": "https://github.com/startergate/Koa-TypeScript-Boilerplate#readme"
+  "homepage": "https://dotori.beansil.com",
+  "standardx": {
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "ecmaVersion": 2020
+    },
+    "ignore": [
+      "src/modules/**/*",
+      "src/tests/**/*"
+    ],
+    "plugins": [
+      "@typescript-eslint"
+    ],
+    "extends": [
+      "plugin:@typescript-eslint/recommended"
+    ]
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "json",
+      "js",
+      "ts"
+    ],
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "src/controller/**/*.ts"
+    ],
+    "transform": {
+      "\\.ts$": "ts-jest"
+    },
+    "coverageThreshold": {
+      "global": {
+        "branches": 100,
+        "functions": 100,
+        "lines": 89
+      }
+    },
+    "coverageReporters": [
+      "text",
+      "text-summary"
+    ],
+    "testRegex": "src\\/tests\\/\\/?(?:[^\\/]+\\/?)*\\/*.(spec|test).ts$",
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/build/",
+      "/coverage/"
+    ]
+  }
 }

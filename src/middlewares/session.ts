@@ -1,8 +1,11 @@
-import {Context} from "koa";
+import { Context, Next } from 'koa';
+import { user } from '../models';
+import { AnonymousUser } from '../modules/User';
 
-const sessionCreator = async (ctx: Context, next: () => Promise<any>) => {
-    ctx.user = '1';  // TODO: User 모델 만들어서 그거 줄 것
-    return await next()
+const sessionCreator = async (ctx: Context, next: Next) => {
+  const auth = ctx.request.headers.get('Authorization') || -1;
+  ctx.user = await user.findByPk(auth) || AnonymousUser;
+  await next();
 };
 
-export default sessionCreator
+export default sessionCreator;
