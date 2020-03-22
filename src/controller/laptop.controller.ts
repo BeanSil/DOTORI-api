@@ -3,7 +3,7 @@ import * as Joi from '@hapi/joi';
 import { laptop } from '../models';
 
 export const checkLaptop = async (ctx: Context) => {
-  //TODO: 유저 모델 완성되면 수정
+  // TODO: 유저 모델 완성되면 수정
   const record = await laptop.findOne({
     where: {
       user_id: ctx.user.pid,
@@ -21,7 +21,7 @@ export const checkLaptop = async (ctx: Context) => {
 };
 
 export const applyLaptop = async (ctx: Context) => {
-  //TODO: 추후 학습실 배치 이후 수정
+  // TODO: 추후 학습실 배치 이후 수정
   const application = Joi.object().keys({
     room: Joi.number()
       .integer()
@@ -33,7 +33,7 @@ export const applyLaptop = async (ctx: Context) => {
 
   ctx.assert(!application.validate(ctx.request.body).error, 400);
 
-  //TODO: 현재 노트북 대여 신청 가능한 시간인지 확인
+  // TODO: 현재 노트북 대여 신청 가능한 시간인지 확인
 
   ctx.assert(
     !(await laptop.findOne({
@@ -46,7 +46,7 @@ export const applyLaptop = async (ctx: Context) => {
     400
   );
 
-  //TODO: 유저 모델 완성되면 수정
+  // TODO: 유저 모델 완성되면 수정
   await laptop.create({
     user_id: ctx.user.pid,
     room: ctx.request.body.room,
@@ -57,7 +57,7 @@ export const applyLaptop = async (ctx: Context) => {
 };
 
 export const cancelLaptop = async (ctx: Context) => {
-  //TODO: 유저 모델 완성되면 수정
+  // TODO: 유저 모델 완성되면 수정
   const record = await laptop.findOne({
     where: {
       user_id: ctx.user.pid,

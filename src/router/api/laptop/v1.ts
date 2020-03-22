@@ -8,13 +8,13 @@ import {
 
 const v1 = new Router();
 
-//GET
+// GET
 v1.get('/', checkLaptop);
 
-//POST
+// POST
 v1.post('/', applyLaptop);
 
-//DELETE
+// DELETE
 v1.delete('/', cancelLaptop);
 
 export default v1;
