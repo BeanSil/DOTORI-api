@@ -15,4 +15,4 @@ const music = MusicArchiveFactory(sequelize);
 
 sequelize.sync();
 
-export { sequelize, Sequelize,music };
+export { sequelize, Sequelize, music };
