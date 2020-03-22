@@ -40,7 +40,7 @@
   "scripts": {
     "start": "cross-env NODE_PATH=./src pm2 start dist --watch",
     "style-test": "standardx \"src/**/*.ts\" && tsc",
-    "test": "jest --setupFiles dotenv/config && yarn style-test",
+    "test": "jest && yarn style-test",
     "pretty": "prettier es2020 --write \"src/**/*.ts\"",
     "clear": "rimraf dist",
     "build": "tsc",
@@ -57,6 +57,9 @@
     ],
     "extends": [
       "plugin:@typescript-eslint/recommended"
+    ],
+    "ignore": [
+      "src/tests/**/*"
     ]
   },
   "repository": {
