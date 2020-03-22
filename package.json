@@ -42,6 +42,9 @@
     "parserOptions": {
       "ecmaVersion": 2020
     },
+    "ignore": [
+      "src/modules/**/*"
+    ],
     "plugins": [
       "@typescript-eslint"
     ],
