@@ -74,16 +74,6 @@
       "plugin:@typescript-eslint/recommended"
     ]
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/startergate/DOTORI-api.git"
-  },
-  "author": "",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/startergate/DOTORI-api/issues"
-  },
-  "homepage": "https://dotori.beansil.com",
   "jest": {
     "moduleFileExtensions": [
       "json",
