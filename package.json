@@ -64,16 +64,14 @@
       "ecmaVersion": 2020
     },
     "ignore": [
-      "src/modules/**/*"
+      "src/modules/**/*",
+      "src/tests/**/*"
     ],
     "plugins": [
       "@typescript-eslint"
     ],
     "extends": [
       "plugin:@typescript-eslint/recommended"
-    ],
-    "ignore": [
-      "src/tests/**/*"
     ]
   },
   "repository": {
