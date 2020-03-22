@@ -4,8 +4,8 @@ import { Sequelize, DataTypes, Model, BuildOptions } from 'sequelize';
 export interface MusicArchiveAttrbutes extends Model {
     id: number;
     user_id: number;
-    music: number;
-    singer: number;
+    music: string;
+    singer: string;
     createdAt?: Date;
 }
 
