@@ -1,18 +1,11 @@
 import * as Router from 'koa-router';
 import { Context, Next } from 'koa';
+import * as Controller from '../../../../controller/music.controller'
 
 const v1 = new Router();
 
-v1.get('/', (ctx: Context) => {
-  ctx.body = 'GET /music/v1';
-});
-
-v1.post('/', (ctx: Context) => {
-  ctx.body = 'POST /music/v1';
-});
-
-v1.delete('/:id', (ctx: Context) => {
-  ctx.body = 'DELETE /music/v1/:id';
-});
+v1.get('/',Controller.checkMusic);
+v1.post('/',Controller.applyMusic);
+v1.delete('/',Controller.deleteMusic);
 
 export default v1;
