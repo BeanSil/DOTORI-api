@@ -6,27 +6,22 @@ export const checkLaptop = async (ctx: Context) => {
   //TODO: 유저 모델 완성되면 수정
   const record = await laptop.findOne({
     where: {
-      user_id: ctx.user,
+      user_id: ctx.user.pid,
       createdAt: new Date().toISOString().slice(0, 10)
     }
   });
 
-  ctx.status = 200;
+  ctx.assert(!record, 404);
 
-  if (!record) {
-    ctx.body = {
-      room: 0,
-      seat: 0
-    };
-  } else {
-    ctx.body = {
-      room: record.room,
-      seat: record.seat
-    };
-  }
+  ctx.status = 200;
+  ctx.body = {
+    room: record.room,
+    seat: record.seat
+  };
 };
 
 export const applyLaptop = async (ctx: Context) => {
+  //TODO: 추후 학습실 배치 이후 수정
   const application = Joi.object().keys({
     room: Joi.number()
       .integer()
@@ -53,7 +48,7 @@ export const applyLaptop = async (ctx: Context) => {
 
   //TODO: 유저 모델 완성되면 수정
   await laptop.create({
-    user_id: ctx.user,
+    user_id: ctx.user.pid,
     room: ctx.request.body.room,
     seat: ctx.request.body.seat
   });
@@ -65,14 +60,14 @@ export const cancelLaptop = async (ctx: Context) => {
   //TODO: 유저 모델 완성되면 수정
   const record = await laptop.findOne({
     where: {
-      user_id: ctx.user,
+      user_id: ctx.user.pid,
       createdAt: new Date().toISOString().slice(0, 10)
     }
   });
 
   ctx.assert(record, 400);
 
-  record.destroy();
+  await record.destroy();
 
   ctx.status = 204;
 };
