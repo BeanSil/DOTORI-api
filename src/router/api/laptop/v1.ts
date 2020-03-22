@@ -15,6 +15,6 @@ v1.get('/', checkLaptop);
 v1.post('/', applyLaptop);
 
 //DELETE
-v1.post('/', cancelLaptop);
+v1.delete('/', cancelLaptop);
 
 export default v1;
