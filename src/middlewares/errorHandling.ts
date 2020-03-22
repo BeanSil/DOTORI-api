@@ -1,6 +1,6 @@
 import { Context, Next } from 'koa';
 
-const errorProvider = async (ctx: Context, next: Next) => {
+const errorHandling = async (ctx: Context, next: Next) => {
   try {
     await next();
   } catch (err) {
@@ -9,11 +9,10 @@ const errorProvider = async (ctx: Context, next: Next) => {
 
     ctx.body = {
       error: {
-        status: ctx.status,
         message: err.message
       }
     };
   }
 };
 
-export default errorProvider;
+export default errorHandling;

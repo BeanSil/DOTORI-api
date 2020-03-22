@@ -8,6 +8,6 @@ score.get('/', validateStudent, Controller.getUserScore);
 score.get('/archive', validateAdmin, Controller.getAllArchives);
 score.post('/archive', validateAdmin, Controller.insertArchive);
 score.put('/archive', validateAdmin, Controller.updateArchive);
-score.delete('/archive', validateAdmin, Controller.removeArchive);
+score.delete('/archive', validateAdmin, Controller.deleteArchive);
 
 export default score;

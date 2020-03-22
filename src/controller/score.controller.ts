@@ -49,11 +49,16 @@ export const insertArchive = async (ctx: Context) => {
     reason: Joi.string().max(255)
   });
 
+  // ***
+  // TO-DO: Concurrency 적용하기
   const archive = await archiveSchema.validateAsync(ctx.request.body);
+
+  const insertedArchive = await scoreArchive.create(archive);
+  // ***
 
   const data = {
     data: {
-      insertedArchive: await scoreArchive.create(archive)
+      insertedArchive: insertedArchive
     }
   };
 
@@ -78,55 +83,46 @@ export const updateArchive = async (ctx: Context) => {
     }
   }).with('data', 'conditions');
 
+  // ***
+  // TO-DO: Concurrency 적용하기
   const requested = await requestSchema.validateAsync(ctx.request.body);
 
   const provided = requested.data;
   const conditions = requested.conditions;
 
-  const currentArchive = await scoreArchive.findAll({
-    where: conditions
-  });
-
   const result = await scoreArchive.update(provided, {
     where: conditions
   });
-
-  const updatedArchive = await scoreArchive.findAll({
-    where: conditions
-  });
-
-  // TO-DO: 수정 전(currentArchive)과 수정 후(updatedArchive)가 같은 경우 에러 Throw
+  // ***
 
   const data = {
     data: {
-      result: result,
-      updatedArchive: currentArchive,
-      currentArchive: updatedArchive
+      result: result
     }
   };
 
   ctx.body = data;
 };
 
-export const removeArchive = async (ctx: Context) => {
+export const deleteArchive = async (ctx: Context) => {
   const requestSchema = Joi.object({
     id: Joi.number()
       .integer()
       .required()
   });
 
+  // ***
+  // TO-DO: Concurrency 적용하기
   const conditions = await requestSchema.validateAsync(ctx.request.body);
 
-  const deletedArchive = await scoreArchive.findAll({
+  const result = await scoreArchive.destroy({
     where: conditions
   });
+  // ***
 
   const data = {
     data: {
-      result: await scoreArchive.destroy({
-        where: conditions
-      }),
-      deletedArchive: deletedArchive
+      result: result
     }
   };
 

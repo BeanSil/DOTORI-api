@@ -1,16 +1,15 @@
 import { Sequelize, DataTypes, Model, BuildOptions } from 'sequelize';
 
 export interface ScoreArchiveAttributes extends Model {
-  id: number;
-  score: number;
-  reason?: string | null;
-  createdAt?: Date;
-  updatedAt?: Date;
+  readonly id: number;
+  readonly score: number;
+  readonly reason?: string | null;
+  readonly createdAt?: Date;
+  readonly updatedAt?: Date;
 }
 
 export type ScoreArchiveStatic = typeof Model & {
   new (values?: object, options?: BuildOptions): ScoreArchiveAttributes;
-  associate(models: any): void;
 };
 
 export const ScoreArchiveFactory = (sequelize: Sequelize) => {
@@ -20,43 +19,18 @@ export const ScoreArchiveFactory = (sequelize: Sequelize) => {
       primaryKey: true,
       autoIncrement: true
     },
+    user_id: {
+      type: DataTypes.BIGINT,
+      allowNulls: false
+    },
     score: {
       type: DataTypes.INTEGER,
       allowNulls: false
     },
     reason: {
       type: DataTypes.STRING
-    },
-    createdAt: {
-      type: DataTypes.DATE,
-      allowNulls: false
-    },
-    updatedAt: {
-      type: DataTypes.DATE,
-      allowNulls: false
     }
   };
 
-  const foreignKeyOptions = {
-    foreignKey: {
-      allowNull: false,
-      name: 'user_id'
-    },
-    onDelete: 'CASCADE'
-  };
-
-  const ScoreArchive = <ScoreArchiveStatic>(
-    sequelize.define('ScoreArchive', attributes)
-  );
-
-  ScoreArchive.associate = (models: any) => {
-    models
-      .filter((model: any) => model.tableName === 'Users')
-      .map((model: any) => {
-        model.hasMany(ScoreArchive, foreignKeyOptions);
-        ScoreArchive.belongsTo(model, foreignKeyOptions);
-      });
-  };
-
-  return ScoreArchive;
+  return <ScoreArchiveStatic>sequelize.define('ScoreArchive', attributes);
 };
