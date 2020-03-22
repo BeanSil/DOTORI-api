@@ -5,9 +5,14 @@
     "noImplicitAny": true,
     "outDir": "./dist",
     "sourceMap": true,
+    "types": ["@types/jest"],
     "typeRoots": ["/node_modules/@types", "/@types"]
   },
   "include": [
     "./src/**/*"
+  ],
+  "exclude": [
+    "./src/**/*.spec.ts",
+    "./src/**/*.test.ts"
   ]
 }
