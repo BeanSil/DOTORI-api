@@ -18,18 +18,18 @@ type PostStatic = typeof Model & {
 export const PostFactory = (sequelize: Sequelize) => {
   return <PostStatic>sequelize.define('Post', {
     post_id: {
-      type: DataTypes.BIGINT,
+      type: DataTypes.BIGINT.UNSIGNED,
       autoIncrement: true,
       unique: true,
       allowNull: false,
       primaryKey: true
     },
     user_id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false
     },
     board_type: {
-      type: DataTypes.STRING(5),
+      type: DataTypes.STRING(),
       values: ['자유게시판', '공지사항'],
       allowNull: false
     },

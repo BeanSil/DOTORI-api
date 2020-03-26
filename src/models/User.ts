@@ -20,7 +20,7 @@ type UserStatic = typeof Model & {
 export const UserFactory = (sequelize: Sequelize) => {
   return <UserStatic>sequelize.define('User', {
     pid: {
-      type: DataTypes.BIGINT,
+      type: DataTypes.BIGINT.UNSIGNED,
       autoIncrement: true,
       unique: true,
       allowNull: false,
@@ -39,15 +39,15 @@ export const UserFactory = (sequelize: Sequelize) => {
       allowNull: false
     },
     grade: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER.UNSIGNED,
       allowNull: true
     },
     class: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER.UNSIGNED,
       allowNull: true
     },
     number: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER.UNSIGNED,
       allowNull: true
     },
     suspended_until: {
