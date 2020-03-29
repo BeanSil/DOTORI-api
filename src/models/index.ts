@@ -9,7 +9,7 @@ const sequelize = new Sequelize(
   process.env.DEV_DATABASE_PW,
   {
     host: process.env.DEV_DATABASE_HOST,
-    port: process.env.DEV_DATABASE_PORT as unknown as number || null,
+    port: ((process.env.DEV_DATABASE_PORT as unknown) as number) || null,
     dialect: 'mariadb'
   }
 );
@@ -20,7 +20,7 @@ const sequelizeUser = new Sequelize(
   process.env.DEV_DATABASE_PW,
   {
     host: process.env.DEV_DATABASE_HOST,
-    port: process.env.DEV_DATABASE_PORT as unknown as number || null,
+    port: ((process.env.DEV_DATABASE_PORT as unknown) as number) || null,
     dialect: 'mariadb'
   }
 );
