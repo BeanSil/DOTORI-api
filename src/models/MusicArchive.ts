@@ -5,7 +5,8 @@ export interface MusicArchiveAttrbutes extends Model {
     user_id: number;
     music: string;
     singer: string;
-    createdAt?: Date;
+    link: string;
+    status: number;
 }
 
 export type MusicArchiveStatic = typeof Model & {
@@ -31,9 +32,14 @@ export const MusicArchiveFactory = (sequelize: Sequelize) => {
       type: DataTypes.STRING,
       allowNull: false
     },
-    createdAt: {
-      type: DataTypes.DATE,
+    link: {
+      type: DataTypes.STRING,
       allowNull: false
+    },
+    status: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0
     }
   });
 };
