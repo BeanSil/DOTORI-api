@@ -1,7 +1,6 @@
 {
   "rules": {
     "semi": [2, "always"],
-    "no-unused-vars": "off",
-    "camelcase": "warn"
+    "no-unused-vars": "off"
   }
 }
