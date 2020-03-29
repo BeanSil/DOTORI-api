@@ -3,7 +3,7 @@ import { user } from '../models';
 import { AnonymousUser } from '../modules/User';
 
 const sessionCreator = async (ctx: Context, next: Next) => {
-  const auth = ctx.request.headers['Authorization'] || -1;
+  const auth = ctx.request.headers.Authorization || -1;
   ctx.user = await user.findByPk(auth) || AnonymousUser;
   await next();
 };
