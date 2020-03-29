@@ -44,9 +44,14 @@ export const postPost = async (ctx: Context) => {
   const body = ctx.request.body;
   body.user_id = ctx.user.id;
 
-  await post.create(body);
+  const result = await post.create(body);
 
   ctx.status = 201;
+
+  ctx.body = {
+    isCreated: true,
+    data: result
+  };
 };
 
 export const putPost = async (ctx: Context) => {
@@ -64,11 +69,14 @@ export const putPost = async (ctx: Context) => {
   ctx.assert(!PostIdInParam.validate(ctx.params).error, 400);
   ctx.assert(!OldPost.validate(ctx.request.body).error, 400);
 
-  ctx.assert(!(await post.update(ctx.request.body, {
-    where: {
-      post_id: ctx.params.postid
-    }
-  })), 404);
+  ctx.assert(
+    !(await post.update(ctx.request.body, {
+      where: {
+        post_id: ctx.params.postid
+      }
+    })),
+    404
+  );
 
   ctx.status = 200;
 };
