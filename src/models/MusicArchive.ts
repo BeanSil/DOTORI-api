@@ -1,12 +1,12 @@
 import { Sequelize, DataTypes, Model, BuildOptions } from 'sequelize';
 
 export interface MusicArchiveAttrbutes extends Model {
-    id: number;
-    user_id: number;
-    music: string;
-    singer: string;
-    link: string;
-    status: number;
+  id: number;
+  user_id: number;
+  music: string;
+  singer: string;
+  link: string;
+  status: number;
 }
 
 export type MusicArchiveStatic = typeof Model & {
