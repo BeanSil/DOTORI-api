@@ -5,7 +5,7 @@ import * as Joi from '@hapi/joi';
 export const applyMusic = async (ctx: Context) => {
     const getdata = ctx.request.body;
 
-    const data ={
+    const data = {
         applyMusic: await music.create(getdata)
     }
 
