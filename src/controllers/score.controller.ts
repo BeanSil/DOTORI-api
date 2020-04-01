@@ -1,7 +1,7 @@
 import { Context } from 'koa';
 import * as Joi from '@hapi/joi';
 
-import { scoreArchive } from '../models';
+import { scoreArchive, user } from '../models';
 
 export const getUserScore = async (ctx: Context) => {
   const user = ctx.user;
@@ -25,9 +25,10 @@ export const getUserScore = async (ctx: Context) => {
 };
 
 export const getAllArchives = async (ctx: Context) => {
-  const archives = await scoreArchive.findAll();
+  const _archives = await scoreArchive.findAll();
 
-  // TO-DO: 불러온 아카이브 데이터 중 user_id로 User 데이터 불러오기
+  const userFetched = _archives.map(fetchUserPipeline);
+  const archives = await Promise.all(userFetched);
 
   const data = {
     data: {
@@ -49,12 +50,10 @@ export const insertArchive = async (ctx: Context) => {
     reason: Joi.string().max(255)
   });
 
-  // ***
-  // TO-DO: Concurrency 적용하기
-  const archive = await archiveSchema.validateAsync(ctx.request.body);
-
-  const insertedArchive = await scoreArchive.create(archive);
-  // ***
+  const [...insertedArchive] = await Promise.all([
+    await archiveSchema.validateAsync(ctx.request.body),
+    await scoreArchive.create(ctx.request.body)
+  ]);
 
   const data = {
     data: {
@@ -83,17 +82,16 @@ export const updateArchive = async (ctx: Context) => {
     }
   }).with('data', 'conditions');
 
-  // ***
-  // TO-DO: Concurrency 적용하기
-  const requested = await requestSchema.validateAsync(ctx.request.body);
-
+  const requested = ctx.request.body;
   const provided = requested.data;
   const conditions = requested.conditions;
 
-  const result = await scoreArchive.update(provided, {
-    where: conditions
-  });
-  // ***
+  const [...result] = await Promise.all([
+    await requestSchema.validateAsync(ctx.request.body),
+    await scoreArchive.update(provided, {
+      where: conditions
+    })
+  ]);
 
   const data = {
     data: {
@@ -111,14 +109,12 @@ export const deleteArchive = async (ctx: Context) => {
       .required()
   });
 
-  // ***
-  // TO-DO: Concurrency 적용하기
-  const conditions = await requestSchema.validateAsync(ctx.request.body);
-
-  const result = await scoreArchive.destroy({
-    where: conditions
-  });
-  // ***
+  const [...result] = await Promise.all([
+    await requestSchema.validateAsync(ctx.request.body),
+    await scoreArchive.destroy({
+      where: ctx.request.body
+    })
+  ]);
 
   const data = {
     data: {
@@ -127,4 +123,10 @@ export const deleteArchive = async (ctx: Context) => {
   };
 
   ctx.body = data;
+};
+
+const fetchUserPipeline = async (archive: any) => {
+  archive.user = await user.findByPk(archive.id);
+
+  return archive;
 };

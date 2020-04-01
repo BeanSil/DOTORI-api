@@ -4,8 +4,6 @@ export interface ScoreArchiveAttributes extends Model {
   readonly id: number;
   readonly score: number;
   readonly reason?: string | null;
-  readonly createdAt?: Date;
-  readonly updatedAt?: Date;
 }
 
 export type ScoreArchiveStatic = typeof Model & {
