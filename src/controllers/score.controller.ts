@@ -50,7 +50,7 @@ export const insertArchive = async (ctx: Context) => {
     reason: Joi.string().max(255)
   });
 
-  const [...insertedArchive] = await Promise.all([
+  const [_, insertedArchive] = await Promise.all([
     await archiveSchema.validateAsync(ctx.request.body),
     await scoreArchive.create(ctx.request.body)
   ]);
@@ -86,7 +86,7 @@ export const updateArchive = async (ctx: Context) => {
   const provided = requested.data;
   const conditions = requested.conditions;
 
-  const [...result] = await Promise.all([
+  const [_, result] = await Promise.all([
     await requestSchema.validateAsync(ctx.request.body),
     await scoreArchive.update(provided, {
       where: conditions
@@ -109,7 +109,7 @@ export const deleteArchive = async (ctx: Context) => {
       .required()
   });
 
-  const [...result] = await Promise.all([
+  const [_, result] = await Promise.all([
     await requestSchema.validateAsync(ctx.request.body),
     await scoreArchive.destroy({
       where: ctx.request.body
