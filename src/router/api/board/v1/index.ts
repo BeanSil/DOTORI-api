@@ -3,8 +3,8 @@ import * as Router from 'koa-router';
 import {
   getPosts,
   getPost,
-  postPost,
   putPost,
+  postPost,
   deletePost
 } from '../../../../controller/board.v1.controller';
 
@@ -23,7 +23,7 @@ v1.get('/:postid', getPost);
 v1.post('/:postid', postPost);
 
 // PUT
-v1.post('/', putPost);
+v1.put('/', putPost);
 
 // DELETE
 v1.delete('/:postid', deletePost);
