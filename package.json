@@ -41,7 +41,7 @@
   "scripts": {
     "start": "yarn build && cross-env NODE_ENV=deploy NODE_PATH=./src pm2 start dist/deploy.js --watch",
     "style-test": "standardx \"src/**/*.ts\" && tsc",
-    "test": "jest && yarn style-test",
+    "test": "jest -i && yarn style-test",
     "pretty": "prettier es2020 --write \"src/**/*.ts\"",
     "clear": "rimraf dist",
     "build": "tsc",
