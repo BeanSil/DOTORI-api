@@ -3,7 +3,7 @@ import * as Joi from '@hapi/joi';
 import { post } from '../models';
 
 const PostIdInParam = Joi.object().keys({
-  id: Joi.number()
+  postid: Joi.number()
     .integer()
     .min(1)
     .required()
@@ -68,26 +68,22 @@ export const postPost = async (ctx: Context) => {
 
   ctx.assert(!PostIdInParam.validate(ctx.params).error, 400);
   ctx.assert(!OldPost.validate(ctx.request.body).error, 400);
-
-  ctx.assert(
-    !(await post.update(ctx.request.body, {
-      where: {
-        post_id: ctx.params.postid
-      }
-    })),
-    404
-  );
+  const result = await post.update(ctx.request.body, {
+    where: {
+      post_id: ctx.params.postid
+    }
+  });
+  ctx.assert(result, 404);
 
   ctx.status = 200;
 };
 
 export const deletePost = async (ctx: Context) => {
-  ctx.assert(!PostIdInParam.validate(ctx.params), 400);
+  ctx.assert(!PostIdInParam.validate(ctx.params), 404);
 
   // TODO: 회원 권한 검사 (본인 or 관리자)
 
   const result = await post.destroy({ where: { post_id: ctx.params.postid } });
-
   ctx.assert(result, 404);
 
   ctx.status = 200;
