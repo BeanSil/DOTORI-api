@@ -7,7 +7,9 @@ import * as path from 'path';
 import * as dotenv from 'dotenv';
 
 // 각 환경에서만 필요한 변수를 가져옵니다.
-dotenv.config({ path: path.join(__dirname, `../.env.${process.env.NODE_ENV}`) });
+dotenv.config({
+  path: path.join(__dirname, `../.env.${process.env.NODE_ENV}`)
+});
 
 // 모든 환경에서 사용되는 변수를 불러옵니다.
 // override는 되지 않습니다.

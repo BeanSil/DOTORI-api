@@ -8,12 +8,14 @@ const sequelizeUser = new Sequelize(userDb);
 
 const user = UserFactory(sequelizeUser);
 
-sequelize.createSchema(db.database, {}).then(() => {
-  sequelize.sync();
+const sync = sequelize.createSchema(db.database, {}).then(() => {
+  return sequelize.sync();
 });
 
-sequelizeUser.createSchema(userDb.database, {}).then(() => {
-  sequelizeUser.sync();
+const syncUser = sequelizeUser.createSchema(userDb.database, {}).then(() => {
+  return sequelizeUser.sync();
 });
 
-export { sequelize, Sequelize, user };
+const waitForSync = Promise.all([sync, syncUser]);
+
+export { sequelize, Sequelize, waitForSync, user };
