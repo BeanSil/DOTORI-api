@@ -1,5 +1,5 @@
 import * as request from 'supertest';
-import app from '../..';
+import app from '../../';
 
 const api = '/api/music/v1/';
 
