@@ -56,7 +56,7 @@ export const postPost = async (ctx: Context) => {
 
 export const putPost = async (ctx: Context) => {
   const OldPost = Joi.object().keys({
-    board_type: Joi.string().allow(['자유게시판', '공지사항']),
+    board_type: Joi.string().valid('자유게시판', '공지사항'),
     title: Joi.string()
       .min(1)
       .max(255),
