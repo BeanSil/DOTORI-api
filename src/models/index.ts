@@ -20,4 +20,4 @@ const syncUser = sequelizeUser.createSchema(userDb.database, {}).then(() => {
 
 const waitForSync = Promise.all([sync, syncUser]);
 
-export { sequelize, Sequelize, waitForSync, user };
+export { sequelize, Sequelize, waitForSync, music, user };
