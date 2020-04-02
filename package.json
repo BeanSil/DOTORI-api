@@ -2,7 +2,7 @@
   "name": "dotori-v1",
   "description": "dotori",
   "version": "1.0.0",
-  "main": "dist/index.js",
+  "main": "dist/deploy.js",
   "dependencies": {
     "@types/koa-logger": "^3.1.1",
     "cross-env": "^6.0.3",
@@ -36,13 +36,13 @@
     "typescript": "^3.7.2"
   },
   "scripts": {
-    "start": "cross-env NODE_PATH=./src pm2 start dist --watch",
+    "start": "cross-env NODE_ENV=deploy NODE_PATH=./src pm2 start dist/deploy --watch",
     "style-test": "standardx \"src/**/*.ts\" && tsc",
     "test": "jest && yarn style-test",
     "pretty": "prettier es2020 --write \"src/**/*.ts\"",
     "clear": "rimraf dist",
     "build": "tsc",
-    "dev": "nodemon --watch 'src/**/*' -e ts,tsx --exec ts-node ./src/index.ts",
+    "dev": "cross-env NODE_PATH=./src NODE_ENV=develop nodemon --watch 'src/**/*' -e ts,tsx --exec ts-node ./src/index.ts",
     "kill": "pm2 kill"
   },
   "repository": {
@@ -72,6 +72,7 @@
     ]
   },
   "jest": {
+    "setupFiles": ["./src/test/index.ts"],
     "moduleFileExtensions": [
       "json",
       "js",
