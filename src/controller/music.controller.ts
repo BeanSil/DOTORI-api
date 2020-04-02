@@ -17,7 +17,7 @@ export const applyMusic = async (ctx: Context) => {
 export const checkmusic = async (ctx: Context) => {
   const requestSchema = Joi.object({
     data: {
-      //status : 0: 요청 완료, 1:음악 승인, 2:음악 거절
+      // status : 0: 요청 완료, 1:음악 승인, 2:음악 거절
       status: Joi.number()
         .integer()
         .required()
