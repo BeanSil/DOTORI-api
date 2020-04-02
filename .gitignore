@@ -168,10 +168,6 @@ typings/
 # Yarn Integrity file
 .yarn-integrity
 
-# dotenv environment variables file
-.env.deploy
-.env.test
-
 # parcel-bundler cache (https://parceljs.org/)
 .cache
 
