@@ -8,6 +8,12 @@ const sequelizeUser = new Sequelize(userDb);
 
 const user = UserFactory(sequelizeUser);
 
-sequelizeUser.sync();
+sequelize.createSchema(db.database, {}).then(() => {
+  sequelize.sync();
+});
+
+sequelizeUser.createSchema(userDb.database, {}).then(() => {
+  sequelizeUser.sync();
+});
 
 export { sequelize, Sequelize, user };
