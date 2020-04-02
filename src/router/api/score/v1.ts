@@ -6,7 +6,7 @@ import {
   insertArchive,
   updateArchive,
   deleteArchive
-} from '../../../controllers';
+} from '../../../controller';
 import { validateStudent, validateAdmin } from '../../../middlewares';
 
 const score = new Router();

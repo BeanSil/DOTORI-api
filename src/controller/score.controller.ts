@@ -12,7 +12,9 @@ export const getUserScore = async (ctx: Context) => {
     }
   });
 
-  const scores = archive.map((archive: any) => archive.score);
+  const scores = archive.map(
+    /* istanbul ignore next */ (archive: any) => archive.score
+  );
 
   const data = {
     data: {
@@ -41,7 +43,7 @@ export const getAllArchives = async (ctx: Context) => {
 
 export const insertArchive = async (ctx: Context) => {
   const archiveSchema = Joi.object({
-    data: {
+    data: Joi.object({
       score: Joi.number()
         .integer()
         .required(),
@@ -49,7 +51,7 @@ export const insertArchive = async (ctx: Context) => {
         .integer()
         .required(),
       reason: Joi.string().max(255)
-    }
+    }).required()
   });
 
   const [_, insertedArchive] = await Promise.all([
@@ -68,7 +70,7 @@ export const insertArchive = async (ctx: Context) => {
 
 export const updateArchive = async (ctx: Context) => {
   const requestSchema = Joi.object({
-    data: {
+    data: Joi.object({
       score: Joi.number()
         .integer()
         .required(),
@@ -76,12 +78,12 @@ export const updateArchive = async (ctx: Context) => {
         .integer()
         .required(),
       reason: Joi.string().max(255)
-    },
-    conditions: {
+    }).required(),
+    conditions: Joi.object({
       id: Joi.number()
         .integer()
         .required()
-    }
+    }).required()
   }).with('data', 'conditions');
 
   const requested = ctx.request.body;
@@ -106,11 +108,11 @@ export const updateArchive = async (ctx: Context) => {
 
 export const deleteArchive = async (ctx: Context) => {
   const requestSchema = Joi.object({
-    conditions: {
+    conditions: Joi.object({
       id: Joi.number()
         .integer()
         .required()
-    }
+    }).required()
   });
 
   const [_, result] = await Promise.all([
@@ -129,7 +131,7 @@ export const deleteArchive = async (ctx: Context) => {
   ctx.body = data;
 };
 
-const fetchUserPipeline = async (archive: any) => {
+const fetchUserPipeline = /* istanbul ignore next */ async (archive: any) => {
   archive.user = await user.findByPk(archive.user_id);
 
   return archive;

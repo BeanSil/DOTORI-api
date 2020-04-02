@@ -2,6 +2,7 @@ import { Sequelize, DataTypes, Model, BuildOptions } from 'sequelize';
 
 export interface ScoreArchiveAttributes extends Model {
   readonly id: number;
+  readonly user_id: number;
   readonly score: number;
   readonly reason?: string | null;
 }
