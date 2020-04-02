@@ -79,7 +79,7 @@ export const postPost = async (ctx: Context) => {
 };
 
 export const deletePost = async (ctx: Context) => {
-  ctx.assert(!PostIdInParam.validate(ctx.params), 404);
+  ctx.assert(!PostIdInParam.validate(ctx.params).error, 404);
 
   // TODO: 회원 권한 검사 (본인 or 관리자)
 
