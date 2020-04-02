@@ -35,7 +35,7 @@ export const UserFactory = (sequelize: Sequelize) => {
       allowNull: false
     },
     name: {
-      type: DataTypes.STRING(5),
+      type: DataTypes.STRING,
       allowNull: false
     },
     grade: {
