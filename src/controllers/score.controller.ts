@@ -8,7 +8,7 @@ export const getUserScore = async (ctx: Context) => {
 
   const archive = await scoreArchive.findAll({
     where: {
-      user_id: user.id
+      user_id: user.pid
     }
   });
 
@@ -41,18 +41,20 @@ export const getAllArchives = async (ctx: Context) => {
 
 export const insertArchive = async (ctx: Context) => {
   const archiveSchema = Joi.object({
-    score: Joi.number()
-      .integer()
-      .required(),
-    user_id: Joi.number()
-      .integer()
-      .required(),
-    reason: Joi.string().max(255)
+    data: {
+      score: Joi.number()
+        .integer()
+        .required(),
+      user_id: Joi.number()
+        .integer()
+        .required(),
+      reason: Joi.string().max(255)
+    }
   });
 
   const [_, insertedArchive] = await Promise.all([
     await archiveSchema.validateAsync(ctx.request.body),
-    await scoreArchive.create(ctx.request.body)
+    await scoreArchive.create(ctx.request.body.data)
   ]);
 
   const data = {
@@ -104,15 +106,17 @@ export const updateArchive = async (ctx: Context) => {
 
 export const deleteArchive = async (ctx: Context) => {
   const requestSchema = Joi.object({
-    id: Joi.number()
-      .integer()
-      .required()
+    conditions: {
+      id: Joi.number()
+        .integer()
+        .required()
+    }
   });
 
   const [_, result] = await Promise.all([
     await requestSchema.validateAsync(ctx.request.body),
     await scoreArchive.destroy({
-      where: ctx.request.body
+      where: ctx.request.body.conditions
     })
   ]);
 
@@ -126,7 +130,7 @@ export const deleteArchive = async (ctx: Context) => {
 };
 
 const fetchUserPipeline = async (archive: any) => {
-  archive.user = await user.findByPk(archive.id);
+  archive.user = await user.findByPk(archive.user_id);
 
   return archive;
 };
