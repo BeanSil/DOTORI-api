@@ -36,7 +36,8 @@ describe('delete post', () => {
     await post.destroy({ where: { post_id: created } });
     done();
   });
-  test('with wrong board id', async () => {
+
+  test('with wrong post id', async () => {
     const response = await request(app.callback())
       .delete(api)
       .set('Authorization', authKey);
@@ -48,5 +49,6 @@ describe('delete post', () => {
     const response = await request(app.callback())
       .delete(api.replace('postid', created))
       .set('Authorization', authKey);
+    expect(response.status).toBe(200);
   });
 });
