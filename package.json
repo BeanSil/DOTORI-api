@@ -73,7 +73,7 @@
   },
   "jest": {
     "setupFiles": [
-      "./src/test/index.ts"
+      "./src/tests/index.ts"
     ],
     "moduleFileExtensions": [
       "json",
