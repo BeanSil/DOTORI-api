@@ -27,7 +27,6 @@ export const getPosts = async (ctx: Context) => {
 };
 
 export const putPost = async (ctx: Context) => {
-  console.log("am i here right");
   const NewPost = Joi.object().keys({
     board_type: Joi.string()
       .valid('자유게시판', '공지사항')
@@ -83,11 +82,13 @@ export const postPost = async (ctx: Context) => {
 };
 
 export const deletePost = async (ctx: Context) => {
-  ctx.assert(PostIdInParam.validate(ctx.params), 400);
+  ctx.assert(!PostIdInParam.validate(ctx.params), 400);
 
   // TODO: 회원 권한 검사 (본인 or 관리자)
 
-  ctx.assert(!(await post.destroy(ctx.params.postid)), 404);
+  const result = await post.destroy({ where: { post_id: ctx.params.postid } });
+
+  ctx.assert(result, 404);
 
   ctx.status = 200;
 };
