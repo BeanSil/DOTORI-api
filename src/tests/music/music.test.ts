@@ -30,7 +30,9 @@ describe('MusicApply', () => {
   describe('Get music apply list', () => {
     it('get', async () => {
       const response = await request(app.callback()).get(api);
+      
       expect(response.status).toBe(200);
+      expect(response.body.data).toBeTruthy();
     });
   });
 
