@@ -17,7 +17,6 @@ describe('delete post', () => {
       name: '고익종'
     });
     authKey = testUser.pid;
-    console.log(testUser);
     done();
   });
 
@@ -29,7 +28,6 @@ describe('delete post', () => {
       content: '노트북 대여시간이 변경됩니다.',
       is_anonymous: false
     });
-    console.log(testPost);
     created = testPost.post_id;
     done();
   });
@@ -47,7 +45,6 @@ describe('delete post', () => {
   });
 
   test('normal case', async () => {
-    console.log(created);
     const response = await request(app.callback())
       .delete(api.replace('postid', created))
       .set('Authorization', authKey);
