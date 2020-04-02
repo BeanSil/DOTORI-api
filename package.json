@@ -42,7 +42,7 @@
     "pretty": "prettier es2020 --write \"src/**/*.ts\"",
     "clear": "rimraf dist",
     "build": "tsc",
-    "dev": "cross-env NODE_PATH=./src NODE_ENV=develop nodemon --watch 'src/**/*' -e ts,tsx --exec ts-node ./src/index.ts",
+    "dev": "cross-env NODE_PATH=./src NODE_ENV=develop nodemon --watch 'src/**/*' -e ts,tsx --exec ts-node ./src/deploy.ts",
     "kill": "pm2 kill"
   },
   "repository": {
@@ -72,7 +72,9 @@
     ]
   },
   "jest": {
-    "setupFiles": ["./src/test/index.ts"],
+    "setupFiles": [
+      "./src/test/index.ts"
+    ],
     "moduleFileExtensions": [
       "json",
       "js",
