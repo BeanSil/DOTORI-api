@@ -26,10 +26,11 @@ export const getPosts = async (ctx: Context) => {
   };
 };
 
-export const postPost = async (ctx: Context) => {
+export const putPost = async (ctx: Context) => {
+  console.log("am i here right");
   const NewPost = Joi.object().keys({
     board_type: Joi.string()
-      .allow(['자유게시판', '공지사항'])
+      .valid('자유게시판', '공지사항')
       .required(),
     title: Joi.string()
       .min(1)
@@ -42,7 +43,7 @@ export const postPost = async (ctx: Context) => {
   ctx.assert(!NewPost.validate(ctx.request.body).error, 400);
 
   const body = ctx.request.body;
-  body.user_id = ctx.user.id;
+  body.user_id = ctx.user.pid;
 
   const result = await post.create(body);
 
@@ -54,7 +55,7 @@ export const postPost = async (ctx: Context) => {
   };
 };
 
-export const putPost = async (ctx: Context) => {
+export const postPost = async (ctx: Context) => {
   const OldPost = Joi.object().keys({
     board_type: Joi.string().valid('자유게시판', '공지사항'),
     title: Joi.string()
