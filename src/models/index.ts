@@ -1,33 +1,23 @@
 import { Sequelize } from 'sequelize';
 import { ScoreArchiveFactory } from './ScoreArchive';
 import { UserFactory } from './User';
+import { db, userDb } from './setting';
 
-const sequelize = new Sequelize(
-  process.env.DEV_DATABASE_NAME,
-  process.env.DEV_DATABASE_ID,
-  process.env.DEV_DATABASE_PW,
-  {
-    host: process.env.DEV_DATABASE_HOST,
-    port: process.env.DEV_DATABASE_PORT as unknown as number || null,
-    dialect: 'mariadb'
-  }
-);
+const sequelize = new Sequelize(db);
 
-const sequelizeUser = new Sequelize(
-  'bean_user',
-  process.env.DEV_DATABASE_ID,
-  process.env.DEV_DATABASE_PW,
-  {
-    host: process.env.DEV_DATABASE_HOST,
-    port: process.env.DEV_DATABASE_PORT as unknown as number || null,
-    dialect: 'mariadb'
-  }
-);
+const sequelizeUser = new Sequelize(userDb);
 
 const scoreArchive = ScoreArchiveFactory(sequelize);
 const user = UserFactory(sequelizeUser);
 
-sequelize.sync();
-sequelizeUser.sync();
+const sync = sequelize.createSchema(db.database, {}).then(() => {
+  return sequelize.sync();
+});
 
-export { sequelize, Sequelize, scoreArchive, user };
+const syncUser = sequelizeUser.createSchema(userDb.database, {}).then(() => {
+  return sequelizeUser.sync();
+});
+
+const waitForSync = Promise.all([sync, syncUser]);
+
+export { sequelize, Sequelize, waitForSync, scoreArchive, user };
