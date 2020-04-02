@@ -169,7 +169,7 @@ typings/
 .yarn-integrity
 
 # dotenv environment variables file
-.env
+.env.deploy
 .env.test
 
 # parcel-bundler cache (https://parceljs.org/)
@@ -210,3 +210,5 @@ tmp/
 temp/
 
 # End of https://www.gitignore.io/api/git,node,jetbrains+all
+
+.env*
