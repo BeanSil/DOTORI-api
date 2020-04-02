@@ -13,14 +13,14 @@ describe('create post', () => {
     content: '노트북 대여시간이 변경됩니다.',
     is_anonymous: false
   });
-  test('create post without body', async () => {
+  test('without body', async () => {
     const response = await request(app.callback())
       .post(api)
       .set('Authorization', authKey);
     expect(response.status).toBe(400);
   });
 
-  test('create post without user', async () => {
+  test('without user', async () => {
     const response = await request(app.callback())
       .post(api)
       .type('form')
@@ -28,7 +28,7 @@ describe('create post', () => {
     expect(response.status).toBe(400);
   });
 
-  test('create post with wrong body', async () => {
+  test('with wrong body', async () => {
     let newData = baseData;
     newData.set('board_type', '주식갤러리');
     const response = await request(app.callback())
@@ -39,7 +39,7 @@ describe('create post', () => {
     expect(response.status).toBe(400);
   });
 
-  test('create post', async () => {
+  test('normal case', async () => {
     const response = await request(app.callback())
       .post(api)
       .set('Authorization', authKey)
