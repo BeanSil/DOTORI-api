@@ -17,15 +17,15 @@ v1.get('/', getPosts);
 v1.get('/page/:page([0-9])', getPosts);
 
 // GET
-v1.get('/:postid', getPost);
+v1.get('/:postid([0-9])', getPost);
 
 // POST
-v1.post('/:postid', postPost);
+v1.post('/:postid([0-9])', postPost);
 
 // PUT
 v1.put('/', putPost);
 
 // DELETE
-v1.delete('/:postid', deletePost);
+v1.delete('/:postid([0-9])', deletePost);
 
 export default v1;
