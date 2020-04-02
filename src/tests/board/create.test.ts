@@ -1,10 +1,11 @@
 import { Map } from 'immutable';
 import * as request from 'supertest';
 import app from '../../';
+import { user, waitForSync } from '../../models';
 
 const api = '/api/board/v1/';
 
-const authKey = '';
+let authKey: any;
 
 describe('create post', () => {
   const baseData = Map<any>({
@@ -13,16 +14,33 @@ describe('create post', () => {
     content: '노트북 대여시간이 변경됩니다.',
     is_anonymous: false
   });
+
+  beforeAll(async done => {
+    await waitForSync;
+    const testUser = await user.create({
+      email: 'somedummymail@gsm.hs.kr',
+      pw: 'somedummypassword',
+      name: '고익종'
+    });
+    authKey = testUser.pid;
+    done();
+  });
+
+  afterAll(async done => {
+    await user.destroy({ where: { pid: authKey } });
+    done();
+  });
+
   test('without body', async () => {
     const response = await request(app.callback())
-      .post(api)
+      .put(api)
       .set('Authorization', authKey);
     expect(response.status).toBe(400);
   });
 
   test('without user', async () => {
     const response = await request(app.callback())
-      .post(api)
+      .put(api)
       .type('form')
       .send(baseData);
     expect(response.status).toBe(400);
@@ -32,7 +50,7 @@ describe('create post', () => {
     let newData = baseData;
     newData.set('board_type', '주식갤러리');
     const response = await request(app.callback())
-      .post(api)
+      .put(api)
       .set('Authorization', authKey)
       .type('form')
       .send(newData);
@@ -41,9 +59,8 @@ describe('create post', () => {
 
   test('normal case', async () => {
     const response = await request(app.callback())
-      .post(api)
+      .put(api)
       .set('Authorization', authKey)
-      .type('form')
       .send(baseData);
     expect(response.status).toBe(201);
     expect(response.body.isCreated).toBe(true);
