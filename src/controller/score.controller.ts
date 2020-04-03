@@ -71,14 +71,12 @@ export const insertArchive = async (ctx: Context) => {
 export const updateArchive = async (ctx: Context) => {
   const requestSchema = Joi.object({
     data: Joi.object({
-      score: Joi.number()
-        .integer()
-        .required(),
-      user_id: Joi.number()
-        .integer()
-        .required(),
+      score: Joi.number().integer(),
+      user_id: Joi.number().integer(),
       reason: Joi.string().max(255)
-    }).required(),
+    })
+      .required()
+      .or('score', 'user_id', 'reason'),
     conditions: Joi.object({
       id: Joi.number()
         .integer()
