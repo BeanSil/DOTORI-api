@@ -10,10 +10,14 @@ const PostIdInParam = Joi.object().keys({
 });
 
 export const getPost = async (ctx: Context) => {
-  ctx.assert(PostIdInParam.validate(ctx.params), 400);
+  ctx.assert(!PostIdInParam.validate(ctx.params).error, 400);
+
+  let result = await post.findByPk(ctx.params.postid);
+
+  ctx.assert(result, 404);
 
   ctx.body = {
-    data: await post.findByPk(ctx.params.postid)
+    data: result
   };
 };
 
