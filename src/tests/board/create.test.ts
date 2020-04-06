@@ -41,18 +41,16 @@ describe('create post', () => {
   test('without user', async () => {
     const response = await request(app.callback())
       .put(api)
-      .type('form')
       .send(baseData);
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(401);
   });
 
   test('with wrong body', async () => {
     let newData = baseData;
-    newData.set('board_type', '주식갤러리');
+    newData = newData.set('board_type', '주식갤러리');
     const response = await request(app.callback())
       .put(api)
       .set('Authorization', authKey)
-      .type('form')
       .send(newData);
     expect(response.status).toBe(400);
   });

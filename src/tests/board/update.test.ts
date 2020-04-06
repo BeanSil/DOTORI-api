@@ -47,7 +47,6 @@ describe('update post', () => {
       .post(api.replace('postid', created))
       .set('Authorization', authKey)
       .send(toBe);
-    console.log(response);
     delete response.body.data.createdAt;
     delete response.body.data.updatedAt;
     toBe.post_id = created;
@@ -56,14 +55,16 @@ describe('update post', () => {
   });
 
   test('wrong post id', async () => {
-    const response = await request(app.callback()).post(api);
+    const response = await request(app.callback())
+      .post(api)
+      .set('Authorization', authKey);
     expect(response.status).toBe(400);
   });
 
   test('post not exist', async () => {
-    const response = await request(app.callback()).post(
-      api.replace('postid', created + 1)
-    );
+    const response = await request(app.callback())
+      .post(api.replace('postid', created + 1))
+      .set('Authorization', authKey);
     expect(response.status).toBe(404);
   });
 });
