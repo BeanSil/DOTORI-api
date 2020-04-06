@@ -80,6 +80,9 @@ export const postPost = async (ctx: Context) => {
   ctx.assert(result, 404);
 
   ctx.status = 200;
+  ctx.body = {
+    data: await post.findByPk(ctx.params.postid)
+  }
 };
 
 export const deletePost = async (ctx: Context) => {
