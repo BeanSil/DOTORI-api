@@ -7,6 +7,7 @@ import {
   postPost,
   deletePost
 } from '../../../../controller/board.v1.controller';
+import { LoginRequired } from '../../../../utils/authorization';
 
 const v1 = new Router();
 
@@ -20,12 +21,12 @@ v1.get('/page/:page', getPosts);
 v1.get('/:postid', getPost);
 
 // POST
-v1.post('/:postid', postPost);
+v1.post('/:postid', LoginRequired, postPost);
 
 // PUT
-v1.put('/', putPost);
+v1.put('/', LoginRequired, putPost);
 
 // DELETE
-v1.delete('/:postid', deletePost);
+v1.delete('/:postid', LoginRequired, deletePost);
 
 export default v1;
