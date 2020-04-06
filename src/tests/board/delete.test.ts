@@ -5,6 +5,7 @@ import { post, user, waitForSync } from '../../models';
 const api = '/api/board/v1/postid';
 
 let authKey: any;
+
 describe('delete post', () => {
   let created: any;
 

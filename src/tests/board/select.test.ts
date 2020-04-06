@@ -9,18 +9,19 @@ describe('select post', () => {
 
   let created: any;
 
-  let data = Map<any>({
+  let data: any = {
+    post_id: null,
     user_id: 2,
     board_type: '공지사항',
     title: '노트북 대여시간 변경',
     content: '노트북 대여시간이 변경됩니다.',
     is_anonymous: false
-  });
+  };
 
   beforeAll(async () => {
     await waitForSync;
     created = (await post.create(data)).post_id;
-    data.set('post_id', created);
+    data.post_id = created;
   });
 
   afterAll(async () => {
@@ -29,8 +30,9 @@ describe('select post', () => {
 
   test('normal case', async () => {
     const response = await request(app.callback()).get(api.replace('postid', created));
-
-    expect(response.body.data).toStrictEqual(data)
+    delete response.body.data.createdAt;
+    delete response.body.data.updatedAt;
+    expect(response.body.data).toEqual(data)
   });
 
   test('wrong post id', async () => {
@@ -40,6 +42,6 @@ describe('select post', () => {
 
   test('post not exist', async () => {
     const response = await request(app.callback()).get(api.replace('postid', created + 1));
-    expect(response.status).toBe(400)
+    expect(response.status).toBe(404)
   })
 });
