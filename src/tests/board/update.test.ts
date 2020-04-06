@@ -1,13 +1,12 @@
 import * as request from 'supertest';
 import app from '../../';
-import {post, user, waitForSync} from '../../models';
+import { post, user, waitForSync } from '../../models';
 
 const api = '/api/board/v1/postid';
 
 let authKey: any;
 
 describe('update post', () => {
-
   let created: any;
 
   let toBe: any = {
@@ -28,21 +27,24 @@ describe('update post', () => {
   });
 
   beforeEach(async () => {
-    created = (await post.create({
-      user_id: authKey,
-      board_type: '공지사항',
-      title: '노트북 대여시간 변경',
-      content: '노트북 대여시간이 변경됩니다.',
-      is_anonymous: false
-    })).post_id;
+    created = (
+      await post.create({
+        user_id: authKey,
+        board_type: '공지사항',
+        title: '노트북 대여시간 변경',
+        content: '노트북 대여시간이 변경됩니다.',
+        is_anonymous: false
+      })
+    ).post_id;
   });
 
   afterEach(async () => {
-    await post.destroy({where: {post_id: created}})
+    await post.destroy({ where: { post_id: created } });
   });
 
   test('normal case', async () => {
-    const response = await request(app.callback()).post(api.replace('postid', created))
+    const response = await request(app.callback())
+      .post(api.replace('postid', created))
       .set('Authorization', authKey)
       .send(toBe);
     console.log(response);
@@ -50,16 +52,18 @@ describe('update post', () => {
     delete response.body.data.updatedAt;
     toBe.post_id = created;
     toBe.user_id = authKey;
-    expect(response.body.data).toEqual(toBe)
+    expect(response.body.data).toEqual(toBe);
   });
 
   test('wrong post id', async () => {
     const response = await request(app.callback()).post(api);
-    expect(response.status).toBe(400)
+    expect(response.status).toBe(400);
   });
 
   test('post not exist', async () => {
-    const response = await request(app.callback()).post(api.replace('postid', created + 1));
-    expect(response.status).toBe(404)
-  })
+    const response = await request(app.callback()).post(
+      api.replace('postid', created + 1)
+    );
+    expect(response.status).toBe(404);
+  });
 });

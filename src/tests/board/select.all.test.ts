@@ -6,7 +6,7 @@ const api = '/api/board/v1/';
 
 beforeAll(async done => {
   await waitForSync;
-  done()
+  done();
 });
 
 describe('select all post', () => {
@@ -20,7 +20,7 @@ describe('select all post', () => {
         title: '노트북 대여시간 변경',
         content: '노트북 대여시간이 변경됩니다.',
         is_anonymous: false
-      })
+      });
     }
 
     await post.bulkCreate(arr);
@@ -29,10 +29,10 @@ describe('select all post', () => {
 
   afterAll(async done => {
     await post.destroy({ where: {} });
-    done()
+    done();
   });
 
-  test('normal case', async (done) => {
+  test('normal case', async done => {
     const response = await request(app.callback()).get(api);
     expect(response.status).toBe(200);
     expect(response.body.data).toHaveLength(3);
@@ -51,7 +51,7 @@ describe('select all post by page', () => {
         title: '노트북 대여시간 변경',
         content: '노트북 대여시간이 변경됩니다.',
         is_anonymous: false
-      })
+      });
     }
 
     await post.bulkCreate(arr);
@@ -60,7 +60,7 @@ describe('select all post by page', () => {
 
   afterAll(async done => {
     await post.destroy({ where: {} });
-    done()
+    done();
   });
 
   test('normal case - without page - maxed out', async () => {

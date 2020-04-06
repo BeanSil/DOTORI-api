@@ -6,7 +6,6 @@ import { post, waitForSync } from '../../models';
 const api = '/api/board/v1/postid';
 
 describe('select post', () => {
-
   let created: any;
 
   let data: any = {
@@ -25,23 +24,27 @@ describe('select post', () => {
   });
 
   afterAll(async () => {
-    await post.destroy({where: {post_id: created}})
+    await post.destroy({ where: { post_id: created } });
   });
 
   test('normal case', async () => {
-    const response = await request(app.callback()).get(api.replace('postid', created));
+    const response = await request(app.callback()).get(
+      api.replace('postid', created)
+    );
     delete response.body.data.createdAt;
     delete response.body.data.updatedAt;
-    expect(response.body.data).toEqual(data)
+    expect(response.body.data).toEqual(data);
   });
 
   test('wrong post id', async () => {
     const response = await request(app.callback()).get(api);
-    expect(response.status).toBe(400)
+    expect(response.status).toBe(400);
   });
 
   test('post not exist', async () => {
-    const response = await request(app.callback()).get(api.replace('postid', created + 1));
-    expect(response.status).toBe(404)
-  })
+    const response = await request(app.callback()).get(
+      api.replace('postid', created + 1)
+    );
+    expect(response.status).toBe(404);
+  });
 });
