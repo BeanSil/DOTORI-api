@@ -11,12 +11,14 @@ export const checkLaptop = async (ctx: Context) => {
     }
   });
 
-  ctx.assert(!record, 404);
+  ctx.assert(record, 404);
 
   ctx.status = 200;
   ctx.body = {
-    room: record.room,
-    seat: record.seat
+    data: {
+      room: record.room,
+      seat: record.seat
+    }
   };
 };
 
