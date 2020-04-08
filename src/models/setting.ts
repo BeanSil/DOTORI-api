@@ -1,5 +1,4 @@
 import { Options } from 'sequelize';
-import { Dialect } from 'sequelize/types/lib/sequelize';
 
 export const db: Options = {
   username: process.env.DATABASE_ID,
