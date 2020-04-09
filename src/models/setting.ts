@@ -5,7 +5,10 @@ export const db: Options = {
   password: process.env.DATABASE_PW,
   database: process.env.DATABASE_NAME,
   host: process.env.DATABASE_HOST || 'localhost',
-  dialect: 'mariadb'
+  dialect: 'mariadb',
+  dialectOptions: {
+    timezone: 'Etc/GMT-9'
+  }
 };
 
 export const userDb: Options = {
@@ -13,5 +16,8 @@ export const userDb: Options = {
   password: process.env.USER_DATABASE_PW,
   database: process.env.USER_DATABASE_NAME,
   host: process.env.USER_DATABASE_HOST || 'localhost',
-  dialect: 'mariadb'
+  dialect: 'mariadb',
+  dialectOptions: {
+    timezone: 'Etc/GMT-9'
+  }
 };
