@@ -4,10 +4,14 @@ import * as bodyParser from 'koa-bodyparser';
 import * as logger from 'koa-logger';
 
 import router from './router';
-import sessionCreator from './middlewares/session';
+import { sessionCreator, errorHandling } from './middlewares';
 
 const app = new Koa();
 
+// setting port
+const port = process.env.PORT || 5000;
+
+app.use(errorHandling);
 app.use(logger());
 app.use(bodyParser());
 app.use(sessionCreator);
