@@ -2,7 +2,7 @@
   "name": "dotori-v1",
   "description": "dotori",
   "version": "1.0.0",
-  "main": "dist/index.js",
+  "main": "dist/deploy.js",
   "dependencies": {
     "@hapi/joi": "^17.1.1",
     "cross-env": "^6.0.3",
@@ -12,10 +12,8 @@
     "koa-logger": "^3.2.1",
     "koa-router": "^7.4.0",
     "mariadb": "^2.3.1",
-    "nodemon": "^1.19.4",
     "pm2": "^4.2.1",
-    "sequelize": "^5.21.3",
-    "standardx": "^5.0.0"
+    "sequelize": "^5.21.3"
   },
   "devDependencies": {
     "@types/bluebird": "^3.5.30",
@@ -29,22 +27,25 @@
     "@types/validator": "^12.0.1",
     "@typescript-eslint/eslint-plugin": "^2.24.0",
     "@typescript-eslint/parser": "^2.24.0",
+    "immutable": "^4.0.0-rc.12",
     "jest": "^25.1.0",
+    "nodemon": "^1.19.4",
     "prettier": "1.19.1",
     "rimraf": "^3.0.0",
+    "standardx": "^5.0.0",
     "supertest": "^4.0.2",
     "ts-jest": "^25.2.1",
     "ts-node": "^8.4.1",
     "typescript": "^3.7.2"
   },
   "scripts": {
-    "start": "cross-env NODE_PATH=./src pm2 start dist --watch",
+    "start": "yarn build && cross-env NODE_ENV=deploy NODE_PATH=./src pm2 start dist/deploy.js --watch",
     "style-test": "standardx \"src/**/*.ts\" && tsc",
-    "test": "jest && yarn style-test",
+    "test": "jest -i && yarn style-test",
     "pretty": "prettier es2020 --write \"src/**/*.ts\"",
     "clear": "rimraf dist",
     "build": "tsc",
-    "dev": "nodemon --watch 'src/**/*' -e ts,tsx --exec ts-node ./src/index.ts",
+    "dev": "cross-env NODE_PATH=./src NODE_ENV=develop nodemon --watch 'src/**/*' -e ts,tsx --exec ts-node ./src/deploy.ts",
     "kill": "pm2 kill"
   },
   "repository": {
@@ -74,6 +75,9 @@
     ]
   },
   "jest": {
+    "setupFiles": [
+      "./src/tests/index.ts"
+    ],
     "moduleFileExtensions": [
       "json",
       "js",
