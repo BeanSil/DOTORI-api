@@ -40,9 +40,16 @@ export const applyLaptop = async (ctx: Context) => {
   ctx.assert(
     !(await laptop.findOne({
       where: {
-        room: ctx.request.body.room,
-        seat: ctx.request.body.seat,
-        createdAt: new Date().toISOString().slice(0, 10)
+        $or: [
+          {
+            room: ctx.request.body.room,
+            seat: ctx.request.body.seat,
+            createdAt: new Date().toISOString().slice(0, 10)
+          },
+          {
+            user_id: ctx.user.pid
+          }
+        ]
       }
     })),
     400
