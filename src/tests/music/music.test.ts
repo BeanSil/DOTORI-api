@@ -1,9 +1,8 @@
 import * as request from 'supertest';
 import app from '../../';
+import { music,user, waitForSync } from '../../models';
 
 const api = '/api/music/v1/';
-
-const authKey = '';
 
 const insertTestData = {
   user_id: 1,
@@ -24,6 +23,33 @@ const changeStatus = {
 const deleteTestData = {
   id: 4
 };
+
+const User = {
+  pid: 997,
+  email: 'test@test.com',
+  pw: '0000',
+  name: 'testname'
+};
+
+const authKey = '997';
+
+beforeAll(async () => {
+  await waitForSync;
+
+  await user.create(User);
+});
+
+afterAll(async () => {
+  await user.destroy({
+    where: { pid: User.pid }
+  });
+});
+
+afterEach(async () => {
+  await music.destroy({
+    where: {}
+  });
+});
 
 describe('MusicApply', () => {
 
@@ -81,11 +107,9 @@ describe('MusicApply', () => {
   });
 
   describe('Delete music', () => {
-    it('user is not administrator', async () => {
+    it('without music id data', async () => {
       const response = await request(app.callback())
-        .put(api)
-        .set('Authorization', authKey)
-        .type('json');
+        .delete(api)
 
       expect(response.status).toBe(500);
     });
@@ -95,6 +119,7 @@ describe('MusicApply', () => {
         .delete(api)
         .type('json')
         .send(deleteTestData);
+
       expect(response.status).toBe(204);
     });
   });
