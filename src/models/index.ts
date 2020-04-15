@@ -2,9 +2,9 @@ import { Sequelize } from 'sequelize';
 import { ScoreArchiveFactory } from './ScoreArchive';
 import { UserFactory } from './User';
 import { PostFactory } from './Post';
+import { LaptopArchiveFactory } from './LaptopArchive';
 
 import { db, userDb } from './setting';
-import { LaptopArchiveFactory } from './LaptopArchive';
 
 const sequelize = new Sequelize(db);
 
