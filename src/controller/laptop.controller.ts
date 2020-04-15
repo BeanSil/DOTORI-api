@@ -1,9 +1,11 @@
 import { Context } from 'koa';
 import * as Joi from '@hapi/joi';
 import { laptop } from '../models';
+import * as sequelize from 'sequelize';
+
+const Op = sequelize.Op;
 
 export const checkLaptop = async (ctx: Context) => {
-  // TODO: 유저 모델 완성되면 수정
   const record = await laptop.findOne({
     where: {
       user_id: ctx.user.pid,
@@ -40,14 +42,15 @@ export const applyLaptop = async (ctx: Context) => {
   ctx.assert(
     !(await laptop.findOne({
       where: {
-        $or: [
+        [Op.or]: [
+          {
+            user_id: ctx.user.pid,
+            createdAt: new Date().toISOString().slice(0, 10)
+          },
           {
             room: ctx.request.body.room,
             seat: ctx.request.body.seat,
             createdAt: new Date().toISOString().slice(0, 10)
-          },
-          {
-            user_id: ctx.user.pid
           }
         ]
       }
@@ -55,18 +58,17 @@ export const applyLaptop = async (ctx: Context) => {
     400
   );
 
-  // TODO: 유저 모델 완성되면 수정
   await laptop.create({
     user_id: ctx.user.pid,
     room: ctx.request.body.room,
-    seat: ctx.request.body.seat
+    seat: ctx.request.body.seat,
+    createdAt: new Date().toISOString().slice(0, 10)
   });
 
   ctx.status = 201;
 };
 
 export const cancelLaptop = async (ctx: Context) => {
-  // TODO: 유저 모델 완성되면 수정
   const record = await laptop.findOne({
     where: {
       user_id: ctx.user.pid,
