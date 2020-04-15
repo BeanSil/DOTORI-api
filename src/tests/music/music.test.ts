@@ -32,25 +32,24 @@ describe('MusicApply', () => {
       const response = await request(app.callback()).get(api);
       
       expect(response.status).toBe(200);
-      expect(response.body.data).toBeTruthy();
     });
   });
 
   describe('Apply music', () => {
     it('apply music without data', async () => {
       const response = await request(app.callback())
-        .put(api)
+        .post(api)
         .type('json');
 
-      expect(response.status).toBe(400);
+      expect(response.status).toBe(500);
     });
 
     it('apply music', async () => {
       const response = await request(app.callback())
-        .put(api)
+        .post(api)
         .type('json')
         .send(insertTestData);
-      expect(response.status).toBe(200);
+      expect(response.status).toBe(201);
     });
   });
 
@@ -58,10 +57,8 @@ describe('MusicApply', () => {
     it('user is not administrator', async () => {
       const response = await request(app.callback())
         .put(api)
-        .type('json')
-        .send(changeStatus);
 
-      expect(response.status).toBe(400);
+      expect(response.status).toBe(500);
     });
 
     it('without status data', async () => {
@@ -70,16 +67,16 @@ describe('MusicApply', () => {
         .set('Authorization', authKey)
         .type('json');
 
-      expect(response.status).toBe(400);
+      expect(response.status).toBe(500);
     });
 
     it('change music status', async () => {
       const response = await request(app.callback())
-        .post(api)
+        .put(api)
         .type('json')
         .set('Authorization', authKey)
         .send(changeStatus);
-      expect(response.status).toBe(200);
+      expect(response.status).toBe(202);
     });
   });
 
@@ -90,7 +87,7 @@ describe('MusicApply', () => {
         .set('Authorization', authKey)
         .type('json');
 
-      expect(response.status).toBe(400);
+      expect(response.status).toBe(500);
     });
 
     it('delete apply music', async () => {
@@ -98,7 +95,7 @@ describe('MusicApply', () => {
         .delete(api)
         .type('json')
         .send(deleteTestData);
-      expect(response.status).toBe(200);
+      expect(response.status).toBe(204);
     });
   });
 });

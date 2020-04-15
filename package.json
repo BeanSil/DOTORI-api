@@ -102,7 +102,6 @@
       "text",
       "text-summary"
     ],
-    "testRegex": "src\\/tests\\/\\/?(?:[^\\/]+\\/?)*\\/*.(spec|test).ts$",
     "testPathIgnorePatterns": [
       "/node_modules/",
       "/build/",
