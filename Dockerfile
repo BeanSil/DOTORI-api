@@ -1,4 +1,5 @@
 FROM node:12
+FROM mariadb:latest
 
 WORKDIR /app
 
