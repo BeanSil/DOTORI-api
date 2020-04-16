@@ -6,7 +6,9 @@ export const applyMusic = async (ctx: Context) => {
   const getdata = ctx.request.body;
 
   const data = {
-    applyMusic: await music.create(getdata)
+    data:{
+      applyMusic: await music.create(getdata)
+    }
   };
 
   ctx.status = 201;
@@ -45,7 +47,9 @@ export const getMusic = async (ctx: Context) => {
   const getdata = await music.findAll();
 
   const data = {
-    list: getdata
+    data:{
+      list: getdata
+    }
   };
 
   ctx.status = 200;
