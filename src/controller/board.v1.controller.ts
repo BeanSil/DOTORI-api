@@ -33,14 +33,13 @@ export const getPosts = async (ctx: Context) => {
 export const putPost = async (ctx: Context) => {
   const NewPost = Joi.object().keys({
     board_type: Joi.string()
-      .valid('자유게시판', '공지사항')
+      .valid('자유게시판', '대나무숲', '공지사항')
       .required(),
     title: Joi.string()
       .min(1)
       .max(255)
       .required(),
-    content: Joi.string().required(),
-    is_anonymous: Joi.bool()
+    content: Joi.string().required()
   });
 
   ctx.assert(!NewPost.validate(ctx.request.body).error, 400);
@@ -60,12 +59,11 @@ export const putPost = async (ctx: Context) => {
 
 export const postPost = async (ctx: Context) => {
   const OldPost = Joi.object().keys({
-    board_type: Joi.string().valid('자유게시판', '공지사항'),
+    board_type: Joi.string().valid('자유게시판', '대나무숲', '공지사항'),
     title: Joi.string()
       .min(1)
       .max(255),
-    content: Joi.string(),
-    is_anonymous: Joi.bool()
+    content: Joi.string()
   });
 
   // TODO: 회원 권한 검사 (본인)
