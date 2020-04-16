@@ -11,6 +11,8 @@ import { LoginRequired } from '../../../../utils/authorization';
 
 const v1 = new Router();
 
+// TODO: 모두 게시판 구분을 url에 추가해줄것.
+
 // BULK-GET
 v1.get('/', getPosts);
 
