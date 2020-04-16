@@ -12,7 +12,6 @@
     "koa-logger": "^3.2.1",
     "koa-router": "^7.4.0",
     "mariadb": "^2.3.1",
-    "pm2": "^4.2.1",
     "sequelize": "^5.21.3"
   },
   "devDependencies": {
@@ -39,12 +38,13 @@
     "typescript": "^3.7.2"
   },
   "scripts": {
-    "start": "yarn build && cross-env NODE_ENV=deploy NODE_PATH=./src pm2 start dist/deploy.js --watch",
+    "start": "yarn build && cross-env NODE_ENV=deploy NODE_PATH=./src node dist/deploy.js",
     "style-test": "standardx \"src/**/*.ts\" && tsc",
     "test": "jest -i && yarn style-test",
     "pretty": "prettier es2020 --write \"src/**/*.ts\"",
     "clear": "rimraf dist",
     "build": "tsc",
+    "docker-build": "docker build .",
     "dev": "cross-env NODE_PATH=./src NODE_ENV=develop nodemon --watch 'src/**/*' -e ts,tsx --exec ts-node ./src/deploy.ts",
     "kill": "pm2 kill"
   },
