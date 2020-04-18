@@ -102,9 +102,9 @@ export const reservedSeats = async (ctx: Context) => {
   });
 
   let seats: number[] = [];
-  
+
   records.forEach(record => {
-    seats.push(record.seat)
+    seats.push(record.seat);
   });
 
   ctx.status = 200;
@@ -131,9 +131,11 @@ export const roomDetail = async (ctx: Context) => {
   let userQueries: any[] = [];
 
   records.forEach(record => {
-    userQueries.push(new Promise((resolve, reject) => {
-      resolve(user.findByPk(record.user_id));
-    }));
+    userQueries.push(
+      new Promise((resolve, reject) => {
+        resolve(user.findByPk(record.user_id));
+      })
+    );
   });
 
   const users = await Promise.all(userQueries);
@@ -147,7 +149,7 @@ export const roomDetail = async (ctx: Context) => {
       number: student.number,
       name: student.name,
       seat: records[index].seat
-    })
+    });
   });
 
   ctx.status = 200;
@@ -157,4 +159,3 @@ export const roomDetail = async (ctx: Context) => {
     }
   };
 };
-
