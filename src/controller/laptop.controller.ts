@@ -140,10 +140,10 @@ export const roomDetail = async (ctx: Context) => {
 
   const users = await Promise.all(userQueries);
 
-  let detail: Object[] = [];
+  let details: Object[] = [];
 
   users.forEach((student, index) => {
-    detail.push({
+    details.push({
       grade: student.grade,
       class: student.class,
       number: student.number,
@@ -155,7 +155,7 @@ export const roomDetail = async (ctx: Context) => {
   ctx.status = 200;
   ctx.body = {
     data: {
-      detail
+      details
     }
   };
 };
