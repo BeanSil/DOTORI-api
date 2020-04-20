@@ -43,9 +43,35 @@ describe('Room Check API', () => {
     done();
   });
 
-  it('checks room list', async () => {
+  it('checks room list with no reservation', async () => {
     const response = await request(app.callback()).get(api);
-    expect(response.status).toBe(404);
+    expect(response.status).toBe(200);
+    expect(response.body.data).toEqual({
+      reserveCount: [
+        0,0,0,0,0
+      ]
+    });
+  })
+
+  it('checks room list with reservation', async () => {
+    await laptop.create({
+      user_id: authKey1,
+      room: 5,
+      seat: 1
+    });
+    await laptop.create({
+      user_id: authKey2,
+      room: 5,
+      seat: 2
+    });
+
+    const response = await request(app.callback()).get(api);
+    expect(response.status).toBe(200);
+    expect(response.body.data).toEqual({
+      reserveCount: [
+        0, 0, 0, 0, 2
+      ]
+    });
   })
 
   it('is with wrong room number', async () => {

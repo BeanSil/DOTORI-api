@@ -84,7 +84,26 @@ export const cancelLaptop = async (ctx: Context) => {
 };
 
 export const roomList = async (ctx: Context) => {
-  // TODO: 학습실 배정 후 추가
+  // TODO: 학습실 배정 후 수정
+  const roomQueries: any[] = [];
+
+  for (let i = 1; i <= 5; i++){
+    roomQueries.push(laptop.count({
+      where: {
+        room: i,
+        createdAt: new Date().toISOString().slice(0, 10)
+      }
+    }));
+  }
+
+  const reserveCount = await Promise.all(roomQueries);
+
+  ctx.status = 200;
+  ctx.body = {
+    data: {
+      reserveCount
+    }
+  }
 };
 
 export const reservedSeats = async (ctx: Context) => {
@@ -132,9 +151,7 @@ export const roomDetail = async (ctx: Context) => {
 
   records.forEach(record => {
     userQueries.push(
-      new Promise((resolve, reject) => {
-        resolve(user.findByPk(record.user_id));
-      })
+      user.findByPk(record.user_id)
     );
   });
 
