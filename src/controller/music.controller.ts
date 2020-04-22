@@ -2,6 +2,12 @@ import { Context } from 'koa';
 import { music } from '../models';
 import * as Joi from '@hapi/joi';
 
+const requestSchema = Joi.object({
+  id: Joi.number()
+    .integer()
+    .required()
+});
+
 export const applyMusic = async (ctx: Context) => {
   const getdata = ctx.request.body;
 
@@ -17,28 +23,21 @@ export const applyMusic = async (ctx: Context) => {
 };
 
 export const checkmusic = async (ctx: Context) => {
-  const requestSchema = Joi.object({
-    data: {
-      // status : 0: 요청 완료, 1:음악 승인, 2:음악 거절
-      status: Joi.number()
-        .integer()
-        .required()
-    },
-    conditions: {
-      id: Joi.number()
-        .integer()
-        .required()
-    }
-  }).with('data', 'conditions');
-
-  const requested = await requestSchema.validateAsync(ctx.request.body);
-
-  const provided = requested.data;
-  const conditions = requested.conditions;
-
-  await music.update(provided, {
-    where: conditions
+  const CheckData = Joi.object({
+    status: Joi.number()
+      .integer()
+      .required()
   });
+
+  ctx.assert(!requestSchema.validate(ctx.params).error, 400);
+  ctx.assert(!CheckData.validate(ctx.request.body).error, 400);
+  
+  const result = await music.update(ctx.request.body, {
+    where: {
+      id: ctx.params.id
+    }
+  });
+  ctx.assert(result[0], 404);
 
   ctx.status = 202;
 };
@@ -58,17 +57,13 @@ export const getMusic = async (ctx: Context) => {
 };
 
 export const deleteMusic = async (ctx: Context) => {
-  const requestSchema = Joi.object({
-    id: Joi.number()
-      .integer()
-      .required()
-  });
 
-  const conditions = await requestSchema.validateAsync(ctx.request.body);
+  ctx.assert(!requestSchema.validate(ctx.params).error, 404);
 
-  await music.destroy({
-    where: conditions
-  });
+  // TODO: 회원 권한 검사 (본인 or 관리자)
+
+  const result = await music.destroy({ where: { id: ctx.params.id } });
+  ctx.assert(result, 404);
 
   ctx.status = 204;
 };
