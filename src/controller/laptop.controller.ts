@@ -87,7 +87,7 @@ export const roomList = async (ctx: Context) => {
   // TODO: 학습실 배정 후 수정
   const roomQueries: any[] = [];
 
-  for (let i = 1; i <= 5; i++){
+  for (let i = 1; i <= 5; i++) {
     roomQueries.push(laptop.count({
       where: {
         room: i,
@@ -103,7 +103,7 @@ export const roomList = async (ctx: Context) => {
     data: {
       reserveCount
     }
-  }
+  };
 };
 
 export const reservedSeats = async (ctx: Context) => {
@@ -120,7 +120,7 @@ export const reservedSeats = async (ctx: Context) => {
     attributes: ['seat']
   });
 
-  let seats: number[] = [];
+  const seats: number[] = [];
 
   records.forEach(record => {
     seats.push(record.seat);
@@ -147,7 +147,7 @@ export const roomDetail = async (ctx: Context) => {
     }
   });
 
-  let userQueries: any[] = [];
+  const userQueries: any[] = [];
 
   records.forEach(record => {
     userQueries.push(
@@ -157,7 +157,7 @@ export const roomDetail = async (ctx: Context) => {
 
   const users = await Promise.all(userQueries);
 
-  let details: Object[] = [];
+  const details: Object[] = [];
 
   users.forEach((student, index) => {
     details.push({
