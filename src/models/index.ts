@@ -1,4 +1,5 @@
 import { Sequelize } from 'sequelize';
+import { MusicArchiveFactory } from './MusicArchive';
 import { ScoreArchiveFactory } from './ScoreArchive';
 import { UserFactory } from './User';
 import { PostFactory } from './Post';
@@ -10,6 +11,7 @@ const sequelize = new Sequelize(db);
 
 const sequelizeUser = new Sequelize(userDb);
 
+const music = MusicArchiveFactory(sequelize);
 const post = PostFactory(sequelize);
 const scoreArchive = ScoreArchiveFactory(sequelize);
 
@@ -26,4 +28,4 @@ const syncUser = sequelizeUser.createSchema(userDb.database, {}).then(() => {
 
 const waitForSync = Promise.all([sync, syncUser]);
 
-export { sequelize, Sequelize, waitForSync, laptop, post, scoreArchive, user };
+export { sequelize, Sequelize, waitForSync, laptop, post, scoreArchive, music, user };
