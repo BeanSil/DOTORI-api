@@ -1,6 +1,6 @@
 import * as request from 'supertest';
 import app from '../../';
-import { music,user, waitForSync } from '../../models';
+import { music, user, waitForSync } from '../../models';
 
 const api = '/api/music/v1/';
 
@@ -52,11 +52,10 @@ afterEach(async () => {
 });
 
 describe('MusicApply', () => {
-
   describe('Get music apply list', () => {
     it('get', async () => {
       const response = await request(app.callback()).get(api);
-      
+
       expect(response.status).toBe(200);
     });
   });
@@ -81,8 +80,7 @@ describe('MusicApply', () => {
 
   describe('Change status', () => {
     it('user is not administrator', async () => {
-      const response = await request(app.callback())
-        .put(api)
+      const response = await request(app.callback()).put(api);
 
       expect(response.status).toBe(500);
     });
@@ -108,8 +106,7 @@ describe('MusicApply', () => {
 
   describe('Delete music', () => {
     it('without music id data', async () => {
-      const response = await request(app.callback())
-        .delete(api)
+      const response = await request(app.callback()).delete(api);
 
       expect(response.status).toBe(500);
     });

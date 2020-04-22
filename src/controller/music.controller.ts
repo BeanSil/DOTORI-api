@@ -31,7 +31,7 @@ export const checkmusic = async (ctx: Context) => {
 
   ctx.assert(!requestSchema.validate(ctx.params).error, 400);
   ctx.assert(!CheckData.validate(ctx.request.body).error, 400);
-  
+
   const result = await music.update(ctx.request.body, {
     where: {
       id: ctx.params.id
@@ -57,7 +57,6 @@ export const getMusic = async (ctx: Context) => {
 };
 
 export const deleteMusic = async (ctx: Context) => {
-
   ctx.assert(!requestSchema.validate(ctx.params).error, 404);
 
   // TODO: 회원 권한 검사 (본인 or 관리자)
