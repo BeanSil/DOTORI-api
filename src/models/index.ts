@@ -3,6 +3,7 @@ import { MusicArchiveFactory } from './MusicArchive';
 import { ScoreArchiveFactory } from './ScoreArchive';
 import { UserFactory } from './User';
 import { PostFactory } from './Post';
+import { LaptopArchiveFactory } from './LaptopArchive';
 
 import { db, userDb } from './setting';
 
@@ -15,6 +16,7 @@ const post = PostFactory(sequelize);
 const scoreArchive = ScoreArchiveFactory(sequelize);
 
 const user = UserFactory(sequelizeUser);
+const laptop = LaptopArchiveFactory(sequelize);
 
 const sync = sequelize.createSchema(db.database, {}).then(() => {
   return sequelize.sync();
@@ -26,4 +28,4 @@ const syncUser = sequelizeUser.createSchema(userDb.database, {}).then(() => {
 
 const waitForSync = Promise.all([sync, syncUser]);
 
-export { sequelize, Sequelize, waitForSync, post, scoreArchive, music, user };
+export { sequelize, Sequelize, waitForSync, laptop, post, scoreArchive, music, user };
