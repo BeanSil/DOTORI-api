@@ -47,7 +47,7 @@
     "clear": "rimraf dist",
     "build": "tsc",
     "dev": "cross-env NODE_PATH=./src NODE_ENV=develop nodemon --watch 'src/**/*' -e ts,tsx --exec ts-node ./src/deploy.ts",
-    "redoc": "redoc-cli serve "
+    "redoc": "redoc-cli serve ./openapi.yaml"
   },
   "repository": {
     "type": "git",
