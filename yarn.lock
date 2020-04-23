@@ -805,10 +805,15 @@
   resolved "https://registry.yarnpkg.com/@types/mime/-/mime-2.0.1.tgz#dc488842312a7f075149312905b5e3c0b054c79d"
   integrity sha512-FwI9gX75FgVBJ7ywgnq/P7tw+/o1GUbtP0KzbtusLigAOgIgNISRK0ZPl4qertvXSIE8YbsVJueQ90cDt9YYyw==
 
-"@types/node@*", "@types/node@>=8.0.0":
+"@types/node@*":
   version "13.9.8"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-13.9.8.tgz#09976420fc80a7a00bf40680c63815ed8c7616f4"
   integrity sha512-1WgO8hsyHynlx7nhP1kr0OFzsgKz5XDQL+Lfc3b1Q3qIln/n8cKD4m09NJ0+P1Rq7Zgnc7N0+SsMnoD1rEb0kA==
+
+"@types/node@>=8.0.0":
+  version "13.9.2"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-13.9.2.tgz#ace1880c03594cc3e80206d96847157d8e7fa349"
+  integrity sha512-bnoqK579sAYrQbp73wwglccjJ4sfRdKU7WNEZ5FW4K2U6Kc0/eZ5kvXG0JKsEKFB50zrFmfFt52/cvBbZa7eXg==
 
 "@types/prettier@^1.19.0":
   version "1.19.1"
@@ -2276,11 +2281,6 @@ destroy@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/destroy/-/destroy-1.0.4.tgz#978857442c44749e4206613e37946205826abd80"
   integrity sha1-l4hXRCxEdJ5CBmE+N5RiBYJqvYA=
-
-detect-newline@^3.0.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/detect-newline/-/detect-newline-3.1.0.tgz#576f5dfc63ae1a192ff192d8ad3af6308991b651"
-  integrity sha512-TLz+x/vEXm/Y7P7wn1EJFNLxYpUD4TgMosxY6fAVJUnJMbupHBOncxyWUG9OpTaH9EBD7uFI5LfEgmMOc54DsA==
 
 diff-sequences@^25.2.6:
   version "25.2.6"
@@ -6166,35 +6166,6 @@ redoc@2.0.0-rc.24:
     tslib "^1.11.1"
     url-template "^2.0.8"
 
-redoc@^2.0.0-rc.26:
-  version "2.0.0-rc.26"
-  resolved "https://registry.yarnpkg.com/redoc/-/redoc-2.0.0-rc.26.tgz#958597afe0db9ac8ae5b73c51c3b2a28cfe2210e"
-  integrity sha512-OQb2pURJQAgbaWqAd5dUTXpEEeYkloBhTmz4hnuBKxnjAtqy5XNalei1DbfodOSUf2duie0o7rSembXc8zmxPA==
-  dependencies:
-    classnames "^2.2.6"
-    decko "^1.2.0"
-    dompurify "^2.0.8"
-    eventemitter3 "^4.0.0"
-    json-pointer "^0.6.0"
-    json-schema-ref-parser "^6.1.0"
-    lunr "2.3.8"
-    mark.js "^8.11.1"
-    marked "^0.7.0"
-    memoize-one "~5.1.1"
-    mobx-react "6.1.5"
-    openapi-sampler "1.0.0-beta.15"
-    perfect-scrollbar "^1.4.0"
-    polished "^3.4.4"
-    prismjs "^1.19.0"
-    prop-types "^15.7.2"
-    react-dropdown "^1.7.0"
-    react-tabs "^3.1.0"
-    slugify "^1.4.0"
-    stickyfill "^1.1.1"
-    swagger2openapi "^5.3.4"
-    tslib "^1.11.1"
-    url-template "^2.0.8"
-
 reftools@^1.1.0, reftools@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/reftools/-/reftools-1.1.1.tgz#09cff48f62c09cae40bd1fe9683f5412d2a4656d"
@@ -7346,7 +7317,7 @@ tr46@^1.0.1:
   dependencies:
     punycode "^2.1.0"
 
-ts-jest@^25.2.1:
+ts-jest@^25.3.0:
   version "25.3.0"
   resolved "https://registry.yarnpkg.com/ts-jest/-/ts-jest-25.3.0.tgz#c12d34573cbe34d49f10567940e44fd19d1c9178"
   integrity sha512-qH/uhaC+AFDU9JfAueSr0epIFJkGMvUPog4FxSEVAtPOur1Oni5WBJMiQIkfHvc7PviVRsnlVLLY2I6221CQew==
