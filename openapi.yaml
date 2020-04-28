@@ -1,3 +1,4 @@
+# https://github.com/Redocly/openapi-template/blob/gh-pages/openapi.yaml 를 참고해서 작성해주세요.
 openapi: 3.0.2
 info:
   version: '1.0.0'
@@ -37,25 +38,6 @@ paths:
 
 # An object to hold reusable parts that can be used across the definition
 components:
-  schemas:
-    User:
-      type: object
-      properties:
-        username:
-          description: User supplied username
-          type: string
-          minLength: 4
-          example: John78
-        firstName:
-          description: User first name
-          type: string
-          minLength: 1
-          example: John
-        lastName:
-          description: User last name
-          type: string
-          minLength: 1
-          example: Smith
   headers:
   # Security scheme definitions that can be used across the definition.
   securitySchemes:
@@ -64,14 +46,6 @@ components:
       type: oauth2 # authorization type, one of: oauth2, apiKey, http
       flows:
         implicit:
-          authorizationUrl: 'http://dotori.beansil.com/api/account/oauth/dialog'
+          authorizationUrl: 'http://dotori.beansil.com/api/account/oauth/'
           scopes:
             'read:users': read users info
-    api_key:  # security definition name (you can name it as you want)
-      type: apiKey
-      # The following options are specific to apiKey type
-      in: header # Where API key will be passed: header or query
-      name: api_key # API key parameter name
-    basic_auth: # security definition name (you can name it as you want)
-      type: http
-      scheme: basic
