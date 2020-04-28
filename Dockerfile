@@ -19,5 +19,4 @@ RUN yarn
 
 COPY . .
 
-EXPOSE 5000
-CMD [ "yarn", "start" ]
+ADD    https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh /
