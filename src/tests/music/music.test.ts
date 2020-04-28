@@ -16,7 +16,7 @@ let changeStatus: any = {
   status: 1
 };
 
-let authKey : any;
+let authKey: any;
 
 let id: any;
 
@@ -40,7 +40,7 @@ afterEach(async () => {
 
 afterAll(async () => {
   await user.destroy({
-    where: {pid: authKey}
+    where: { pid: authKey }
   });
 });
 
@@ -82,21 +82,20 @@ describe('MusicApply', () => {
         })
       ).id;
     });
-  
+
     afterEach(async () => {
       await music.destroy({ where: { id: id } });
     });
 
     it('user is not administrator', async () => {
-      const response = await request(app.callback())
-      .put(url.replace('id',id));
+      const response = await request(app.callback()).put(url.replace('id', id));
 
       expect(response.status).toBe(400);
     });
 
     it('without status data', async () => {
       const response = await request(app.callback())
-        .put(url.replace('id',id))
+        .put(url.replace('id', id))
         .set('Authorization', authKey)
         .type('json');
 
@@ -105,44 +104,43 @@ describe('MusicApply', () => {
 
     it('change music status', async () => {
       const response = await request(app.callback())
-        .put(url.replace('id',id))
+        .put(url.replace('id', id))
         .set('Authorization', authKey)
         .send(changeStatus)
         .type('json');
-        expect(response.status).toEqual(202);
+      expect(response.status).toEqual(202);
     });
   });
 
   describe('Delete music', () => {
-
-  beforeEach(async done => {
-    const testmusic = await music.create({
-      user_id: authKey,
-      music: 'testmusic',
-      singer: 'musicSinger test',
-      link: 'TestLink'
+    beforeEach(async done => {
+      const testmusic = await music.create({
+        user_id: authKey,
+        music: 'testmusic',
+        singer: 'musicSinger test',
+        link: 'TestLink'
+      });
+      id = testmusic.id;
+      done();
     });
-    id = testmusic.id;
-    done();
-  });
 
-  afterEach(async done => {
-    await music.destroy({ where: { id: id } });
-    done();
-  });
+    afterEach(async done => {
+      await music.destroy({ where: { id: id } });
+      done();
+    });
 
     it('wr music id data', async () => {
       const response = await request(app.callback())
-      .delete(url)
-      .set('Authorization', authKey);
+        .delete(url)
+        .set('Authorization', authKey);
 
       expect(response.status).toBe(404);
     });
 
     it('delete apply music', async () => {
       const response = await request(app.callback())
-        .delete(url.replace('id',id))
-        .set('Authorization',authKey);
+        .delete(url.replace('id', id))
+        .set('Authorization', authKey);
 
       expect(response.status).toBe(204);
     });
