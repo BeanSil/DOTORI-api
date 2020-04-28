@@ -5,10 +5,31 @@ import * as Joi from '@hapi/joi';
 const requestSchema = Joi.object({
   id: Joi.number()
     .integer()
+    .min(1)
     .required()
 });
 
 export const applyMusic = async (ctx: Context) => {
+  const apply = Joi.object().keys({
+    user_id: Joi.number()
+      .integer()
+      .required(),
+    music: Joi.string()
+      .min(1)
+      .max(255)
+      .required(),
+    singer: Joi.string()
+      .min(1)
+      .max(255)
+      .required(),
+    link: Joi.string()
+      .min(1)
+      .max(255)
+      .required()
+  });
+
+  ctx.assert(!apply.validate(ctx.request.body).error, 400);
+
   const getdata = ctx.request.body;
 
   const data = {
@@ -58,8 +79,6 @@ export const getMusic = async (ctx: Context) => {
 
 export const deleteMusic = async (ctx: Context) => {
   ctx.assert(!requestSchema.validate(ctx.params).error, 404);
-
-  // TODO: 회원 권한 검사 (본인 or 관리자)
 
   const result = await music.destroy({ where: { id: ctx.params.id } });
   ctx.assert(result, 404);

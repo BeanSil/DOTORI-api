@@ -3,6 +3,7 @@ import app from '../../';
 import { music, user, waitForSync } from '../../models';
 
 const api = '/api/music/v1/';
+const url = '/api/music/v1/id';
 
 const insertTestData = {
   user_id: 1,
@@ -11,43 +12,35 @@ const insertTestData = {
   link: 'www.musiclink.com'
 };
 
-const changeStatus = {
-  data: {
-    status: 1
-  },
-  conditions: {
-    id: 4
-  }
+let changeStatus: any = {
+  status: 1
 };
 
-const deleteTestData = {
-  id: 4
-};
+let authKey: any;
 
-const User = {
-  pid: 997,
-  email: 'test@test.com',
-  pw: '0000',
-  name: 'testname'
-};
+let id: any;
 
-const authKey = '997';
-
-beforeAll(async () => {
+beforeAll(async done => {
   await waitForSync;
 
-  await user.create(User);
-});
-
-afterAll(async () => {
-  await user.destroy({
-    where: { pid: User.pid }
+  const testUser = await user.create({
+    email: 'test@test.com',
+    pw: '0000',
+    name: 'testname'
   });
+  authKey = testUser.pid;
+  done();
 });
 
 afterEach(async () => {
   await music.destroy({
     where: {}
+  });
+});
+
+afterAll(async () => {
+  await user.destroy({
+    where: { pid: authKey }
   });
 });
 
@@ -66,7 +59,7 @@ describe('MusicApply', () => {
         .post(api)
         .type('json');
 
-      expect(response.status).toBe(500);
+      expect(response.status).toBe(400);
     });
 
     it('apply music', async () => {
@@ -79,43 +72,75 @@ describe('MusicApply', () => {
   });
 
   describe('Change status', () => {
-    it('user is not administrator', async () => {
-      const response = await request(app.callback()).put(api);
+    beforeEach(async () => {
+      id = (
+        await music.create({
+          user_id: authKey,
+          music: 'testmusic',
+          singer: 'musicSinger test',
+          link: 'TestLink'
+        })
+      ).id;
+    });
 
-      expect(response.status).toBe(500);
+    afterEach(async () => {
+      await music.destroy({ where: { id: id } });
+    });
+
+    it('user is not administrator', async () => {
+      const response = await request(app.callback()).put(url.replace('id', id));
+
+      expect(response.status).toBe(400);
     });
 
     it('without status data', async () => {
       const response = await request(app.callback())
-        .put(api)
+        .put(url.replace('id', id))
         .set('Authorization', authKey)
         .type('json');
 
-      expect(response.status).toBe(500);
+      expect(response.status).toBe(400);
     });
 
     it('change music status', async () => {
       const response = await request(app.callback())
-        .put(api)
-        .type('json')
+        .put(url.replace('id', id))
         .set('Authorization', authKey)
-        .send(changeStatus);
-      expect(response.status).toBe(202);
+        .send(changeStatus)
+        .type('json');
+      expect(response.status).toEqual(202);
     });
   });
 
   describe('Delete music', () => {
-    it('without music id data', async () => {
-      const response = await request(app.callback()).delete(api);
+    beforeEach(async done => {
+      const testmusic = await music.create({
+        user_id: authKey,
+        music: 'testmusic',
+        singer: 'musicSinger test',
+        link: 'TestLink'
+      });
+      id = testmusic.id;
+      done();
+    });
 
-      expect(response.status).toBe(500);
+    afterEach(async done => {
+      await music.destroy({ where: { id: id } });
+      done();
+    });
+
+    it('wr music id data', async () => {
+      const response = await request(app.callback())
+        .delete(url)
+        .set('Authorization', authKey);
+
+      expect(response.status).toBe(404);
     });
 
     it('delete apply music', async () => {
       const response = await request(app.callback())
-        .delete(api)
-        .type('json')
-        .send(deleteTestData);
+        .delete(url.replace('id', id))
+        .set('Authorization', authKey);
 
       expect(response.status).toBe(204);
     });
