@@ -12,16 +12,13 @@ services:
       MYSQL_DATABASE: dotori
     restart: on-failure
   server:
+    depends_on:
+      - mariadb
     container_name: "dotori_server"
     build: .
     ports:
       - "5000:5000"
-    command:
-      - bash
-        - -c
-        - |
-          /wait-for-it.sh mariadb:3306 -t 10
-          yarn start
+    command: yarn fast-start
     environment:
       PORT: 5000
       DATABASE_NAME: dotori
@@ -31,6 +28,6 @@ services:
 
       USER_DATABASE_NAME: bean_user
       USER_DATABASE_HOST: host.docker.internal
-      USER_DATABASE_ID: changeitwhenitreleased
+      USER_DATABASE_ID: root
       USER_DATABASE_PW: changeitwhenitreleased
     restart: on-failure

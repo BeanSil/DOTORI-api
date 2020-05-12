@@ -1,22 +1,21 @@
 FROM node:12
-FROM mariadb:latest
-
-WORKDIR /app
 
 RUN apt-get update \
     && apt-get upgrade -y \
     && apt-get install -y curl bash \
     && curl -sL https://deb.nodesource.com/setup_12.x | bash -
 
-RUN apt-get install -y nodejs mariadb-server
+RUN apt-get install -y nodejs
 
-RUN npm i -g yarn
+RUN npm i -g yarn --force
 
-COPY package.json ./
-COPY /src ./
+COPY . /app
+
+WORKDIR /app
+
+RUN ls /app
 
 RUN yarn
 
-COPY . .
+RUN yarn build
 
-ADD    https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh /

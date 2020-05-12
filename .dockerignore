@@ -1,3 +1,5 @@
-**/*.test.ts
+*/tests
 node_modules
 dist
+.git
+*.md
