@@ -40,7 +40,8 @@
     "typescript": "^3.7.2"
   },
   "scripts": {
-    "start": "yarn build && cross-env NODE_ENV=deploy NODE_PATH=./src node dist/deploy.js",
+    "start": "yarn build && yarn fast-start",
+    "fast-start": "cross-env NODE_ENV=deploy NODE_PATH=./dist node dist/deploy.js",
     "style-test": "standardx \"src/**/*.ts\" && tsc",
     "test": "jest -i && yarn style-test",
     "pretty": "prettier es2020 --write \"src/**/*.ts\"",
