@@ -8,20 +8,20 @@ import {
   reservedSeats,
   roomDetail
 } from '../../../controller/laptop.controller';
-import { validateAdmin, validateStudent } from '../../../middlewares';
+import { LoginRequired, AdminOnly } from '../../../utils/authorization';
 
 const v1 = new Router();
 
 // GET
-v1.get('/', validateStudent, checkLaptop);
+v1.get('/', LoginRequired, checkLaptop);
 v1.get('/room', roomList);
 v1.get('/room/:room', reservedSeats);
-v1.get('/room/detail/:room', validateAdmin, roomDetail);
+v1.get('/room/detail/:room', AdminOnly, roomDetail);
 
 // POST
-v1.post('/', validateStudent, applyLaptop);
+v1.post('/', LoginRequired, applyLaptop);
 
 // DELETE
-v1.delete('/', validateStudent, cancelLaptop);
+v1.delete('/', LoginRequired, cancelLaptop);
 
 export default v1;

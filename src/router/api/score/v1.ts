@@ -7,14 +7,14 @@ import {
   updateArchive,
   deleteArchive
 } from '../../../controller';
-import { validateStudent, validateAdmin } from '../../../middlewares';
+import { LoginRequired, AdminOnly } from '../../../utils/authorization';
 
 const score = new Router();
 
-score.get('/', validateStudent, getUserScore);
-score.get('/archive', validateAdmin, getAllArchives);
-score.post('/archive', validateAdmin, insertArchive);
-score.put('/archive', validateAdmin, updateArchive);
-score.delete('/archive', validateAdmin, deleteArchive);
+score.get('/', LoginRequired, getUserScore);
+score.get('/archive', AdminOnly, getAllArchives);
+score.post('/archive', AdminOnly, insertArchive);
+score.put('/archive', AdminOnly, updateArchive);
+score.delete('/archive', AdminOnly, deleteArchive);
 
 export default score;
