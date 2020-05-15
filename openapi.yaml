@@ -21,6 +21,10 @@ tags:
     description: 기숙사 관련 기능
   - name: Account
     description: 계정 관련 기능
+  - name: Score Archive
+    description: 상벌점 아카이브를 관리하는 API를 설명합니다.
+  - name: User
+    description: 학생 유저와 연동하는 상벌점 API를 설명합니다.
 servers:
   - url: 'http://localhost:5000/api'
   - url: 'http://dotori.beansil.com/api'
@@ -35,6 +39,108 @@ paths:
         '200':
           description: Success
       summary: 서버가 살아있는지 체크합니다.
+  /score/v1:
+    get:
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: integer
+          description: '유저의 인증 번호'
+          required: true
+      tags:
+        - User
+      summary: 학생 유저의 상벌점 정보를 불러옵니다.
+      responses:
+        '200':
+          $ref: '#/components/responses/FetchedUserScoreSucceed'
+        '401':
+          description: 유저 토큰 인증 과정 중 문제가 생길 경우
+        '500':
+          description: 기타 문제가 생길 경우(서버 오류 등)
+  /score/v1/archive:
+    get:
+      tags:
+        - Score Archive
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: integer
+          description: '유저의 인증 번호'
+          required: true
+      summary: 관리자가 모든 상벌점 정보를 불러옵니다.
+      responses:
+        '200':
+          $ref: '#/components/responses/FetchedArchiveSucceed'
+        '401':
+          description: 유저 토큰 인증 과정 중 문제가 생길 경우
+        '500':
+          description: 기타 문제가 생길 경우(요청 바디, DB 등)
+    post:
+      tags:
+      - Score Archive
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: integer
+          description: '유저의 인증 번호'
+          required: true
+      summary: 관리자가 상벌점 정보를 추가합니다.
+      responses:
+        '200':
+          $ref: '#/components/responses/ArchiveInsertionSucceed'
+        '401':
+          description: 유저 토큰 인증 과정 중 문제가 생길 경우
+        '500':
+          description: 기타 문제가 생길 경우(요청 바디, DB 등)
+      requestBody:
+        $ref: '#/components/requestBodies/ArchiveBody'
+    put:
+      tags:
+      - Score Archive
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: integer
+          description: '유저의 인증 번호'
+          required: true
+      summary: 관리자가 상벌점 정보를 수정합니다.
+      responses:
+        '200':
+          $ref: '#/components/responses/ArchiveUpdateSucceed'
+        '401':
+          description: 유저 토큰 인증 과정 중 문제가 생길 경우
+        '500':
+          description: 기타 문제가 생길 경우(요청 바디, DB 등)
+      requestBody:
+        $ref: '#/components/requestBodies/ArchiveUpdate'
+  /score/v1/archive/:id:
+    delete:
+      tags:
+      - Score Archive
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: integer
+          description: '유저의 인증 번호'
+          required: true
+      summary: 관리자가 상벌점 정보를 삭제합니다.
+      responses:
+        '200':
+          $ref: '#/components/responses/ArchiveDeletionSucceed'
+        '401':
+          description: 유저 토큰 인증 과정 중 문제가 생길 경우
+        '500':
+          description: 기타 문제가 생길 경우(요청 바디, DB 등)
 
 # An object to hold reusable parts that can be used across the definition
 components:
@@ -49,3 +155,253 @@ components:
           authorizationUrl: 'http://dotori.beansil.com/api/account/oauth/'
           scopes:
             'read:users': read users info
+  schemas:
+    ScoreArchive:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: POST 요청 시 자동으로 생성됨
+        user_id:
+          type: integer
+          format: int64
+        score:
+          type: integer
+          format: int64
+        reason:
+          type: string
+          description: 부여한 이유
+    User:
+      type: object
+      properties:
+        pid:
+          type: integer
+          description: OAuth 유저의 번호로 자동 생성됨
+        email:
+          type: string
+        pw:
+          type: string
+        name:
+          type: string
+        grade:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 3
+        class:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 4
+        number:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 21
+        suspened_until:
+          type: string
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+  requestBodies:
+    ArchiveBody:
+      description: 아카이브 목록을 추가할 시 전달할 정보
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/components/schemas/ScoreArchive'
+          examples:
+            '1번 유저에 상점을 부여할 경우': 
+              value: {
+                data: {
+                  user_id: 4,
+                  score: 2,
+                  reason: '라면 청소'
+                }
+              }
+            '4번 유저에 벌점을 부여할 경우': 
+              value: {
+                data: {
+                  user_id: 1,
+                  score: -5,
+                  reason: '점호 불참'
+                }
+              }
+            '5번 유저에 벌점을 부여할 경우': 
+              value: {
+                data: {
+                  user_id: 5,
+                  score: -10,
+                  reason: '그냥 싫어서'
+                }
+              }
+      required: true
+    ArchiveUpdate:
+      description: 아카이브 목록을 수정할 시 전달할 정보
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/components/schemas/ScoreArchive'
+              conditions:
+                type: object
+                properties:
+                  id:
+                    type: string
+          examples:
+            '3번 아카이브 목록에 기재된 점수를 수정할 경우': 
+              value: {
+                data: {
+                  score: 1,
+                  reason: '라면 청소(상점 기준 하향됨)'
+                },
+                conditions: {
+                  id: 3
+                }
+              }
+            '6번 아카이브 목록에 기재된 유저 번호를 수정할 경우': 
+              value: {
+                data: {
+                  user_id: 5,
+                  reason: '점호 불참'
+                },
+                conditions: {
+                  id: 6
+                }
+              }
+            '7번 아카이브 목록 내용 전체를 수정할 경우': 
+              value: {
+                data: {
+                  user_id: 1,
+                  score: 3,
+                  reason: '기숙사 자치위원회 포상'
+                },
+                conditions: {
+                  id: 7
+                }
+              }
+      required: true
+    ArchiveDeletion:
+      description: 아카이브 목록을 삭제할 시 전달할 정보
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              conditions:
+                type: object
+                properties:
+                  id:
+                    type: string
+          examples:
+            '7번 목록을 삭제할 경우':
+              value: {
+                conditions: {
+                  id: 7
+                }
+              }
+  responses:
+    FetchedUserScoreSucceed:
+      description: '학생 유저의 점수 목록을 정상적으로 불러왔을 때 반환하는 응답입니다.'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  scores:
+                    type: array
+                    items:
+                      type: integer
+          example:
+            data: {
+              name: '박준영',
+              scores: [1, 1, -1, 2, -2, 1, 1, 2, 1]
+            }
+    FetchedArchiveSucceed:
+      description: '모든 학생 유저의 상벌점 아카이브를 정상적으로 불러왔을 때 반환하는 응답입니다.'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  archives:
+                    type: array
+                    items:
+                      type: object
+          example:
+            data: {
+              archives: [{
+                id: 1,
+                user_id: 1,
+                score: 1,
+                reason: '라면 청소'
+              }, {
+                id: 2,
+                user_id: 132,         
+                score: -5,
+                reason: '점호 불참'
+              }, {
+                id: 3,
+                user_id: 45,
+                score: -2,
+                reason: '호실 불 안 끄고 감'
+              }]
+            }
+    ArchiveInsertionSucceed:
+      description: '아카이브 목록 추가가 성공적으로 이루어졌을 때 반환하는 응답입니다.'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  insertedArchive:
+                    $ref: '#/components/schemas/ScoreArchive'
+    ArchiveUpdateSucceed:
+      description: '아카이브 목록 수정이 성공적으로 이루어졌을 때 반환하는 응답입니다.'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  result:
+                    type: array
+                    items:
+                      type: string
+                    example: [1]
+    ArchiveDeletionSucceed:
+      description: '아카이브 목록 삭제가 성공적으로 이루어졌을 때 반환하는 응답입니다.'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  result:
+                    type: integer
+                    example: 1
