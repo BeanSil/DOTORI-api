@@ -76,12 +76,7 @@ paths:
     get:
       summary: 지정한 게시물을 가져옵니다.
       parameters:
-        - in: path
-          name: post_id
-          schema:
-            type: integer
-          required: true
-          description: 가져오고자 하는 게시물 번호
+        - $ref: '#/components/parameters/PostId'
       responses:
         '200':
           $ref: '#/components/responses/SinglePost'
@@ -90,13 +85,7 @@ paths:
   /score/v1:
     get:
       parameters:
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-            format: integer
-          description: '유저의 인증 번호'
-          required: true
+        - $ref: '#/components/parameters/Authorization'
       tags:
         - User
       summary: 학생 유저의 상벌점 정보를 불러옵니다.
@@ -112,13 +101,7 @@ paths:
       tags:
         - Score Archive
       parameters:
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-            format: integer
-          description: '유저의 인증 번호'
-          required: true
+        - $ref: '#/components/parameters/Authorization'
       summary: 관리자가 모든 상벌점 정보를 불러옵니다.
       responses:
         '200':
@@ -131,13 +114,7 @@ paths:
       tags:
       - Score Archive
       parameters:
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-            format: integer
-          description: '유저의 인증 번호'
-          required: true
+        - $ref: '#/components/parameters/Authorization'
       summary: 관리자가 상벌점 정보를 추가합니다.
       responses:
         '200':
@@ -152,13 +129,7 @@ paths:
       tags:
       - Score Archive
       parameters:
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-            format: integer
-          description: '유저의 인증 번호'
-          required: true
+        - $ref: '#/components/parameters/Authorization'
       summary: 관리자가 상벌점 정보를 수정합니다.
       responses:
         '200':
@@ -174,13 +145,7 @@ paths:
       tags:
       - Score Archive
       parameters:
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-            format: integer
-          description: '유저의 인증 번호'
-          required: true
+        - $ref: '#/components/parameters/Authorization'
       summary: 관리자가 상벌점 정보를 삭제합니다.
       responses:
         '200':
@@ -211,6 +176,7 @@ components:
           type: integer
           format: int64
           description: POST 요청 시 자동으로 생성됨
+          readOnly: true
         user_id:
           type: integer
           format: int64
@@ -291,6 +257,23 @@ components:
           created_at: "2020-05-17T10:26:28Z",
           updated_at: "2020-05-18T10:26:28Z"
         }
+  parameters:
+    Authorization:
+      in: header
+      name: Authorization
+      description: '유저의 인증 번호'
+      schema:
+        type: string
+        format: uuid
+      required: true
+    PostId:
+      in: path
+      name: post_id
+      schema:
+        type: integer
+        minimum: 0
+      required: true
+      description: 가져오고자 하는 게시물 번호
   requestBodies:
     ScoreArchiveBody:
       description: 아카이브 목록을 추가할 시 전달할 정보
