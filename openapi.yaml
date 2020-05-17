@@ -25,19 +25,23 @@ tags:
     description: 상벌점 아카이브를 관리하는 API를 설명합니다.
   - name: User
     description: 학생 유저와 연동하는 상벌점 API를 설명합니다.
+  - name: Board
+    description: 기숙사 관련 기능
 servers:
   - url: 'http://localhost:5000/api'
   - url: 'http://dotori.beansil.com/api'
   - url: 'https://dotori.beansil.com/api'
 
 paths:
-  '/':
+  /:
     get:
       tags:
         - General
       responses:
         '200':
           description: Success
+        '500':
+          description: DB 연결 에러 시 발생.
       summary: 서버가 살아있는지 체크합니다.
   /score/v1:
     get:
