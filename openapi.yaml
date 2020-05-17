@@ -7,7 +7,7 @@ info:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
   x-logo:
-    url: 'https://redocly.github.io/openapi-template/logo.png'
+    url: 'https://avatars2.githubusercontent.com/u/41184136'
 
   description: |
     DOTORI API 문서
