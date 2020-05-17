@@ -43,6 +43,35 @@ paths:
         '500':
           description: DB 연결 에러 시 발생.
       summary: 서버가 살아있는지 체크합니다.
+  /board/v1:
+    get:
+      summary: 게시판 첫번째 페이지를 가져옵니다.
+      description: 게시판 첫번째 페이지를 가져옵니다. (/board/v1 == /board/v1/page/0)
+      responses:
+        '200':
+          $ref: '#/components/responses/PagedPostList'
+        '500':
+          description: 기타 문제가 생길 경우(서버 오류 등)
+      tags:
+        - Board
+  /board/v1/page/{page}:
+    get:
+      summary: 지정한 게시판 페이지를 가져옵니다.
+      description: 지정한 게시판 첫번째 페이지를 가져옵니다.
+      parameters:
+        - in: path
+          name: page
+          schema:
+            type: integer
+          required: true
+          description: 가져오고자 하는 페이지 번호
+      responses:
+        '200':
+          $ref: '#/components/responses/PagedPostList'
+        '500':
+          description: 기타 문제가 생길 경우(서버 오류 등)
+      tags:
+        - Board
   /score/v1:
     get:
       parameters:
@@ -212,6 +241,41 @@ components:
         updated_at:
           type: string
           format: date-time
+    Post:
+      type: object
+      properties:
+        post_id:
+          type: integer
+          readOnly: true
+        user_id:
+          type: integer
+        board_type:
+          type: string
+        title:
+          type: string
+        content:
+          type: string
+        is_anonymous:
+          type: boolean
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      example: {
+          post_id: 0,
+          user_id: 0,
+          board_type: '공지사항',
+          title: '흥미로운 제목',
+          content: '미안하다 이거 보여주려고 어그로 끌었다...',
+          is_anonymous: false,
+          created_at: "2020-05-17T10:26:28Z",
+          updated_at: "2020-05-18T10:26:28Z"
+        }
   requestBodies:
     ArchiveBody:
       description: 아카이브 목록을 추가할 시 전달할 정보
@@ -239,7 +303,7 @@ components:
                   reason: '점호 불참'
                 }
               }
-            '5번 유저에 벌점을 부여할 경우': 
+            '5번 유저에 벌점을 부여할 경우':
               value: {
                 data: {
                   user_id: 5,
@@ -315,6 +379,18 @@ components:
                 }
               }
   responses:
+    PagedPostList:
+      description: '게시물 목록입니다.'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+                maxLength: 20
     FetchedUserScoreSucceed:
       description: '학생 유저의 점수 목록을 정상적으로 불러왔을 때 반환하는 응답입니다.'
       content:
