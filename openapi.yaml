@@ -26,7 +26,7 @@ tags:
   - name: User
     description: 학생 유저와 연동하는 상벌점 API를 설명합니다.
   - name: Board
-    description: 기숙사 관련 기능
+    description: 게시판 관련 기능
 servers:
   - url: 'http://localhost:5000/api'
   - url: 'http://dotori.beansil.com/api'
@@ -84,7 +84,7 @@ paths:
           description: 가져오고자 하는 게시물 번호
       responses:
         '200':
-          $ref: '#/components/responses/SinglePostResponse'
+          $ref: '#/components/responses/SinglePost'
   /score/v1:
     get:
       parameters:
@@ -392,6 +392,7 @@ components:
                 }
               }
   responses:
+    # 게시판 API 응답
     PagedPostList:
       description: '게시물 목록입니다.'
       content:
@@ -404,7 +405,7 @@ components:
                 items:
                   $ref: '#/components/schemas/Post'
                 maxItems: 20
-    SinglePostResponse:
+    SinglePost:
       description: 게시물
       content:
         application/json:
@@ -413,6 +414,8 @@ components:
             properties:
               data:
                 $ref: '#/components/schemas/Post'
+
+    # 상벌점 API 응답
     FetchedUserScoreSucceed:
       description: '학생 유저의 점수 목록을 정상적으로 불러왔을 때 반환하는 응답입니다.'
       content:
