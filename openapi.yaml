@@ -1,0 +1,51 @@
+# https://github.com/Redocly/openapi-template/blob/gh-pages/openapi.yaml 를 참고해서 작성해주세요.
+openapi: 3.0.2
+info:
+  version: '1.0.0'
+  title: DOTORI
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+  x-logo:
+    url: 'https://redocly.github.io/openapi-template/logo.png'
+
+  description: |
+    DOTORI API 문서
+
+    # 개요
+    이 API 문서는 빈실 DOTORI API의 스펙에 대해 다루고 있습니다.
+tags:
+  - name: General
+    description: 외부 접속 불가한 API
+  - name: Dormitory
+    description: 기숙사 관련 기능
+  - name: Account
+    description: 계정 관련 기능
+servers:
+  - url: 'http://localhost:5000/api'
+  - url: 'http://dotori.beansil.com/api'
+  - url: 'https://dotori.beansil.com/api'
+
+paths:
+  '/':
+    get:
+      tags:
+        - General
+      responses:
+        '200':
+          description: Success
+      summary: 서버가 살아있는지 체크합니다.
+
+# An object to hold reusable parts that can be used across the definition
+components:
+  headers:
+  # Security scheme definitions that can be used across the definition.
+  securitySchemes:
+    main_auth: # security definition name (you can name it as you want)
+      # the following options are specific to oauth2 type
+      type: oauth2 # authorization type, one of: oauth2, apiKey, http
+      flows:
+        implicit:
+          authorizationUrl: 'http://dotori.beansil.com/api/account/oauth/'
+          scopes:
+            'read:users': read users info

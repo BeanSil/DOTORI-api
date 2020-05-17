@@ -208,3 +208,4 @@ temp/
 # End of https://www.gitignore.io/api/git,node,jetbrains+all
 
 .env*
+.DS_Store
