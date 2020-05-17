@@ -88,12 +88,14 @@ export const roomList = async (ctx: Context) => {
   const roomQueries: any[] = [];
 
   for (let i = 1; i <= 5; i++) {
-    roomQueries.push(laptop.count({
-      where: {
-        room: i,
-        createdAt: new Date().toISOString().slice(0, 10)
-      }
-    }));
+    roomQueries.push(
+      laptop.count({
+        where: {
+          room: i,
+          createdAt: new Date().toISOString().slice(0, 10)
+        }
+      })
+    );
   }
 
   const reserveCount = await Promise.all(roomQueries);
@@ -150,9 +152,7 @@ export const roomDetail = async (ctx: Context) => {
   const userQueries: any[] = [];
 
   records.forEach(record => {
-    userQueries.push(
-      user.findByPk(record.user_id)
-    );
+    userQueries.push(user.findByPk(record.user_id));
   });
 
   const users = await Promise.all(userQueries);
