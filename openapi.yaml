@@ -191,17 +191,17 @@ components:
         grade:
           type: integer
           format: int32
-          minimum: 1
+          minimum: 0
           maximum: 3
         class:
           type: integer
           format: int32
-          minimum: 1
+          minimum: 0
           maximum: 4
         number:
           type: integer
           format: int32
-          minimum: 1
+          minimum: 0
           maximum: 21
         suspened_until:
           type: string
