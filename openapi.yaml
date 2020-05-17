@@ -85,6 +85,8 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/SinglePost'
+        '404':
+          description: 게시물 번호에 해당하는 데이터가 없는 경우
   /score/v1:
     get:
       parameters:
