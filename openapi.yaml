@@ -120,7 +120,7 @@ paths:
       summary: 관리자가 모든 상벌점 정보를 불러옵니다.
       responses:
         '200':
-          $ref: '#/components/responses/FetchedArchiveSucceed'
+          $ref: '#/components/responses/FetchedScoreArchiveSucceed'
         '401':
           description: 유저 토큰 인증 과정 중 문제가 생길 경우
         '500':
@@ -139,13 +139,13 @@ paths:
       summary: 관리자가 상벌점 정보를 추가합니다.
       responses:
         '200':
-          $ref: '#/components/responses/ArchiveInsertionSucceed'
+          $ref: '#/components/responses/ScoreArchiveInsertionSucceed'
         '401':
           description: 유저 토큰 인증 과정 중 문제가 생길 경우
         '500':
           description: 기타 문제가 생길 경우(요청 바디, DB 등)
       requestBody:
-        $ref: '#/components/requestBodies/ArchiveBody'
+        $ref: '#/components/requestBodies/ScoreArchiveBody'
     put:
       tags:
       - Score Archive
@@ -160,13 +160,13 @@ paths:
       summary: 관리자가 상벌점 정보를 수정합니다.
       responses:
         '200':
-          $ref: '#/components/responses/ArchiveUpdateSucceed'
+          $ref: '#/components/responses/ScoreArchiveUpdateSucceed'
         '401':
           description: 유저 토큰 인증 과정 중 문제가 생길 경우
         '500':
           description: 기타 문제가 생길 경우(요청 바디, DB 등)
       requestBody:
-        $ref: '#/components/requestBodies/ArchiveUpdate'
+        $ref: '#/components/requestBodies/ScoreArchiveUpdate'
   /score/v1/archive/:id:
     delete:
       tags:
@@ -182,7 +182,7 @@ paths:
       summary: 관리자가 상벌점 정보를 삭제합니다.
       responses:
         '200':
-          $ref: '#/components/responses/ArchiveDeletionSucceed'
+          $ref: '#/components/responses/ScoreArchiveDeletionSucceed'
         '401':
           description: 유저 토큰 인증 과정 중 문제가 생길 경우
         '500':
@@ -290,7 +290,7 @@ components:
           updated_at: "2020-05-18T10:26:28Z"
         }
   requestBodies:
-    ArchiveBody:
+    ScoreArchiveBody:
       description: 아카이브 목록을 추가할 시 전달할 정보
       content:
         application/json:
@@ -300,7 +300,7 @@ components:
               data:
                 $ref: '#/components/schemas/ScoreArchive'
           examples:
-            '1번 유저에 상점을 부여할 경우': 
+            '1번 유저에 상점을 부여할 경우':
               value: {
                 data: {
                   user_id: 4,
@@ -308,7 +308,7 @@ components:
                   reason: '라면 청소'
                 }
               }
-            '4번 유저에 벌점을 부여할 경우': 
+            '4번 유저에 벌점을 부여할 경우':
               value: {
                 data: {
                   user_id: 1,
@@ -325,7 +325,7 @@ components:
                 }
               }
       required: true
-    ArchiveUpdate:
+    ScoreArchiveUpdate:
       description: 아카이브 목록을 수정할 시 전달할 정보
       content:
         application/json:
@@ -340,7 +340,7 @@ components:
                   id:
                     type: string
           examples:
-            '3번 아카이브 목록에 기재된 점수를 수정할 경우': 
+            '3번 아카이브 목록에 기재된 점수를 수정할 경우':
               value: {
                 data: {
                   score: 1,
@@ -350,7 +350,7 @@ components:
                   id: 3
                 }
               }
-            '6번 아카이브 목록에 기재된 유저 번호를 수정할 경우': 
+            '6번 아카이브 목록에 기재된 유저 번호를 수정할 경우':
               value: {
                 data: {
                   user_id: 5,
@@ -360,7 +360,7 @@ components:
                   id: 6
                 }
               }
-            '7번 아카이브 목록 내용 전체를 수정할 경우': 
+            '7번 아카이브 목록 내용 전체를 수정할 경우':
               value: {
                 data: {
                   user_id: 1,
@@ -372,7 +372,7 @@ components:
                 }
               }
       required: true
-    ArchiveDeletion:
+    ScoreArchiveDeletion:
       description: 아카이브 목록을 삭제할 시 전달할 정보
       content:
         application/json:
@@ -434,7 +434,7 @@ components:
               name: '박준영',
               scores: [1, 1, -1, 2, -2, 1, 1, 2, 1]
             }
-    FetchedArchiveSucceed:
+    FetchedScoreArchiveSucceed:
       description: '모든 학생 유저의 상벌점 아카이브를 정상적으로 불러왔을 때 반환하는 응답입니다.'
       content:
         application/json:
@@ -457,7 +457,7 @@ components:
                 reason: '라면 청소'
               }, {
                 id: 2,
-                user_id: 132,         
+                user_id: 132,
                 score: -5,
                 reason: '점호 불참'
               }, {
@@ -467,7 +467,7 @@ components:
                 reason: '호실 불 안 끄고 감'
               }]
             }
-    ArchiveInsertionSucceed:
+    ScoreArchiveInsertionSucceed:
       description: '아카이브 목록 추가가 성공적으로 이루어졌을 때 반환하는 응답입니다.'
       content:
         application/json:
@@ -479,7 +479,7 @@ components:
                 properties:
                   insertedArchive:
                     $ref: '#/components/schemas/ScoreArchive'
-    ArchiveUpdateSucceed:
+    ScoreArchiveUpdateSucceed:
       description: '아카이브 목록 수정이 성공적으로 이루어졌을 때 반환하는 응답입니다.'
       content:
         application/json:
@@ -494,7 +494,7 @@ components:
                     items:
                       type: string
                     example: [1]
-    ArchiveDeletionSucceed:
+    ScoreArchiveDeletionSucceed:
       description: '아카이브 목록 삭제가 성공적으로 이루어졌을 때 반환하는 응답입니다.'
       content:
         application/json:
