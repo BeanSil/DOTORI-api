@@ -403,8 +403,8 @@ components:
                 type: array
                 items:
                   $ref: '#/components/schemas/Post'
-                maxLength: 20
-    SinglePageResponse:
+                maxItems: 20
+    SinglePostResponse:
       description: 게시물
       content:
         application/json:
