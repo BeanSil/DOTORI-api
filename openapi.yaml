@@ -54,6 +54,17 @@ paths:
           description: 기타 문제가 생길 경우(서버 오류 등)
       tags:
         - Board
+    put:
+      summary: 게시글을 작성합니다.
+      parameters:
+        - $ref: '#/components/parameters/Authorization'
+      requestBody:
+        $ref: '#/components/requestBodies/NewPost'
+      responses:
+        '201':
+          $ref: '#/components/responses/SinglePost'
+        '400':
+          description: parameter들이 올바르지 않은 경우
   /board/v1/page/{page}:
     get:
       summary: 지정한 게시판 페이지를 가져옵니다.
@@ -80,8 +91,40 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/SinglePost'
+        '400':
+          description: parameter들이 올바르지 않은 경우
         '404':
           description: 게시물 번호에 해당하는 데이터가 없는 경우
+      tags:
+        - Board
+    post:
+      summary: 지정한 게시물을 수정합니다.
+      parameters:
+        - $ref: '#/components/parameters/Authorization'
+        - $ref: '#/components/parameters/PostId'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdatedPost'
+      responses:
+        '200':
+          $ref: '#/components/responses/SinglePost'
+        '400':
+          description: parameter들이 올바르지 않은 경우
+        '404':
+          description: 게시물 번호에 해당하는 데이터가 없는 경우
+      tags:
+        - Board
+    delete:
+      summary: 지정한 게시물을 삭제합니다.
+      parameters:
+        - $ref: '#/components/parameters/PostId'
+      responses:
+        '200':
+          description: 정상 삭제 완료 시
+        '400':
+          description: parameter들이 올바르지 않은 경우
+        '404':
+          description: 게시물 번호에 해당하는 데이터가 없는 경우
+
   /score/v1:
     get:
       parameters:
@@ -230,8 +273,12 @@ components:
           readOnly: true
         user_id:
           type: integer
+          readOnly: true
         board_type:
           type: string
+          enum:
+            - 공지사항
+            - 자유게시판
         title:
           type: string
         content:
@@ -275,6 +322,21 @@ components:
       required: true
       description: 가져오고자 하는 게시물 번호
   requestBodies:
+    NewPost:
+      description: 신규 게시물 생성 시 전달되는 정보
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Post'
+      required: true
+    UpdatedPost:
+      description: 기존 게시물 수정 시 전달되는 정보
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Post'
+      required: false
+
     ScoreArchiveBody:
       description: 아카이브 목록을 추가할 시 전달할 정보
       content:
