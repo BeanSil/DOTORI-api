@@ -72,6 +72,19 @@ paths:
           description: 기타 문제가 생길 경우(서버 오류 등)
       tags:
         - Board
+  /board/v1/{post_id}:
+    get:
+      summary: 지정한 게시물을 가져옵니다.
+      parameters:
+        - in: path
+          name: post_id
+          schema:
+            type: integer
+          required: true
+          description: 가져오고자 하는 게시물 번호
+      responses:
+        '200':
+          $ref: '#/components/responses/SinglePostResponse'
   /score/v1:
     get:
       parameters:
@@ -391,6 +404,15 @@ components:
                 items:
                   $ref: '#/components/schemas/Post'
                 maxLength: 20
+    SinglePageResponse:
+      description: 게시물
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/components/schemas/Post'
     FetchedUserScoreSucceed:
       description: '학생 유저의 점수 목록을 정상적으로 불러왔을 때 반환하는 응답입니다.'
       content:
