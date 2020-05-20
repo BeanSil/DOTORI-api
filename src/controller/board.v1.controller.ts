@@ -12,7 +12,12 @@ const PostIdInParam = Joi.object().keys({
 export const getPost = async (ctx: Context) => {
   ctx.assert(!PostIdInParam.validate(ctx.params).error, 400);
 
-  const result = await post.findByPk(ctx.params.postid);
+  const result = await post.findOne({
+    where: {
+      post_id: ctx.params.postid,
+      board_type: ctx.params.board
+    }
+  });
 
   ctx.assert(result, 404);
 
@@ -22,8 +27,14 @@ export const getPost = async (ctx: Context) => {
 };
 
 export const getPosts = async (ctx: Context) => {
+
+  // TODO: 404 추가, page joi 검사 추가
+
   ctx.body = {
     data: await post.findAll({
+      where: {
+        board_type: ctx.params.board
+      },
       offset: 20 * ctx.params.page || 0,
       limit: 20
     })
@@ -32,9 +43,6 @@ export const getPosts = async (ctx: Context) => {
 
 export const putPost = async (ctx: Context) => {
   const NewPost = Joi.object().keys({
-    board_type: Joi.string()
-      .valid('자유게시판', '대나무숲', '공지사항')
-      .required(),
     title: Joi.string()
       .min(1)
       .max(255)
