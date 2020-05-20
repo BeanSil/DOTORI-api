@@ -2,12 +2,13 @@ import * as request from 'supertest';
 import app from '../../';
 import { post, user, waitForSync } from '../../models';
 
-const api = '/api/board/v1/postid';
+const api = '/api/board/v1/:board/postid';
 
 let authKey: any;
 
 describe('delete post', () => {
   let created: any;
+  let boardType = 'notice';
 
   beforeAll(async done => {
     await waitForSync;
@@ -24,7 +25,7 @@ describe('delete post', () => {
   beforeEach(async done => {
     const testPost = await post.create({
       user_id: authKey,
-      board_type: '공지사항',
+      board_type: boardType,
       title: '노트북 대여시간 변경',
       content: '노트북 대여시간이 변경됩니다.',
       is_anonymous: false
@@ -40,7 +41,7 @@ describe('delete post', () => {
 
   test('with wrong post id', async () => {
     const response = await request(app.callback())
-      .delete(api)
+      .delete(api.replace(':board', boardType))
       .set('Authorization', authKey);
 
     expect(response.status).toBe(404);
@@ -48,7 +49,7 @@ describe('delete post', () => {
 
   test('normal case', async () => {
     const response = await request(app.callback())
-      .delete(api.replace('postid', created))
+      .delete(api.replace(':board', boardType).replace('postid', created))
       .set('Authorization', authKey);
     expect(response.status).toBe(200);
   });

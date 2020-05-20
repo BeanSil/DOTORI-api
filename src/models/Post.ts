@@ -30,7 +30,7 @@ export const PostFactory = (sequelize: Sequelize) => {
     },
     board_type: {
       type: DataTypes.STRING(),
-      values: ['자유게시판', '대나무숲', '공지사항'],
+      values: ['freeboard', 'anonymous', 'notice'],
       allowNull: false
     },
     title: {
@@ -39,6 +39,10 @@ export const PostFactory = (sequelize: Sequelize) => {
     },
     content: {
       type: DataTypes.TEXT({ length: 'long' }),
+      allowNull: false
+    },
+    is_anonymous: {
+      type: DataTypes.BOOLEAN,
       allowNull: false
     }
   });
