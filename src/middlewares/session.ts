@@ -1,11 +1,23 @@
 import { Context, Next } from 'koa';
+
+import * as redis from 'redis';
+
 import { user } from '../models';
 import { AnonymousUser, User } from '../modules/User';
 
+const client = redis.createClient();
+
 const sessionCreator = async (ctx: Context, next: Next) => {
-  const auth = ctx.request.headers.authorization || -1;
-  ctx.user = new User(await user.findByPk(auth)) || AnonymousUser;
-  await next();
+  if (ctx.request.headers.authorization) {
+    client.get(ctx.request.headers.authorization, async (err, pid) => {
+      ctx.user = new User(await user.findByPk(pid)) || AnonymousUser;
+      await next();
+    });
+  } else {
+    ctx.user = AnonymousUser;
+    await next();
+  }
+
 };
 
 export default sessionCreator;
