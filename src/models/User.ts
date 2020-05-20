@@ -1,6 +1,6 @@
 import { Sequelize, DataTypes, Model, BuildOptions } from 'sequelize';
 
-interface UserAttribute extends Model {
+export interface UserAttribute extends Model {
   readonly pid: bigint;
   readonly email: string;
   readonly pw: string;
