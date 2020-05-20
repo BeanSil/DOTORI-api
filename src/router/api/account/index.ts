@@ -1,5 +1,5 @@
 import * as Router from 'koa-router';
-import v1 from "./v1";
+import v1 from './v1';
 
 const account = new Router();
 
