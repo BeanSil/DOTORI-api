@@ -17,7 +17,7 @@ export abstract class AbstractUser {
     if (this.grade > 0) return Authority.STUDENT;
     else if (this.class === 0) return Authority.PARENT;
     else if (this.class === 1) return Authority.TEACHER;
-    else if (this.class === 2) return Authority.DOMITORY;
+    else if (this.class === 2) return Authority.DORMITORY;
     else return Authority.ANONYMOUS;
   }
 }
@@ -42,7 +42,6 @@ export enum Authority {
   STUDENT,
   PARENT,
   TEACHER,
-  DOMITORY,
+  DORMITORY,
   ANONYMOUS
-
 }
