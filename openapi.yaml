@@ -27,6 +27,9 @@ tags:
     description: 학생 유저와 연동하는 상벌점 API를 설명합니다.
   - name: Board
     description: 게시판 관련 기능
+  - name: Laptop
+    description: 노트북 대여와 대여 기록 조회 API를 설명합니다.
+
 servers:
   - url: 'http://localhost:5000/api'
   - url: 'http://dotori.beansil.com/api'
@@ -197,6 +200,76 @@ paths:
           description: 유저 토큰 인증 과정 중 문제가 생길 경우
         '500':
           description: 기타 문제가 생길 경우(요청 바디, DB 등)
+
+  /laptop:
+    get:
+      tags:
+      - Laptop
+      summary: 학생의 노트북 대여 여부를 알려줍니다.
+      parameters:
+        - $ref: '#/components/parameters/Authorization'
+      responses:
+        '200':
+          $ref: '#/components/responses/LaptopReservationFound'
+        '404':
+          description: 학생이 노트북 대여를 하지 않았을 경우
+    post:
+      tags:
+      - Laptop
+      summary: 학생이 선택한 자리에 노트북 대여를 요청합니다.
+      parameters:
+      - $ref: '#/components/parameters/Authorization'
+      responses:
+        '201':
+          description: 노트북 대여에 성공 하였을 경우
+        '400':
+          description: body의 형식이 올바르지 않거나 자리가 이미 예약된 경우
+      requestBodies:
+        $ref: '#/components/requestBodies/LaptopApply'
+    delete:
+      tags:
+      - Laptop
+      summary: 학생의 노트북 대여를 취소합니다.
+      parameters:
+        - $ref: '#/components/parameters/Authorization'
+      responses:
+        '204':
+          description: 성공적으로 대여를 취소하였을 경우
+        '400':
+          description: 학생이 노트북을 대여하지 않았을 경우
+  /laptop/room:
+    get:
+      tags:
+        - Laptop
+      summary: 대여 가능한 실들의 정보를 불러옵니다.
+      parameters:
+        - $ref: '#/components/parameters/Authorization'
+      responses:
+        '200':
+          $ref: '#/componenets/responses/LaptopRoomLists'
+  /laptop/room/:room:
+    get:
+      tags:
+      - Laptop
+      summary: 해당 학습실의 대여된 자리들을 불러옵니다.
+      parameters:
+        - $ref: '#/components/parameters/Authorization'
+      responses:
+        '200':
+          $ref: '#/componenets/responses/LaptopRoomReservedSeats'
+  /laptop/room/detail/:room:
+    get:
+      tags:
+        - Laptop
+      summary: 관리자가 해당 학습실에 대여한 학생들의 정보를 불러옵니다.
+      parameters:
+        - $ref: '#/components/parameters/Authorization'
+      responses:
+        '200':
+          $ref: '#/componenets/responses/LaptopRoomReservationDetail'
+
+
+
 
 # An object to hold reusable parts that can be used across the definition
 components:
@@ -438,6 +511,24 @@ components:
                   id: 7
                 }
               }
+    LaptopApply:
+      description: 노트북 대여를 신청할 시 전달할 정보
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              room:
+                type: integer
+              seat:
+                type: integer
+          examples:
+            '1번실 5번 자리를 대여할 경우':
+              value: {
+                room: 1,
+                seat: 5
+              }
+
   responses:
     # 게시판 API 응답
     PagedPostList:
@@ -557,3 +648,86 @@ components:
                   result:
                     type: integer
                     example: 1
+    
+    #노트북 API 응답
+    LaptopReservationFound:
+      description: '학생이 노트북 대여를 신청한 자리를 반환하는 응답입니다.'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  room:
+                    type: integer
+                    example: 1
+                  seat:
+                    type: integer
+                    example: 1
+    LaptopRoomLists:
+      description: '학습실들의 예약된 자리들의 수를 반환하는 응답입니다.'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  roomStatus:
+                    type: array
+                    items:
+                      type: integer
+                    example: [3, 0, 0, 0, 0]
+    LaptopRoomReservedSeats:
+      description: '해당 학습실의 예약된 자리들을 반환하는 응답입니다.'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: obejct
+                properties:
+                  seats:
+                    type: array
+                    items:
+                      type: integer
+                    example: [1, 3, 5, 6]
+    LaptopRoomReservationDetail:
+      description: '해당 학습실의 자리를 예약한 사람의 정보들을 반환하는 응답입니다.'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  details:
+                    type: array
+                    items:
+                      type: array
+                      properties:
+                        grade:
+                          type: integer
+                        class:
+                          type: integer
+                        number:
+                          type: integer
+                        name:
+                          type: string
+                        seat:
+                          type: integer
+          example:
+            data: {
+              details: [{
+                grade: 1,
+                class: 1,
+                number: 1,
+                name: '김철수',
+                seat: 3
+              }]
+            }
