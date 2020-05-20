@@ -26,7 +26,6 @@ export const getPost = async (ctx: Context) => {
 };
 
 export const getPosts = async (ctx: Context) => {
-
   // TODO: 404 추가, page joi 검사 추가
 
   ctx.body = {
@@ -96,9 +95,12 @@ export const deletePost = async (ctx: Context) => {
 
   // TODO: 회원 권한 검사 (본인 or 관리자)
 
-  const result = await post.destroy({ where: {
-    board_type: ctx.params.board,
-    post_id: ctx.params.postid } });
+  const result = await post.destroy({
+    where: {
+      board_type: ctx.params.board,
+      post_id: ctx.params.postid
+    }
+  });
   ctx.assert(result, 404);
 
   ctx.status = 200;

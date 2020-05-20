@@ -7,14 +7,14 @@ import {
   postPost,
   deletePost
 } from '../../../../controller/board.v1.controller';
-import { boardTypeChecker } from "../../../../middlewares";
+import { boardTypeChecker } from '../../../../middlewares';
 import { LoginRequired } from '../../../../utils/authorization';
 
 const v1 = new Router();
 
 // TODO: 모두 게시판 구분을 url에 추가해줄것.
 
-v1.use(boardTypeChecker)
+v1.use(boardTypeChecker);
 
 // BULK-GET
 v1.get('/:board', getPosts);
