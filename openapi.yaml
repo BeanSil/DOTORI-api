@@ -48,10 +48,12 @@ paths:
         '500':
           description: DB 연결 에러 시 발생.
       summary: 서버가 살아있는지 체크합니다.
-  /board/v1:
+  /board/v1/{board}:
     get:
       summary: 게시판 첫번째 페이지를 가져옵니다.
       description: 게시판 첫번째 페이지를 가져옵니다. (/board/v1 == /board/v1/page/0)
+      parameters:
+        - $ref: '#/components/parameters/BoardType'
       responses:
         '200':
           $ref: '#/components/responses/PagedPostList'
@@ -63,6 +65,7 @@ paths:
       summary: 게시글을 작성합니다.
       parameters:
         - $ref: '#/components/parameters/Authorization'
+        - $ref: '#/components/parameters/BoardType'
       requestBody:
         $ref: '#/components/requestBodies/NewPost'
       responses:
@@ -72,11 +75,12 @@ paths:
           description: parameter들이 올바르지 않은 경우
       tags:
         - Board
-  /board/v1/page/{page}:
+  /board/v1/{board}/page/{page}:
     get:
       summary: 지정한 게시판 페이지를 가져옵니다.
       description: 지정한 게시판 첫번째 페이지를 가져옵니다.
       parameters:
+        - $ref: '#/components/parameters/BoardType'
         - in: path
           name: page
           schema:
@@ -90,10 +94,11 @@ paths:
           description: 기타 문제가 생길 경우(서버 오류 등)
       tags:
         - Board
-  /board/v1/{post_id}:
+  /board/v1/{board}/{post_id}:
     get:
       summary: 지정한 게시물을 가져옵니다.
       parameters:
+        - $ref: '#/components/parameters/BoardType'
         - $ref: '#/components/parameters/PostId'
       responses:
         '200':
@@ -108,6 +113,7 @@ paths:
       summary: 지정한 게시물을 수정합니다.
       parameters:
         - $ref: '#/components/parameters/Authorization'
+        - $ref: '#/components/parameters/BoardType'
         - $ref: '#/components/parameters/PostId'
       requestBody:
         $ref: '#/components/requestBodies/UpdatedPost'
@@ -123,6 +129,8 @@ paths:
     delete:
       summary: 지정한 게시물을 삭제합니다.
       parameters:
+        - $ref: '#/components/parameters/Authorization'
+        - $ref: '#/components/parameters/BoardType'
         - $ref: '#/components/parameters/PostId'
       responses:
         '200':
@@ -420,8 +428,9 @@ components:
         board_type:
           type: string
           enum:
-            - 공지사항
-            - 자유게시판
+            - notice
+            - freeboard
+            - anonymous
         title:
           type: string
         content:
@@ -492,6 +501,17 @@ components:
         type: string
         format: uuid
       required: true
+    BoardType:
+      in: path
+      name: board
+      schema:
+        type: string
+        enum:
+          - notice
+          - freeboard
+          - anonymous
+      required: true
+      description: 게시판 종류
     PostId:
       in: path
       name: post_id
