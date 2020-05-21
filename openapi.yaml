@@ -246,7 +246,7 @@ paths:
         - $ref: '#/components/parameters/Authorization'
       responses:
         '200':
-          $ref: '#/componenets/responses/LaptopRoomLists'
+          $ref: '#/components/responses/LaptopRoomLists'
   /laptop/room/:room:
     get:
       tags:
@@ -256,7 +256,7 @@ paths:
         - $ref: '#/components/parameters/Authorization'
       responses:
         '200':
-          $ref: '#/componenets/responses/LaptopRoomReservedSeats'
+          $ref: '#/components/responses/LaptopRoomReservedSeats'
   /laptop/room/detail/:room:
     get:
       tags:
@@ -266,7 +266,7 @@ paths:
         - $ref: '#/components/parameters/Authorization'
       responses:
         '200':
-          $ref: '#/componenets/responses/LaptopRoomReservationDetail'
+          $ref: '#/components/responses/LaptopRoomReservationDetail'
 
 
 
