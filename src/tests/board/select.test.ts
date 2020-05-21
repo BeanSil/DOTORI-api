@@ -10,6 +10,7 @@ describe('select post', () => {
   let data: any = {
     post_id: null,
     user_id: 2,
+    board_type: 'notice',
     title: '노트북 대여시간 변경',
     content: '노트북 대여시간이 변경됩니다.',
     is_anonymous: false
@@ -18,6 +19,7 @@ describe('select post', () => {
   beforeAll(async () => {
     await waitForSync;
     created = (await post.create(data)).post_id;
+    console.log(created);
     data.post_id = created;
   });
 

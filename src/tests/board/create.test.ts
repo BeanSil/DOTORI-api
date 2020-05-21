@@ -51,7 +51,7 @@ describe('create post', () => {
       .put(api.replace(':board', encodeURI('dcinside')))
       .set('Authorization', authKey)
       .send(baseData);
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(404);
   });
 
   test('normal case', async () => {

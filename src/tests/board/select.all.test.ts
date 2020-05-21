@@ -2,7 +2,7 @@ import * as request from 'supertest';
 import app from '../../';
 import { post, waitForSync } from '../../models';
 
-const api = '/api/board/v1/notice';
+const api = '/api/board/v1/notice/';
 
 beforeAll(async done => {
   await waitForSync;

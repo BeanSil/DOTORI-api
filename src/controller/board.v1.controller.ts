@@ -6,9 +6,16 @@ const PostIdInParam = Joi.object().keys({
   postid: Joi.number()
     .integer()
     .min(1)
-});
+}).unknown(true);
+
+
+const BoardTypeInParam = Joi.object().keys({
+  board: Joi.string()
+    .valid('freeboard', 'anonymous', 'notice')
+}).unknown(true);
 
 export const getPost = async (ctx: Context) => {
+  ctx.assert(!BoardTypeInParam.validate(ctx.params).error, 404);
   ctx.assert(!PostIdInParam.validate(ctx.params).error, 400);
 
   const result = await post.findOne({
@@ -26,6 +33,7 @@ export const getPost = async (ctx: Context) => {
 };
 
 export const getPosts = async (ctx: Context) => {
+  ctx.assert(!BoardTypeInParam.validate(ctx.params).error, 404);
   // TODO: 404 추가, page joi 검사 추가
 
   ctx.body = {
@@ -40,12 +48,15 @@ export const getPosts = async (ctx: Context) => {
 };
 
 export const putPost = async (ctx: Context) => {
+  ctx.assert(!BoardTypeInParam.validate(ctx.params).error, 404);
+
   const NewPost = Joi.object().keys({
     title: Joi.string()
       .min(1)
       .max(255)
       .required(),
-    content: Joi.string().required()
+    content: Joi.string().required(),
+    is_anonymous: Joi.boolean()
   });
 
   ctx.assert(!NewPost.validate(ctx.request.body).error, 400);
@@ -65,15 +76,19 @@ export const putPost = async (ctx: Context) => {
 };
 
 export const postPost = async (ctx: Context) => {
+  ctx.assert(!BoardTypeInParam.validate(ctx.params).error, 404);
+
   const OldPost = Joi.object().keys({
     title: Joi.string()
       .min(1)
       .max(255),
-    content: Joi.string()
+    content: Joi.string(),
+    is_anonymous: Joi.boolean()
   });
 
   // TODO: 회원 권한 검사 (본인)
 
+  console.log(OldPost.validate(ctx.request.body).error);
   ctx.assert(!PostIdInParam.validate(ctx.params).error, 400);
   ctx.assert(!OldPost.validate(ctx.request.body).error, 400);
 
@@ -91,6 +106,9 @@ export const postPost = async (ctx: Context) => {
 };
 
 export const deletePost = async (ctx: Context) => {
+
+  ctx.assert(!BoardTypeInParam.validate(ctx.params).error, 404);
+
   ctx.assert(!PostIdInParam.validate(ctx.params).error, 404);
 
   // TODO: 회원 권한 검사 (본인 or 관리자)
@@ -101,6 +119,7 @@ export const deletePost = async (ctx: Context) => {
       post_id: ctx.params.postid
     }
   });
+
   ctx.assert(result, 404);
 
   ctx.status = 200;
