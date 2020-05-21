@@ -311,12 +311,7 @@ paths:
       summary: 관리자가 신청된 음악을 상태수정합니다(승인,거절)
       responses:
         '202':
-          description: Accepted
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: pong
+          $ref: '#/components/responses/MusicStatusUpdateSucces'
         '400':
           description: parameter들이 올바르지 않은 경우
         '404':
@@ -941,8 +936,16 @@ components:
     MusicStatusUpdateSucces:
       description: 관리자가 신청한 음악이 적절한지 판단 후 승인또는 거절을 반환하는 응답입니다.
       content:
-            text/plain:
-              schema:
-                type: string
-                example: Accepted
-            
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  status:
+                    type: integer
+                    example: 2
