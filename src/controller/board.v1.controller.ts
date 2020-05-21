@@ -2,17 +2,19 @@ import { Context } from 'koa';
 import * as Joi from '@hapi/joi';
 import { post } from '../models';
 
-const PostIdInParam = Joi.object().keys({
-  postid: Joi.number()
-    .integer()
-    .min(1)
-}).unknown(true);
+const PostIdInParam = Joi.object()
+  .keys({
+    postid: Joi.number()
+      .integer()
+      .min(1)
+  })
+  .unknown(true);
 
-
-const BoardTypeInParam = Joi.object().keys({
-  board: Joi.string()
-    .valid('freeboard', 'anonymous', 'notice')
-}).unknown(true);
+const BoardTypeInParam = Joi.object()
+  .keys({
+    board: Joi.string().valid('freeboard', 'anonymous', 'notice')
+  })
+  .unknown(true);
 
 export const getPost = async (ctx: Context) => {
   ctx.assert(!BoardTypeInParam.validate(ctx.params).error, 404);
@@ -106,7 +108,6 @@ export const postPost = async (ctx: Context) => {
 };
 
 export const deletePost = async (ctx: Context) => {
-
   ctx.assert(!BoardTypeInParam.validate(ctx.params).error, 404);
 
   ctx.assert(!PostIdInParam.validate(ctx.params).error, 404);

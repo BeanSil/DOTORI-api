@@ -46,7 +46,7 @@ describe('update post', () => {
       .post(api.replace('postid', created))
       .set('Authorization', authKey)
       .send(toBe);
-    expect(response.status).toBe(200)
+    expect(response.status).toBe(200);
     delete response.body.data.createdAt;
     delete response.body.data.updatedAt;
     toBe.board_type = 'notice';
