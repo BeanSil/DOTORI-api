@@ -61,6 +61,15 @@ export const checkmusic = async (ctx: Context) => {
   ctx.assert(result[0], 404);
 
   ctx.status = 202;
+
+  const data = {
+    data: {
+      id: ctx.params.id,
+      status: ctx.request.body.status
+    }
+  };
+
+  ctx.body = data;
 };
 
 export const getMusic = async (ctx: Context) => {
