@@ -1,9 +1,8 @@
-import { Map } from 'immutable';
 import * as request from 'supertest';
 import app from '../../';
 import { post, waitForSync } from '../../models';
 
-const api = '/api/board/v1/postid';
+const api = '/api/board/v1/notice/postid';
 
 describe('select post', () => {
   let created: any;
@@ -11,7 +10,7 @@ describe('select post', () => {
   let data: any = {
     post_id: null,
     user_id: 2,
-    board_type: '공지사항',
+    board_type: 'notice',
     title: '노트북 대여시간 변경',
     content: '노트북 대여시간이 변경됩니다.',
     is_anonymous: false

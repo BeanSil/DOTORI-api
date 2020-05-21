@@ -3,17 +3,18 @@ import * as request from 'supertest';
 import app from '../../';
 import { user, waitForSync } from '../../models';
 
-const api = '/api/board/v1/';
+const api = '/api/board/v1/:board';
 
 let authKey: any;
 
 describe('create post', () => {
   const baseData = Map<any>({
-    board_type: '공지사항',
     title: '노트북 대여시간 변경',
     content: '노트북 대여시간이 변경됩니다.',
     is_anonymous: false
   });
+
+  const boardType = 'notice';
 
   beforeAll(async done => {
     await waitForSync;
@@ -33,31 +34,29 @@ describe('create post', () => {
 
   test('without body', async () => {
     const response = await request(app.callback())
-      .put(api)
+      .put(api.replace(':board', boardType))
       .set('Authorization', authKey);
     expect(response.status).toBe(400);
   });
 
   test('without user', async () => {
     const response = await request(app.callback())
-      .put(api)
+      .put(api.replace(':board', boardType))
       .send(baseData);
     expect(response.status).toBe(401);
   });
 
   test('with wrong body', async () => {
-    let newData = baseData;
-    newData = newData.set('board_type', '주식갤러리');
     const response = await request(app.callback())
-      .put(api)
+      .put(api.replace(':board', encodeURI('dcinside')))
       .set('Authorization', authKey)
-      .send(newData);
-    expect(response.status).toBe(400);
+      .send(baseData);
+    expect(response.status).toBe(404);
   });
 
   test('normal case', async () => {
     const response = await request(app.callback())
-      .put(api)
+      .put(api.replace(':board', boardType))
       .set('Authorization', authKey)
       .send(baseData);
     expect(response.status).toBe(201);
