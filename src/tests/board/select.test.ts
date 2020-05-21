@@ -19,7 +19,6 @@ describe('select post', () => {
   beforeAll(async () => {
     await waitForSync;
     created = (await post.create(data)).post_id;
-    console.log(created);
     data.post_id = created;
   });
 
