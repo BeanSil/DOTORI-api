@@ -14,14 +14,14 @@ describe('Laptop Application API', () => {
     pid: 10001,
     email: 'student001@gsm.hs.kr',
     pw: 'mypassword1234',
-    name: 'tester1'
+    name: 'test1'
   };
 
   const testUser2 = {
     pid: 10002,
     email: 'student002@gsm.hs.kr',
     pw: 'mypassword1234',
-    name: 'tester2'
+    name: 'test2'
   };
 
   const authKey1 = '10001';

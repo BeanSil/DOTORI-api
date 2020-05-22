@@ -26,7 +26,7 @@ beforeAll(async done => {
   const testUser = await user.create({
     email: 'test@test.com',
     pw: '0000',
-    name: 'testname'
+    name: 'test'
   });
   authKey = testUser.pid;
   done();
