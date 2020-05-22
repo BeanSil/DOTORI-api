@@ -17,8 +17,6 @@ info:
 tags:
   - name: General
     description: 외부 접속 불가한 API
-  - name: Dormitory
-    description: 기숙사 관련 기능
   - name: Account
     description: 계정 관련 기능
   - name: Score Archive
