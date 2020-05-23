@@ -45,9 +45,15 @@ export class AnonymousUser extends AbstractUser {
 }
 
 export enum Authority {
-  STUDENT,
+  ANONYMOUS,
   PARENT,
-  TEACHER,
+  STUDENT,
   DORMITORY,
-  ANONYMOUS
+  TEACHER
+}
+
+export class AuthorityUtil {
+  static isAdmin(authority: Authority) {
+    return authority >= Authority.DORMITORY
+  }
 }
