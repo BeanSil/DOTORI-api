@@ -31,7 +31,7 @@ export const UserFactory = (sequelize: Sequelize) => {
       allowNull: false
     },
     pw: {
-      type: DataTypes.STRING(64),
+      type: DataTypes.STRING(128),
       allowNull: false
     },
     name: {
