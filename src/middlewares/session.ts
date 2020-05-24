@@ -9,15 +9,15 @@ const client = redis.createClient();
 
 const sessionCreator = async (ctx: Context, next: Next) => {
   if (ctx.request.headers.authorization) {
-    client.get(ctx.request.headers.authorization, async (err, pid) => {
-      ctx.user = new User(await user.findByPk(pid)) || AnonymousUser;
+    client.get(ctx.request.headers.authorization, async (err, pid) => {  // redis 4 나오면 await으로 변경
+      if (err) ctx.throw(500);
+      ctx.user = pid ? new User(await user.findByPk(pid)) : AnonymousUser;
       await next();
     });
   } else {
     ctx.user = AnonymousUser;
     await next();
   }
-
 };
 
 export default sessionCreator;
