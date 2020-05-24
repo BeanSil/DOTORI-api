@@ -24,7 +24,7 @@ export abstract class AbstractUser {
   }
 
   public isSuspended(): boolean {
-    return this.suspended_until >= new Date()
+    return this.suspended_until >= new Date();
   }
 }
 
@@ -54,6 +54,6 @@ export enum Authority {
 
 export class AuthorityUtil {
   static isAdmin(authority: Authority) {
-    return authority >= Authority.DORMITORY
+    return authority >= Authority.DORMITORY;
   }
 }

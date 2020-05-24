@@ -1,6 +1,12 @@
 import * as Router from 'koa-router';
-import {createSession, getUserBySession} from "../../../../controller/account.v1.controller";
-import {LoginRequired, MustNotLoggedIn} from "../../../../utils/authorization";
+import {
+  createSession,
+  getUserBySession
+} from '../../../../controller/account.v1.controller';
+import {
+  LoginRequired,
+  MustNotLoggedIn
+} from '../../../../utils/authorization';
 
 const v1 = new Router();
 

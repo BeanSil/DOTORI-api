@@ -4,8 +4,8 @@ import * as crypto from 'crypto';
 
 import * as redis from 'redis';
 import * as uuid from 'uuid';
-import * as Joi from "@hapi/joi";
-import { user } from "../models";
+import * as Joi from '@hapi/joi';
+import { user } from '../models';
 
 const client = redis.createClient();
 const hash = crypto.createHash('sha512');
@@ -13,7 +13,7 @@ const hash = crypto.createHash('sha512');
 export const getUserBySession = (ctx: Context) => {
   delete ctx.user.pid;
   delete ctx.user.pw;
-  ctx.body = { data: ctx.user }
+  ctx.body = { data: ctx.user };
 };
 
 export const createSession = async (ctx: Context) => {
@@ -24,7 +24,7 @@ export const createSession = async (ctx: Context) => {
 
   ctx.assert(!loginData.validate(ctx.body).error, 400);
 
-  let data = ctx.body;
+  const data = ctx.body;
   hash.update(data.password);
   data.password = hash.digest('hex');
 
@@ -38,5 +38,5 @@ export const createSession = async (ctx: Context) => {
     ctx.throw(500);
   }
 
-  ctx.body = { data: session }
-}
+  ctx.body = { data: session };
+};
