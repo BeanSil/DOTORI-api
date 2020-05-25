@@ -42,7 +42,10 @@ export const createSession = async (ctx: Context) => {
 };
 
 export const deleteSession = (ctx: Context) => {
-
+  client.del(ctx.request.headers.authorization, (err) => {
+    if (err) ctx.throw(500);
+    else ctx.status = 200;
+  });
 };
 
 export const createUser = (ctx: Context) => {
