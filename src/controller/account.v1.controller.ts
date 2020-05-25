@@ -47,12 +47,12 @@ export const deleteSession = (ctx: Context) => {
 
 export const createUser = (ctx: Context) => {
 
-}
+};
 
 export const modifyUser = (ctx: Context) => {
 
-}
+};
 
 export const deleteUser = (ctx: Context) => {
 
-}
+};
