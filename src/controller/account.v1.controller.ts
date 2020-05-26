@@ -6,12 +6,12 @@ import * as redis from 'redis';
 import * as uuid from 'uuid';
 import * as Joi from '@hapi/joi';
 import { user } from '../models';
+import { User } from '../modules/User';
 
 const client = redis.createClient();
 const hash = crypto.createHash('sha512');
 
 export const getUserBySession = (ctx: Context) => {
-  delete ctx.user.pid;
   delete ctx.user.pw;
   ctx.body = { data: ctx.user };
 };
@@ -48,7 +48,34 @@ export const deleteSession = (ctx: Context) => {
   });
 };
 
-export const createUser = (ctx: Context) => {
+export const createUser = async (ctx: Context) => {
+  const userData = Joi.object({
+    email: Joi.string().required(),
+    pw: Joi.string().required(),
+    name: Joi.string().required(),
+    grade: Joi.number().required(),
+    class: Joi.number().required(),
+    number: Joi.number().required()
+  });
+
+  ctx.assert(!userData.validate(ctx.body).error, 400);
+
+  const data = ctx.request.body;
+  
+  hash.update(data.pw);
+  data.pw = hash.digest('hex');
+
+  let created = new User(await user.create(data));
+  
+  delete created.pw;
+
+  const create = {
+    data: created
+  };
+
+  ctx.status = 201;
+
+  ctx.body = create;
 
 };
 

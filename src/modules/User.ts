@@ -3,7 +3,7 @@ import { UserAttribute } from '../models/User';
 export abstract class AbstractUser {
   readonly pid: bigint;
   readonly email: string;
-  readonly pw: string;
+  pw: string;
   readonly name: string;
   readonly grade: number;
   readonly class: number;
