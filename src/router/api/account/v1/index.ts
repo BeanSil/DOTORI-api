@@ -1,8 +1,11 @@
 import * as Router from 'koa-router';
 import {
-  createSession, createUser,
-  deleteSession, deleteUser,
-  getUserBySession, modifyUser
+  createSession,
+  createUser,
+  deleteSession,
+  deleteUser,
+  getUserBySession,
+  modifyUser
 } from '../../../../controller/account.v1.controller';
 import {
   LoginRequired,

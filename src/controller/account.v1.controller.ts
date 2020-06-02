@@ -42,7 +42,7 @@ export const createSession = async (ctx: Context) => {
 };
 
 export const deleteSession = (ctx: Context) => {
-  client.del(ctx.request.headers.authorization, (err) => {
+  client.del(ctx.request.headers.authorization, err => {
     if (err) ctx.throw(500);
     else ctx.status = 200;
   });
@@ -61,12 +61,12 @@ export const createUser = async (ctx: Context) => {
   ctx.assert(!userData.validate(ctx.body).error, 400);
 
   const data = ctx.request.body;
-  
+
   hash.update(data.pw);
   data.pw = hash.digest('hex');
 
   let created = new User(await user.create(data));
-  
+
   delete created.pw;
 
   const create = {
@@ -76,13 +76,8 @@ export const createUser = async (ctx: Context) => {
   ctx.status = 201;
 
   ctx.body = create;
-
 };
 
-export const modifyUser = (ctx: Context) => {
+export const modifyUser = (ctx: Context) => {};
 
-};
-
-export const deleteUser = (ctx: Context) => {
-
-};
+export const deleteUser = (ctx: Context) => {};
