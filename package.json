@@ -49,7 +49,8 @@
     "build": "tsc",
     "docker-build": "docker-compose build || docker-compose up -d",
     "dev": "cross-env NODE_PATH=./src NODE_ENV=develop nodemon --watch 'src/**/*' -e ts,tsx --exec ts-node ./src/deploy.ts",
-    "redoc": "redoc-cli serve ./openapi.yaml"
+    "redoc": "redoc-cli serve ./openapi.yaml",
+    "export": "redoc-cli bundle ./openapi.yaml"
   },
   "repository": {
     "type": "git",
