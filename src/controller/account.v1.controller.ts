@@ -19,18 +19,18 @@ export const getUserBySession = (ctx: Context) => {
 export const createSession = async (ctx: Context) => {
   const loginData = Joi.object({
     id: Joi.string().required(),
-    password: Joi.string().required()
+    pw: Joi.string().required()
   });
 
   ctx.assert(!loginData.validate(ctx.body).error, 400);
 
   const data = ctx.body;
-  hash.update(data.password);
-  data.password = hash.digest('hex');
+  hash.update(data.pw);
+  data.pw = hash.digest('hex');
 
   const result = await user.findOne({ where: data, attributes: ['pid'] });
 
-  ctx.assert(result, 400);
+  ctx.assert(!result, 400);
 
   const session = uuid.v4();
 
