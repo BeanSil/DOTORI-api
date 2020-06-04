@@ -66,7 +66,7 @@ export const createUser = async (ctx: Context) => {
   hash.update(data.pw);
   data.pw = hash.digest('hex');
 
-  let created = new User(await user.create(data));
+  const created = new User(await user.create(data));
 
   delete created.pw;
 
@@ -92,27 +92,27 @@ export const modifyUser = async (ctx: Context) => {
   data.pw = hash.digest('hex');
 
   hash.update(data.original_pw);
-  const original_hash = hash.digest('hex');
+  const originalHash = hash.digest('hex');
 
   const foundUser = await user.findOne({
     where: {
       pid: ctx.user.pid,
-      pw: original_hash
+      pw: originalHash
     }
   });
 
   await foundUser.update(data);
 
-  let updated = new User(foundUser);
+  const updated = new User(foundUser);
   delete updated.pw;
 
   ctx.body = {
     data: updated
-  }
+  };
 };
 
 export const deleteUser = async (ctx: Context) => {
   const deleted = await user.destroy({ where: { pid: ctx.user.pid } });
-  if (!deleted) ctx.throw(500)
-  ctx.status = 200
+  if (!deleted) ctx.throw(500);
+  ctx.status = 200;
 };
