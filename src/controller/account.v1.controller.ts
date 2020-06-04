@@ -55,7 +55,8 @@ export const createUser = async (ctx: Context) => {
     name: Joi.string().required(),
     grade: Joi.number().required(),
     class: Joi.number().required(),
-    number: Joi.number().required()
+    number: Joi.number().required(),
+    phone: Joi.string().required()
   });
 
   ctx.assert(!userData.validate(ctx.body).error, 400);
@@ -76,8 +77,38 @@ export const createUser = async (ctx: Context) => {
   };
 };
 
-export const modifyUser = (ctx: Context) => {
+export const modifyUser = async (ctx: Context) => {
+  const userData = Joi.object({
+    original_pw: Joi.string().required(),
+    new_pw: Joi.string(),
+    name: Joi.string()
+  });
 
+  ctx.assert(!userData.validate(ctx.body).error, 400);
+
+  const data = ctx.request.body;
+
+  hash.update(data.new_pw);
+  data.pw = hash.digest('hex');
+
+  hash.update(data.original_pw);
+  const original_hash = hash.digest('hex');
+
+  const foundUser = await user.findOne({
+    where: {
+      pid: ctx.user.pid,
+      pw: original_hash
+    }
+  });
+
+  await foundUser.update(data);
+
+  let updated = new User(foundUser);
+  delete updated.pw;
+
+  ctx.body = {
+    data: updated
+  }
 };
 
 export const deleteUser = (ctx: Context) => {};
