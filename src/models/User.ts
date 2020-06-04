@@ -38,6 +38,10 @@ export const UserFactory = (sequelize: Sequelize) => {
       type: DataTypes.STRING,
       allowNull: false
     },
+    phone: {
+      type: DataTypes.STRING(11),
+      allowNull: false
+    },
     grade: {
       type: DataTypes.INTEGER.UNSIGNED,
       allowNull: true
