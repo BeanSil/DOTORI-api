@@ -69,15 +69,15 @@ export const createUser = async (ctx: Context) => {
 
   delete created.pw;
 
-  const create = {
-    data: created
-  };
-
   ctx.status = 201;
 
-  ctx.body = create;
+  ctx.body = {
+    data: created
+  };
 };
 
-export const modifyUser = (ctx: Context) => {};
+export const modifyUser = (ctx: Context) => {
+
+};
 
 export const deleteUser = (ctx: Context) => {};
