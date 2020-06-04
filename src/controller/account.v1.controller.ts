@@ -111,4 +111,8 @@ export const modifyUser = async (ctx: Context) => {
   }
 };
 
-export const deleteUser = (ctx: Context) => {};
+export const deleteUser = async (ctx: Context) => {
+  const deleted = await user.destroy({ where: { pid: ctx.user.pid } });
+  if (!deleted) ctx.throw(500)
+  ctx.status = 200
+};
