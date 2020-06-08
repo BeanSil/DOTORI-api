@@ -1,6 +1,6 @@
 import * as Router from 'koa-router';
 
-import { getSummary } from "../../../../controller/dormitory.v1.controller";
+import { getSummary } from '../../../../controller/dormitory.v1.controller';
 
 import { LoginRequired } from '../../../../utils/authorization';
 

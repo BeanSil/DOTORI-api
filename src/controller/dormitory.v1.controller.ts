@@ -1,10 +1,10 @@
-import {Context} from "koa";
-import {laptop, music, scoreArchive} from "../models";
+import { Context } from 'koa';
+import { laptop, music, scoreArchive } from '../models';
 
 export const getSummary = async (ctx: Context) => {
   const user = ctx.user;
 
-  const [ score, laptopRecord, musics ] = await Promise.all([
+  const [score, laptopRecord, musics] = await Promise.all([
     scoreArchive.findAll({
       where: {
         user_id: user.pid
@@ -21,7 +21,7 @@ export const getSummary = async (ctx: Context) => {
         user_id: ctx.user.pid,
         createdAt: new Date().toISOString().slice(0, 10)
       }
-    }),
+    })
   ]);
 
   const scores = score.map(
@@ -35,7 +35,7 @@ export const getSummary = async (ctx: Context) => {
         room: laptopRecord.room,
         seat: laptopRecord.seat
       },
-      music: musics,
+      music: musics
     }
   };
 };
