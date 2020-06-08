@@ -35,7 +35,8 @@ export const getSummary = async (ctx: Context) => {
         room: laptopRecord.room,
         seat: laptopRecord.seat
       },
-      music: musics
+      music: musics,
+      permissionLevel: user.authority()
     }
   };
 };
