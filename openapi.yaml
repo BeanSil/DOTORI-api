@@ -19,6 +19,7 @@ tags:
     description: 외부 접속 불가한 API
   - name: Account
     description: 계정 관련 기능
+  - name: Dormitory
   - name: Score Archive
     description: 상벌점 아카이브를 관리하는 API를 설명합니다.
   - name: User
@@ -46,6 +47,19 @@ paths:
         '500':
           description: DB 연결 에러 시 발생.
       summary: 서버가 살아있는지 체크합니다.
+  /dormitory/v1/summary:
+    get:
+      tags:
+        - Dormitory
+      summary: 유저의 오늘 요약을 가져옵니다.
+      description: 유저가 오늘 신청한 노트북 대여, 기상 음악 내역과 현재 상벌점, 그리고 권한 레벨을 가져옵니다.
+      parameters:
+        - $ref: '#/components/parameters/Authorization'
+      responses:
+        '200':
+          $ref: '#/components/responses/DailySummary'
+        '401':
+          description: Authorization 정보가 제공되지 않을 시 발생.
   /account/v1/session:
     get:
       summary: 현재 세션의 계정 정보를 가져옵니다.
@@ -839,6 +853,31 @@ components:
             properties:
               data:
                 type: string
+
+    # 계정 요약 API 응답
+    DailySummary:
+      description: '오늘 요약'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  score:
+                    type: integer
+                  laptop:
+                    type: object
+                    properties:
+                      room:
+                        type: number
+                      seat:
+                        type: number
+                  music:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Music'
 
     # 게시판 API 응답
     PagedPostList:
