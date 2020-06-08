@@ -5,7 +5,6 @@
   "main": "dist/deploy.js",
   "dependencies": {
     "@hapi/joi": "^17.1.1",
-    "@types/koa-logger": "^3.1.1",
     "cross-env": "^6.0.3",
     "dotenv": "^8.2.0",
     "koa": "^2.11.0",
@@ -13,7 +12,9 @@
     "koa-logger": "^3.2.1",
     "koa-router": "^7.4.0",
     "mariadb": "^2.3.1",
-    "sequelize": "^5.21.3"
+    "redis": "^3.0.2",
+    "sequelize": "^5.21.3",
+    "uuid": "^8.1.0"
   },
   "devDependencies": {
     "@types/bluebird": "^3.5.30",
@@ -23,11 +24,12 @@
     "@types/koa-bodyparser": "^4.3.0",
     "@types/koa-logger": "^3.1.1",
     "@types/koa-router": "^7.0.42",
+    "@types/redis": "^2.8.21",
     "@types/supertest": "^2.0.8",
     "@types/validator": "^12.0.1",
+    "@types/uuid": "^8.0.0",
     "@typescript-eslint/eslint-plugin": "^2.24.0",
     "@typescript-eslint/parser": "^2.24.0",
-    "immutable": "^4.0.0-rc.12",
     "jest": "^25.1.0",
     "nodemon": "^1.19.4",
     "prettier": "1.19.1",
@@ -47,7 +49,7 @@
     "pretty": "prettier es2020 --write \"src/**/*.ts\"",
     "clear": "rimraf dist",
     "build": "tsc",
-    "docker-build": "docker-compose build || docker-compose up -d",
+    "docker-build": "docker-compose build && docker-compose up -d",
     "dev": "cross-env NODE_PATH=./src NODE_ENV=develop nodemon --watch 'src/**/*' -e ts,tsx --exec ts-node ./src/deploy.ts",
     "redoc": "redoc-cli serve ./openapi.yaml",
     "export": "redoc-cli bundle ./openapi.yaml"

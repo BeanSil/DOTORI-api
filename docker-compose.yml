@@ -11,9 +11,15 @@ services:
       MYSQL_PASSWORD: changeitwhenitreleased
       MYSQL_DATABASE: dotori
     restart: on-failure
+  redis:
+    container_name: "dotori_session_store"
+    image: redis
+    ports:
+      - "6379:6379"
   server:
     depends_on:
       - mariadb
+      - redis
     container_name: "dotori_server"
     build: .
     ports:
@@ -30,4 +36,9 @@ services:
       USER_DATABASE_HOST: host.docker.internal
       USER_DATABASE_ID: root
       USER_DATABASE_PW: changeitwhenitreleased
+
+      REDIS_HOST: redis
     restart: on-failure
+    links:
+      - redis
+      - mariadb
