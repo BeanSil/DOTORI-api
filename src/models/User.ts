@@ -1,6 +1,6 @@
 import { Sequelize, DataTypes, Model, BuildOptions } from 'sequelize';
 
-interface UserAttribute extends Model {
+export interface UserAttribute extends Model {
   readonly pid: bigint;
   readonly email: string;
   readonly pw: string;
@@ -31,11 +31,15 @@ export const UserFactory = (sequelize: Sequelize) => {
       allowNull: false
     },
     pw: {
-      type: DataTypes.STRING(64),
+      type: DataTypes.STRING(128),
       allowNull: false
     },
     name: {
       type: DataTypes.STRING,
+      allowNull: false
+    },
+    phone: {
+      type: DataTypes.STRING(11),
       allowNull: false
     },
     grade: {
