@@ -5,7 +5,9 @@ import * as redis from 'redis';
 import { user } from '../models';
 import { AnonymousUser, User } from '../modules/User';
 
-const client = redis.createClient();
+const client = redis.createClient({
+  host: process.env.REDIS_HOST
+});
 
 const sessionCreator = async (ctx: Context, next: Next) => {
   if (ctx.request.headers.authorization) {
