@@ -289,42 +289,18 @@ describe("Dotori's Score API - CRUD", () => {
 
     it('throws error when empty data is sent', async () => {
       const response = await request(app.callback())
-        .delete('/api/score/v1/archive')
-        .set('Authorization', mockUserAuth)
-        .type('json')
-        .send(mockInvalidData);
-
-      expect(response.status).toBe(500);
-      expect(response.body.error).toBeTruthy();
-    });
-
-    it("throws error when conditions field's value is missing", async () => {
-      const mockData = {
-        conditions: {}
-      };
-
-      const response = await request(app.callback())
-        .delete('/api/score/v1/archive')
-        .set('Authorization', mockUserAuth)
-        .type('json')
-        .send(mockData);
+        .delete('/api/score/v1/archive/-1')
+        .set('Authorization', mockUserAuth);
 
       expect(response.status).toBe(500);
       expect(response.body.error).toBeTruthy();
     });
 
     it('responses correctly when proper data is sent', async () => {
-      const mockData = {
-        conditions: {
-          id: mockArchiveID
-        }
-      };
-
       const response = await request(app.callback())
-        .delete('/api/score/v1/archive')
+        .delete(`/api/score/v1/archive/${mockArchiveID}`)
         .set('Authorization', mockUserAuth)
-        .type('json')
-        .send(mockData);
+        .type('json');
 
       expect(response.status).toBe(200);
       expect(response.body.data.result).toEqual(1);

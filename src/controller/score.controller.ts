@@ -105,20 +105,9 @@ export const updateArchive = async (ctx: Context) => {
 };
 
 export const deleteArchive = async (ctx: Context) => {
-  const requestSchema = Joi.object({
-    conditions: Joi.object({
-      id: Joi.number()
-        .integer()
-        .required()
-    }).required()
+  const result = await scoreArchive.destroy({
+    where: ctx.params.id
   });
-
-  const [_, result] = await Promise.all([
-    await requestSchema.validateAsync(ctx.request.body),
-    await scoreArchive.destroy({
-      where: ctx.request.body.conditions
-    })
-  ]);
 
   const data = {
     data: {

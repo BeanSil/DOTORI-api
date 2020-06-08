@@ -122,7 +122,7 @@ describe("Dotori's Score API - Authorization", () => {
   describe('When deleting score archive', () => {
     it('throws error when user is not exists or not admin', async () => {
       const response = await request(app.callback())
-        .delete('/api/score/v1/archive');
+        .delete('/api/score/v1/archive/1');
 
       expect(response.status).toBe(401);
       expect(response.body.error).toBeTruthy();
@@ -133,10 +133,8 @@ describe("Dotori's Score API - Authorization", () => {
 
     it('throws error when sent data is invalid', async () => {
       const response = await request(app.callback())
-        .delete('/api/score/v1/archive')
-        .set('Authorization', mockUserAuth)
-        .type('json')
-        .send(mockInvalidData);
+        .delete('/api/score/v1/archive/1')
+        .set('Authorization', mockUserAuth);
 
       expect(response.status).toBe(500);
       expect(response.body.error).toBeTruthy();

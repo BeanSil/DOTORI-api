@@ -15,6 +15,6 @@ score.get('/', validateStudent, getUserScore);
 score.get('/archive', validateAdmin, getAllArchives);
 score.post('/archive', validateAdmin, insertArchive);
 score.put('/archive', validateAdmin, updateArchive);
-score.delete('/archive', validateAdmin, deleteArchive);
+score.delete('/archive/:id', validateAdmin, deleteArchive);
 
 export default score;
