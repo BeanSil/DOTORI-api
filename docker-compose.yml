@@ -11,8 +11,15 @@ services:
       MYSQL_PASSWORD: changeitwhenitreleased
       MYSQL_DATABASE: dotori
     restart: on-failure
+  nginx:
+    container_name: "dotori_proxy"
+    image: nginx
+    ports:
+      - "8080:80"
+
   server:
     depends_on:
+      - nginx
       - mariadb
     container_name: "dotori_server"
     build: .
