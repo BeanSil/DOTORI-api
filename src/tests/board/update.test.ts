@@ -2,7 +2,7 @@ import * as request from 'supertest';
 import app from '../../';
 import { post, user, waitForSync } from '../../models';
 
-const api = '/api/board/v1/postid';
+const api = '/api/board/v1/notice/postid';
 
 let authKey: any;
 
@@ -10,7 +10,6 @@ describe('update post', () => {
   let created: any;
 
   let toBe: any = {
-    board_type: '공지사항',
     title: '노트북 대여시간 변경함',
     content: '노트북 대여시간이 변경했음.',
     is_anonymous: false
@@ -30,7 +29,7 @@ describe('update post', () => {
     created = (
       await post.create({
         user_id: authKey,
-        board_type: '공지사항',
+        board_type: 'notice',
         title: '노트북 대여시간 변경',
         content: '노트북 대여시간이 변경됩니다.',
         is_anonymous: false
@@ -47,8 +46,10 @@ describe('update post', () => {
       .post(api.replace('postid', created))
       .set('Authorization', authKey)
       .send(toBe);
+    expect(response.status).toBe(200);
     delete response.body.data.createdAt;
     delete response.body.data.updatedAt;
+    toBe.board_type = 'notice';
     toBe.post_id = created;
     toBe.user_id = authKey;
     expect(response.body.data).toEqual(toBe);

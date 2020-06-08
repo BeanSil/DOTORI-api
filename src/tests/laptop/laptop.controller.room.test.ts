@@ -9,14 +9,14 @@ describe('Room Check API', () => {
     pid: 10003,
     email: 'student001@gsm.hs.kr',
     pw: 'mypassword1234',
-    name: 'tester1'
+    name: 'test1'
   };
 
   const testUser2 = {
     pid: 10004,
     email: 'student002@gsm.hs.kr',
     pw: 'mypassword1234',
-    name: 'tester2'
+    name: 'test2'
   };
 
   const authKey1 = '10003';
@@ -127,14 +127,14 @@ describe('Room Check API', () => {
         grade: null,
         class: null,
         number: null,
-        name: 'tester1',
+        name: 'test1',
         seat: 1
       },
       {
         grade: null,
         class: null,
         number: null,
-        name: 'tester2',
+        name: 'test2',
         seat: 2
       }
     ]);
