@@ -28,8 +28,7 @@ describe("Dotori's Score API - Authorization", () => {
 
   describe("When fetching student's score", () => {
     it('throws error when user is not exists or not student', async () => {
-      const response = await request(app.callback())
-        .get('/api/score/v1');
+      const response = await request(app.callback()).get('/api/score/v1');
 
       expect(response.status).toBe(401);
       expect(response.body.error).toBeTruthy();
@@ -50,8 +49,9 @@ describe("Dotori's Score API - Authorization", () => {
 
   describe('When fetching all score archives', () => {
     it('throws error when user is not exists or not admin', async () => {
-      const response = await request(app.callback())
-        .get('/api/score/v1/archive');
+      const response = await request(app.callback()).get(
+        '/api/score/v1/archive'
+      );
 
       expect(response.status).toBe(401);
       expect(response.body.error).toBeTruthy();
@@ -97,8 +97,9 @@ describe("Dotori's Score API - Authorization", () => {
 
   describe('When updating score archive', () => {
     it('throws error when user is not exists or not admin', async () => {
-      const response = await request(app.callback())
-        .put('/api/score/v1/archive');
+      const response = await request(app.callback()).put(
+        '/api/score/v1/archive'
+      );
 
       expect(response.status).toBe(401);
       expect(response.body.error).toBeTruthy();

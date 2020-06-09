@@ -1,6 +1,6 @@
 import { Sequelize, DataTypes, Model, BuildOptions } from 'sequelize';
 
-interface UserAttribute extends Model {
+export interface UserAttribute extends Model {
   readonly pid: bigint;
   readonly email: string;
   readonly pw: string;
@@ -20,7 +20,7 @@ type UserStatic = typeof Model & {
 export const UserFactory = (sequelize: Sequelize) => {
   return <UserStatic>sequelize.define('User', {
     pid: {
-      type: DataTypes.BIGINT,
+      type: DataTypes.BIGINT.UNSIGNED,
       autoIncrement: true,
       unique: true,
       allowNull: false,
@@ -31,23 +31,27 @@ export const UserFactory = (sequelize: Sequelize) => {
       allowNull: false
     },
     pw: {
-      type: DataTypes.STRING(64),
+      type: DataTypes.STRING(128),
       allowNull: false
     },
     name: {
-      type: DataTypes.STRING(5),
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    phone: {
+      type: DataTypes.STRING(11),
       allowNull: false
     },
     grade: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER.UNSIGNED,
       allowNull: true
     },
     class: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER.UNSIGNED,
       allowNull: true
     },
     number: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER.UNSIGNED,
       allowNull: true
     },
     suspended_until: {

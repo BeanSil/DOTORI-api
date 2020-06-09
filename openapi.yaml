@@ -1,0 +1,1154 @@
+# https://github.com/Redocly/openapi-template/blob/gh-pages/openapi.yaml 를 참고해서 작성해주세요.
+openapi: 3.0.2
+info:
+  version: '1.0.0'
+  title: DOTORI
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+  x-logo:
+    url: 'https://avatars2.githubusercontent.com/u/41184136'
+
+  description: |
+    DOTORI API 문서
+
+    # 개요
+    이 API 문서는 빈실 DOTORI API의 스펙에 대해 다루고 있습니다.
+tags:
+  - name: General
+    description: 외부 접속 불가한 API
+  - name: Account
+    description: 계정 관련 기능
+  - name: Dormitory
+  - name: Score Archive
+    description: 상벌점 아카이브를 관리하는 API를 설명합니다.
+  - name: User
+    description: 학생 유저와 연동하는 상벌점 API를 설명합니다.
+  - name: Board
+    description: 게시판 관련 기능
+  - name: Laptop
+    description: 노트북 대여와 대여 기록 조회 API를 설명합니다.
+  - name: Music
+    description: 기상음악 신청 API를 설명합니다.
+
+servers:
+  - url: 'http://localhost:5000/api'
+  - url: 'http://dotori.beansil.com/api'
+  - url: 'https://dotori.beansil.com/api'
+
+paths:
+  /:
+    get:
+      tags:
+        - General
+      responses:
+        '200':
+          description: OK
+        '500':
+          description: DB 연결 에러 시 발생.
+      summary: 서버가 살아있는지 체크합니다.
+  /dormitory/v1/summary:
+    get:
+      tags:
+        - Dormitory
+      summary: 유저의 오늘 요약을 가져옵니다.
+      description: 유저가 오늘 신청한 노트북 대여, 기상 음악 내역과 현재 상벌점, 그리고 권한 레벨을 가져옵니다.
+      parameters:
+        - $ref: '#/components/parameters/Authorization'
+      responses:
+        '200':
+          $ref: '#/components/responses/DailySummary'
+        '401':
+          description: Authorization 정보가 제공되지 않을 시 발생.
+  /account/v1/session:
+    get:
+      summary: 현재 세션의 계정 정보를 가져옵니다.
+      parameters:
+        - $ref: '#/components/parameters/Authorization'
+      responses:
+        '200':
+          $ref: '#/components/responses/SafeUserData'
+        '401':
+          description: Authorization 정보가 제공되지 않을 시 발생.
+      tags:
+        - Account
+    post:
+      summary: 새로운 세션을 만듭니다.
+      requestBody:
+        $ref: '#/components/requestBodies/LoginData'
+      responses:
+        '201':
+          $ref: "#/components/responses/NewSession"
+        '400':
+          description: 로그인 정보가 올바르지 않은 경우
+        '500':
+          description: Redis 연결 실패 시 발생.
+      tags:
+        - Account
+    delete:
+      summary: 세션을 종료합니다.
+      parameters:
+        - $ref: '#/components/parameters/Authorization'
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Authorization 정보가 제공되지 않을 시 발생.
+        '500':
+          description: Redis 연결 실패 시 발생.
+      tags:
+        - Account
+  /account/v1/user:
+    post:
+      summary: 새로운 계정을 만듭니다.
+      requestBody:
+        $ref: '#/components/requestBodies/NewUser'
+      responses:
+        '201':
+          $ref: '#/components/responses/SafeUserData'
+        '400':
+          description: 주어진 정보가 올바르지 않은 경우
+      tags:
+        - Account
+    put:
+      summary: 계정 정보를 수정합니다.
+      parameters:
+        - $ref: '#/components/parameters/Authorization'
+      requestBody:
+        $ref: '#/components/requestBodies/NewUser'
+      responses:
+        '200':
+          $ref: '#/components/responses/SafeUserData'
+        '400':
+          description: 주어진 정보가 올바르지 않은 경우
+      tags:
+        - Account
+    delete:
+      summary: 계정을 삭제합니다.
+      parameters:
+        - $ref: '#/components/parameters/Authorization'
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Authorization 정보가 제공되지 않을 시 발생.
+        '500':
+          description: DB 연결 실패 시 발생.
+      tags:
+        - Account
+
+
+  /board/v1/{board}:
+    get:
+      summary: 게시판 첫번째 페이지를 가져옵니다.
+      description: 게시판 첫번째 페이지를 가져옵니다. (/board/v1 == /board/v1/page/0)
+      parameters:
+        - $ref: '#/components/parameters/BoardType'
+      responses:
+        '200':
+          $ref: '#/components/responses/PagedPostList'
+        '500':
+          description: 기타 문제가 생길 경우(서버 오류 등)
+      tags:
+        - Board
+    put:
+      summary: 게시글을 작성합니다.
+      parameters:
+        - $ref: '#/components/parameters/Authorization'
+        - $ref: '#/components/parameters/BoardType'
+      requestBody:
+        $ref: '#/components/requestBodies/NewPost'
+      responses:
+        '201':
+          $ref: '#/components/responses/SinglePost'
+        '400':
+          description: parameter들이 올바르지 않은 경우
+      tags:
+        - Board
+  /board/v1/{board}/page/{page}:
+    get:
+      summary: 지정한 게시판 페이지를 가져옵니다.
+      description: 지정한 게시판 첫번째 페이지를 가져옵니다.
+      parameters:
+        - $ref: '#/components/parameters/BoardType'
+        - in: path
+          name: page
+          schema:
+            type: integer
+          required: true
+          description: 가져오고자 하는 페이지 번호
+      responses:
+        '200':
+          $ref: '#/components/responses/PagedPostList'
+        '500':
+          description: 기타 문제가 생길 경우(서버 오류 등)
+      tags:
+        - Board
+  /board/v1/{board}/{post_id}:
+    get:
+      summary: 지정한 게시물을 가져옵니다.
+      parameters:
+        - $ref: '#/components/parameters/BoardType'
+        - $ref: '#/components/parameters/PostId'
+      responses:
+        '200':
+          $ref: '#/components/responses/SinglePost'
+        '400':
+          description: parameter들이 올바르지 않은 경우
+        '404':
+          description: 게시물 번호에 해당하는 데이터가 없는 경우
+      tags:
+        - Board
+    post:
+      summary: 지정한 게시물을 수정합니다.
+      parameters:
+        - $ref: '#/components/parameters/Authorization'
+        - $ref: '#/components/parameters/BoardType'
+        - $ref: '#/components/parameters/PostId'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdatedPost'
+      responses:
+        '200':
+          $ref: '#/components/responses/SinglePost'
+        '400':
+          description: parameter들이 올바르지 않은 경우
+        '404':
+          description: 게시물 번호에 해당하는 데이터가 없는 경우
+      tags:
+        - Board
+    delete:
+      summary: 지정한 게시물을 삭제합니다.
+      parameters:
+        - $ref: '#/components/parameters/Authorization'
+        - $ref: '#/components/parameters/BoardType'
+        - $ref: '#/components/parameters/PostId'
+      responses:
+        '200':
+          description: 정상 삭제 완료 시
+        '400':
+          description: parameter들이 올바르지 않은 경우
+        '404':
+          description: 게시물 번호에 해당하는 데이터가 없는 경우
+      tags:
+        - Board
+
+  /score/v1:
+    get:
+      parameters:
+        - $ref: '#/components/parameters/Authorization'
+      tags:
+        - User
+      summary: 학생 유저의 상벌점 정보를 불러옵니다.
+      responses:
+        '200':
+          $ref: '#/components/responses/FetchedUserScoreSucceed'
+        '401':
+          description: 유저 토큰 인증 과정 중 문제가 생길 경우
+        '500':
+          description: 기타 문제가 생길 경우(서버 오류 등)
+  /score/v1/archive:
+    get:
+      tags:
+        - Score Archive
+      parameters:
+        - $ref: '#/components/parameters/Authorization'
+      summary: 관리자가 모든 상벌점 정보를 불러옵니다.
+      responses:
+        '200':
+          $ref: '#/components/responses/FetchedScoreArchiveSucceed'
+        '401':
+          description: 유저 토큰 인증 과정 중 문제가 생길 경우
+        '500':
+          description: 기타 문제가 생길 경우(요청 바디, DB 등)
+    post:
+      tags:
+      - Score Archive
+      parameters:
+        - $ref: '#/components/parameters/Authorization'
+      summary: 관리자가 상벌점 정보를 추가합니다.
+      responses:
+        '200':
+          $ref: '#/components/responses/ScoreArchiveInsertionSucceed'
+        '401':
+          description: 유저 토큰 인증 과정 중 문제가 생길 경우
+        '500':
+          description: 기타 문제가 생길 경우(요청 바디, DB 등)
+      requestBody:
+        $ref: '#/components/requestBodies/ScoreArchiveBody'
+    put:
+      tags:
+      - Score Archive
+      parameters:
+        - $ref: '#/components/parameters/Authorization'
+      summary: 관리자가 상벌점 정보를 수정합니다.
+      responses:
+        '200':
+          $ref: '#/components/responses/ScoreArchiveUpdateSucceed'
+        '401':
+          description: 유저 토큰 인증 과정 중 문제가 생길 경우
+        '500':
+          description: 기타 문제가 생길 경우(요청 바디, DB 등)
+      requestBody:
+        $ref: '#/components/requestBodies/ScoreArchiveUpdate'
+  /score/v1/archive/:id:
+    delete:
+      tags:
+      - Score Archive
+      parameters:
+        - $ref: '#/components/parameters/Authorization'
+      summary: 관리자가 상벌점 정보를 삭제합니다.
+      responses:
+        '200':
+          $ref: '#/components/responses/ScoreArchiveDeletionSucceed'
+        '401':
+          description: 유저 토큰 인증 과정 중 문제가 생길 경우
+        '500':
+          description: 기타 문제가 생길 경우(요청 바디, DB 등)
+
+  /laptop:
+    get:
+      tags:
+      - Laptop
+      summary: 학생의 노트북 대여 여부를 알려줍니다.
+      parameters:
+        - $ref: '#/components/parameters/Authorization'
+      responses:
+        '200':
+          $ref: '#/components/responses/LaptopReservationFound'
+        '404':
+          description: 학생이 노트북 대여를 하지 않았을 경우
+    post:
+      tags:
+      - Laptop
+      summary: 학생이 선택한 자리에 노트북 대여를 요청합니다.
+      parameters:
+      - $ref: '#/components/parameters/Authorization'
+      requestBody:
+        $ref: '#/components/requestBodies/LaptopApply'
+      responses:
+        '201':
+          description: 노트북 대여에 성공 하였을 경우
+        '400':
+          description: body의 형식이 올바르지 않거나 자리가 이미 예약된 경우
+    delete:
+      tags:
+      - Laptop
+      summary: 학생의 노트북 대여를 취소합니다.
+      parameters:
+        - $ref: '#/components/parameters/Authorization'
+      responses:
+        '204':
+          description: 성공적으로 대여를 취소하였을 경우
+        '400':
+          description: 학생이 노트북을 대여하지 않았을 경우
+  /laptop/room:
+    get:
+      tags:
+        - Laptop
+      summary: 대여 가능한 실들의 정보를 불러옵니다.
+      parameters:
+        - $ref: '#/components/parameters/Authorization'
+      responses:
+        '200':
+          $ref: '#/components/responses/LaptopRoomLists'
+  /laptop/room/:room:
+    get:
+      tags:
+      - Laptop
+      summary: 해당 학습실의 대여된 자리들을 불러옵니다.
+      parameters:
+        - $ref: '#/components/parameters/Authorization'
+      responses:
+        '200':
+          $ref: '#/components/responses/LaptopRoomReservedSeats'
+  /laptop/room/detail/:room:
+    get:
+      tags:
+        - Laptop
+      summary: 관리자가 해당 학습실에 대여한 학생들의 정보를 불러옵니다.
+      parameters:
+        - $ref: '#/components/parameters/Authorization'
+      responses:
+        '200':
+          $ref: '#/components/responses/LaptopRoomReservationDetail'
+
+  /music/v1:
+    get:
+      parameters:
+        - $ref: '#/components/parameters/Authorization'
+      tags:
+        - Music
+      summary: 신청된 음악의 목록을 불러옵니다
+      responses:
+        '200':
+          $ref: '#/components/responses/GetApplyMusic'
+        '500':
+          description: 기타 문제가 생길 경우(서버 오류 등)
+    post:
+      tags:
+      - Music
+      parameters:
+        - $ref: '#/components/parameters/Authorization'
+      summary: 학생 유저가 기상음악을 신청합니다
+      responses:
+        '201':
+          $ref: '#/components/responses/ApplyMusicSucces'
+        '400':
+          description: 유저 토큰 인증 과정 중 문제가 생길 경우
+        '500':
+          description: 기타 문제가 생길 경우(요청 바디, DB 등)
+      requestBody:
+        $ref: '#/components/requestBodies/MusicBody'
+  /music/v1/{id}:
+    put:
+      tags:
+      - Music
+      parameters:
+        - $ref: '#/components/parameters/Authorization'
+        - $ref: '#/components/parameters/id'
+      summary: 관리자가 신청된 음악을 상태수정합니다(승인,거절)
+      responses:
+        '202':
+          $ref: '#/components/responses/MusicStatusUpdateSucces'
+        '400':
+          description: parameter들이 올바르지 않은 경우
+        '404':
+          description: 게시물 번호에 해당하는 데이터가 없는 경우
+        '500':
+          description: 기타 문제가 생길 경우(요청 바디, DB 등)
+      requestBody:
+        $ref: '#/components/requestBodies/MusicStatusUpdate'
+    delete:
+      summary: 관리자 및 학생 유저가 음악을 삭제합니다.
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        '204':
+          description: 정상 삭제 완료 시
+        '404':
+          description: 게시물 번호에 해당하는 데이터가 없는 경우
+      tags:
+        - Music
+
+
+
+
+# An object to hold reusable parts that can be used across the definition
+components:
+  headers:
+  # Security scheme definitions that can be used across the definition.
+  securitySchemes:
+    main_auth: # security definition name (you can name it as you want)
+      # the following options are specific to oauth2 type
+      type: oauth2 # authorization type, one of: oauth2, apiKey, http
+      flows:
+        implicit:
+          authorizationUrl: 'http://dotori.beansil.com/api/account/oauth/'
+          scopes:
+            'read:users': read users info
+  
+  schemas:
+    ScoreArchive:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: POST 요청 시 자동으로 생성됨
+          readOnly: true
+        user_id:
+          type: integer
+          format: int64
+        score:
+          type: integer
+          format: int64
+        reason:
+          type: string
+          description: 부여한 이유
+    User:
+      type: object
+      properties:
+        pid:
+          type: integer
+          description: OAuth 유저의 번호로 자동 생성
+          readOnly: true
+        email:
+          type: string
+        pw:
+          type: string
+        name:
+          type: string
+        grade:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 3
+        class:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 4
+        number:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 21
+        suspened_until:
+          type: string
+          format: date-time
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+    Post:
+      type: object
+      properties:
+        post_id:
+          type: integer
+          readOnly: true
+        user_id:
+          type: integer
+          readOnly: true
+        board_type:
+          type: string
+          enum:
+            - notice
+            - freeboard
+            - anonymous
+        title:
+          type: string
+        content:
+          type: string
+        is_anonymous:
+          type: boolean
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      example: {
+          post_id: 0,
+          user_id: 0,
+          board_type: '공지사항',
+          title: '흥미로운 제목',
+          content: '미안하다 이거 보여주려고 어그로 끌었다...',
+          is_anonymous: false,
+          created_at: "2020-05-17T10:26:28Z",
+          updated_at: "2020-05-18T10:26:28Z"
+        }
+    Music:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: POST 요청 시 자동으로 생성됨
+          readOnly: true
+        user_id:
+          type: integer
+          format: int64
+        music:
+          type: string
+          description: 신청할 음악 제목
+        singer:
+          type: string
+          description: 신청할 음악 가수
+        link:
+          type: string
+          description: 신청할 음악 유튜브 링크
+        status:
+          type: integer
+          format: int64
+          description: 0은 신청완료,1은 승인,2는 거절(적절치 못함)
+          minimum: 0
+          maximum: 2
+    Status: 
+      type: object
+      properties:
+        status: 
+          type: integer
+          format: int64
+          description: 0은 신청완료,1은 승인,2는 거절(적절치 못함)
+          minimum: 0
+          maximum: 2
+
+  parameters:
+    Authorization:
+      in: header
+      name: Authorization
+      description: '유저의 인증 번호'
+      schema:
+        type: string
+        format: uuid
+      required: true
+    BoardType:
+      in: path
+      name: board
+      schema:
+        type: string
+        enum:
+          - notice
+          - freeboard
+          - anonymous
+      required: true
+      description: 게시판 종류
+    PostId:
+      in: path
+      name: post_id
+      schema:
+        type: integer
+        minimum: 0
+      required: true
+      description: 가져오고자 하는 게시물 번호
+    id:
+      in: path
+      name: id
+      schema:
+        type: integer
+        minimum: 0
+      required: true
+      description: 가져오고자 하는 음악 id
+  requestBodies:
+    LoginData:
+      description: 계정 세션 생성(로그인) 시 전달되는 정보
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+              pw:
+                type: string
+      required: true
+    NewUser:
+      description: 신규 유저 생성 시 전달되는 정보
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/User'
+      required: true
+
+    NewPost:
+      description: 신규 게시물 생성 시 전달되는 정보
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Post'
+      required: true
+    UpdatedPost:
+      description: 기존 게시물 수정 시 전달되는 정보
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Post'
+      required: false
+
+    ScoreArchiveBody:
+      description: 아카이브 목록을 추가할 시 전달할 정보
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/components/schemas/ScoreArchive'
+          examples:
+            '1번 유저에 상점을 부여할 경우':
+              value: {
+                data: {
+                  user_id: 1,
+                  score: 2,
+                  reason: '라면 청소'
+                }
+              }
+            '4번 유저에 벌점을 부여할 경우':
+              value: {
+                data: {
+                  user_id: 4,
+                  score: -5,
+                  reason: '점호 불참'
+                }
+              }
+            '5번 유저에 벌점을 부여할 경우':
+              value: {
+                data: {
+                  user_id: 5,
+                  score: -10,
+                  reason: '그냥 싫어서'
+                }
+              }
+      required: true
+    ScoreArchiveUpdate:
+      description: 아카이브 목록을 수정할 시 전달할 정보
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/components/schemas/ScoreArchive'
+              conditions:
+                type: object
+                properties:
+                  id:
+                    type: string
+          examples:
+            '3번 아카이브 목록에 기재된 점수를 수정할 경우':
+              value: {
+                data: {
+                  score: 1,
+                  reason: '라면 청소(상점 기준 하향됨)'
+                },
+                conditions: {
+                  id: 3
+                }
+              }
+            '6번 아카이브 목록에 기재된 유저 번호를 수정할 경우':
+              value: {
+                data: {
+                  user_id: 5,
+                  reason: '점호 불참'
+                },
+                conditions: {
+                  id: 6
+                }
+              }
+            '7번 아카이브 목록 내용 전체를 수정할 경우':
+              value: {
+                data: {
+                  user_id: 1,
+                  score: 3,
+                  reason: '기숙사 자치위원회 포상'
+                },
+                conditions: {
+                  id: 7
+                }
+              }
+      required: true
+    ScoreArchiveDeletion:
+      description: 아카이브 목록을 삭제할 시 전달할 정보
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              conditions:
+                type: object
+                properties:
+                  id:
+                    type: string
+          examples:
+            '7번 목록을 삭제할 경우':
+              value: {
+                conditions: {
+                  id: 7
+                }
+              }
+    LaptopApply:
+      description: 노트북 대여를 신청할 시 전달할 정보
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              room:
+                type: integer
+              seat:
+                type: integer
+          examples:
+            '1번실 5번 자리를 대여할 경우':
+              value: {
+                room: 1,
+                seat: 5
+              }
+
+    MusicBody:
+      description: 기상 음악 신청시 전달할 정보
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/components/schemas/Music'
+          examples:
+            '3번 유저가 IU의 Blueming을 신청할 경우':
+              value: {
+                data: {
+                  user_id: 3,
+                  music: 'IU',
+                  singer: 'Blueming',
+                  link: 'https://www.youtube.com/watch?v=D1PvIWdJ8xo'
+                }
+              }
+            '1번 유저가 이찬원의 진또배기를 신청할 경우':
+              value: {
+                data: {
+                  user_id: 1,
+                  music: '이찬원',
+                  singer: '진또배기',
+                  link: 'https://www.youtube.com/watch?v=PcfYFnQSEQQ'
+                }
+              }
+    MusicStatusUpdate:
+      description: 음악신청 상태를 수정할 시 전달하는 정보
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Status'
+          examples:
+            '2번 음악신청 목록에 상태를 승인으로 바꿀 경우':
+              value: {
+                data: {
+                  status: 1
+                }
+              }
+  responses:
+    # 계정 API 응답
+    SafeUserData:
+      description: '사용자 계정 응답입니다.'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  pid:
+                    type: integer
+                  email:
+                    type: string
+                    format: email
+                  name:
+                    type: string
+                  grade:
+                    type: integer
+                  class:
+                    type: integer
+                  number:
+                    type: integer
+                  suspended_until:
+                    type: string
+                    format: date-time
+                  created_at:
+                    type: string
+                    format: date-time
+    NewSession:
+      description: '신규 세션'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: string
+
+    # 계정 요약 API 응답
+    DailySummary:
+      description: '오늘 요약'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  score:
+                    type: integer
+                  laptop:
+                    type: object
+                    properties:
+                      room:
+                        type: number
+                      seat:
+                        type: number
+                  music:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Music'
+
+    # 게시판 API 응답
+    PagedPostList:
+      description: '게시물 목록입니다.'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+                maxItems: 20
+    SinglePost:
+      description: 게시물
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/components/schemas/Post'
+
+    # 상벌점 API 응답
+    FetchedUserScoreSucceed:
+      description: '학생 유저의 점수 목록을 정상적으로 불러왔을 때 반환하는 응답입니다.'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  scores:
+                    type: array
+                    items:
+                      type: integer
+          example:
+            data: {
+              name: '박준영',
+              scores: [1, 1, -1, 2, -2, 1, 1, 2, 1]
+            }
+    FetchedScoreArchiveSucceed:
+      description: '모든 학생 유저의 상벌점 아카이브를 정상적으로 불러왔을 때 반환하는 응답입니다.'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  archives:
+                    type: array
+                    items:
+                      type: object
+          example:
+            data: {
+              archives: [{
+                id: 1,
+                user_id: 1,
+                score: 1,
+                reason: '라면 청소'
+              }, {
+                id: 2,
+                user_id: 132,
+                score: -5,
+                reason: '점호 불참'
+              }, {
+                id: 3,
+                user_id: 45,
+                score: -2,
+                reason: '호실 불 안 끄고 감'
+              }]
+            }
+    ScoreArchiveInsertionSucceed:
+      description: '아카이브 목록 추가가 성공적으로 이루어졌을 때 반환하는 응답입니다.'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  insertedArchive:
+                    $ref: '#/components/schemas/ScoreArchive'
+    ScoreArchiveUpdateSucceed:
+      description: '아카이브 목록 수정이 성공적으로 이루어졌을 때 반환하는 응답입니다.'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  result:
+                    type: array
+                    items:
+                      type: string
+                    example: [1]
+    ScoreArchiveDeletionSucceed:
+      description: '아카이브 목록 삭제가 성공적으로 이루어졌을 때 반환하는 응답입니다.'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  result:
+                    type: integer
+                    example: 1
+    
+    #노트북 API 응답
+    LaptopReservationFound:
+      description: '학생이 노트북 대여를 신청한 자리를 반환하는 응답입니다.'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  room:
+                    type: integer
+                    example: 1
+                  seat:
+                    type: integer
+                    example: 1
+    LaptopRoomLists:
+      description: '학습실들의 예약된 자리들의 수를 반환하는 응답입니다.'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  roomStatus:
+                    type: array
+                    items:
+                      type: integer
+                    example: [3, 0, 0, 0, 0]
+    LaptopRoomReservedSeats:
+      description: '해당 학습실의 예약된 자리들을 반환하는 응답입니다.'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  seats:
+                    type: array
+                    items:
+                      type: integer
+          example: {
+            data: {
+              seats: [1, 3, 5, 6]
+            }
+          }
+    LaptopRoomReservationDetail:
+      description: '해당 학습실의 자리를 예약한 사람의 정보들을 반환하는 응답입니다.'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  details:
+                    type: array
+                    items:
+                      type: array
+                      properties:
+                        grade:
+                          type: integer
+                        class:
+                          type: integer
+                        number:
+                          type: integer
+                        name:
+                          type: string
+                        seat:
+                          type: integer
+          example:
+            data: {
+              details: [{
+                grade: 1,
+                class: 1,
+                number: 1,
+                name: '김철수',
+                seat: 3
+              }]
+            }
+
+    #기상음악 API 응답
+    GetApplyMusic:
+      description: '기상음악 신청 목록을 정상적으로 불러왔을 때 반환하는 응답입니다.'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/components/schemas/ScoreArchive'
+              conditions:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  user_id: 
+                    type: integer
+                  music: 
+                    type: string
+                  singer: 
+                    type: string
+                  link: 
+                    type: string
+                  status: 
+                    type: integer
+          example:
+            data: {
+              list: [
+            {
+                id: 1,
+                user_id: 4,
+                music: "ui6it",
+                singer: "dafsd",
+                link: "www.test.com",
+                status: 0,
+                createdAt: "2020-04-28T00:26:54.000Z",
+                updatedAt: "2020-04-28T00:26:54.000Z"
+            }]
+            }
+    ApplyMusicSucces:
+      description: '기상음악 신청이 성공적으로 이루어졌을 때 반환하는 응답입니다.'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  applyMusic:
+                    $ref: '#/components/schemas/Music'
+    MusicStatusUpdateSucces:
+      description: 관리자가 신청한 음악이 적절한지 판단 후 승인또는 거절을 반환하는 응답입니다.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  status:
+                    type: integer
+                    example: 2
