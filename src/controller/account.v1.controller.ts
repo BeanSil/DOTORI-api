@@ -8,7 +8,9 @@ import * as Joi from '@hapi/joi';
 import { user } from '../models';
 import { User } from '../modules/User';
 
-const client = redis.createClient();
+const client = redis.createClient({
+  host: process.env.REDIS_HOST
+});
 const hash = crypto.createHash('sha512');
 
 export const getUserBySession = (ctx: Context) => {
