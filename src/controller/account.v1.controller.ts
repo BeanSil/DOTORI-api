@@ -65,7 +65,6 @@ export const createUser = async (ctx: Context) => {
 
   const data = ctx.request.body;
 
-
   hash.update(data.pw);
   data.pw = hash.digest('hex');
 
