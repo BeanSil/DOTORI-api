@@ -24,9 +24,9 @@ export const createSession = async (ctx: Context) => {
     pw: Joi.string().required()
   });
 
-  ctx.assert(!loginData.validate(ctx.body).error, 400);
+  ctx.assert(!loginData.validate(ctx.request.body).error, 400);
 
-  const data = ctx.body;
+  const data = ctx.request.body;
   hash.update(data.pw);
   data.pw = hash.digest('hex');
 
@@ -61,9 +61,10 @@ export const createUser = async (ctx: Context) => {
     phone: Joi.string().required()
   });
 
-  ctx.assert(!userData.validate(ctx.body).error, 400);
+  ctx.assert(!userData.validate(ctx.request.body).error, 400);
 
   const data = ctx.request.body;
+
 
   hash.update(data.pw);
   data.pw = hash.digest('hex');
@@ -86,7 +87,7 @@ export const modifyUser = async (ctx: Context) => {
     name: Joi.string()
   });
 
-  ctx.assert(!userData.validate(ctx.body).error, 400);
+  ctx.assert(!userData.validate(ctx.request.body).error, 400);
 
   const data = ctx.request.body;
 
