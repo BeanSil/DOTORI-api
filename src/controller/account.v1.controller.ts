@@ -95,7 +95,6 @@ export const modifyUser = async (ctx: Context) => {
   hash.update(data.new_pw);
   data.pw = hash.digest('hex');
 
-
   hash = crypto.createHash('sha512');
   hash.update(data.original_pw);
   const originalHash = hash.digest('hex');
