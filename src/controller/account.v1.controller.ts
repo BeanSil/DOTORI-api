@@ -11,7 +11,6 @@ import { User } from '../modules/User';
 const client = redis.createClient({
   host: process.env.REDIS_HOST
 });
-const hash = crypto.createHash('sha512');
 
 export const getUserBySession = (ctx: Context) => {
   delete ctx.user.pw;
@@ -27,6 +26,7 @@ export const createSession = async (ctx: Context) => {
   ctx.assert(!loginData.validate(ctx.request.body).error, 400);
 
   const data = ctx.request.body;
+  const hash = crypto.createHash('sha512');
   hash.update(data.pw);
   data.pw = hash.digest('hex');
 
@@ -65,6 +65,7 @@ export const createUser = async (ctx: Context) => {
 
   const data = ctx.request.body;
 
+  const hash = crypto.createHash('sha512');
   hash.update(data.pw);
   data.pw = hash.digest('hex');
 
@@ -90,9 +91,11 @@ export const modifyUser = async (ctx: Context) => {
 
   const data = ctx.request.body;
 
+  let hash = crypto.createHash('sha512');
   hash.update(data.new_pw);
   data.pw = hash.digest('hex');
 
+  hash = crypto.createHash('sha512');
   hash.update(data.original_pw);
   const originalHash = hash.digest('hex');
 
