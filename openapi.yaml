@@ -625,7 +625,7 @@ components:
           schema:
             type: object
             properties:
-              id:
+              email:
                 type: string
               pw:
                 type: string
