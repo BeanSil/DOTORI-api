@@ -19,7 +19,7 @@ export const getUserBySession = (ctx: Context) => {
 
 export const createSession = async (ctx: Context) => {
   const loginData = Joi.object({
-    id: Joi.string().required(),
+    email: Joi.string().required(),
     pw: Joi.string().required()
   });
 
