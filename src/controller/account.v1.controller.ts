@@ -32,7 +32,7 @@ export const createSession = async (ctx: Context) => {
 
   const result = await user.findOne({ where: data, attributes: ['pid'] });
 
-  ctx.assert(!result, 400);
+  ctx.assert(result, 400);
 
   const session = uuid.v4();
 
