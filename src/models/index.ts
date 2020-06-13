@@ -6,17 +6,19 @@ import { PostFactory } from './Post';
 import { LaptopArchiveFactory } from './LaptopArchive';
 
 import { db, userDb } from './setting';
+import {PermissionFactory} from "./Permission";
 
 const sequelize = new Sequelize(db);
 
 const sequelizeUser = new Sequelize(userDb);
 
+const laptop = LaptopArchiveFactory(sequelize);
 const music = MusicArchiveFactory(sequelize);
+const permission = PermissionFactory(sequelize);
 const post = PostFactory(sequelize);
 const scoreArchive = ScoreArchiveFactory(sequelize);
 
 const user = UserFactory(sequelizeUser);
-const laptop = LaptopArchiveFactory(sequelize);
 
 const sync = sequelize.createSchema(db.database, {}).then(() => {
   return sequelize.sync();
@@ -33,6 +35,7 @@ export {
   Sequelize,
   waitForSync,
   laptop,
+  permission,
   post,
   scoreArchive,
   music,
