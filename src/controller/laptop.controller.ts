@@ -1,5 +1,5 @@
 import { Context } from 'koa';
-import * as Joi from '@hapi/joi';
+import * as Joi from 'joi';
 import { laptop, user } from '../models';
 import * as sequelize from 'sequelize';
 

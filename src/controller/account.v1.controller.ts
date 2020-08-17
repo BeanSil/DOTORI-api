@@ -4,7 +4,7 @@ import * as crypto from 'crypto';
 
 import * as redis from 'redis';
 import * as uuid from 'uuid';
-import * as Joi from '@hapi/joi';
+import * as Joi from 'joi';
 import { user } from '../models';
 import { User } from '../modules/User';
 
