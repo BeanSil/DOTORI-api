@@ -1,5 +1,5 @@
 import { Context } from 'koa';
-import * as Joi from '@hapi/joi';
+import * as Joi from 'joi';
 
 import { scoreArchive, user } from '../models';
 
