@@ -1,5 +1,5 @@
 import { Context } from 'koa';
-import * as Joi from '@hapi/joi';
+import * as Joi from 'joi';
 import { post } from '../models';
 
 const PostIdInParam = Joi.object()

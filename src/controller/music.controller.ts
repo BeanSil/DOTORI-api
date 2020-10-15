@@ -1,6 +1,6 @@
 import { Context } from 'koa';
 import { music } from '../models';
-import * as Joi from '@hapi/joi';
+import * as Joi from 'joi';
 
 const requestSchema = Joi.object({
   id: Joi.number()
